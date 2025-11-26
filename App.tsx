@@ -1,44 +1,30 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { StoreProvider } from './src/providers/StoreProvider';
+import { ExerciseForm } from './src/components/molecules/ExerciseForm';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+const App = () => {
+  const handleSave = () => {
+    console.log('Exercício salvo!');
+  };
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const handleCancel = () => {
+    console.log('Cancelado!');
+  };
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
+    <StoreProvider>
+      <View style={styles.container}>
+        <ExerciseForm onSave={handleSave} onCancel={handleCancel} />
+      </View>
+    </StoreProvider>
   );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
   },
 });
 
