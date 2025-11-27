@@ -5,21 +5,29 @@ import { Button } from '../atoms/Button';
 import { Text } from '../atoms/Text';
 import { useExerciseStore } from '../../store';
 import { useMuscleGroupStore } from '../../store';
+import { Exercise } from '../../types';
 
 interface ExerciseFormProps {
   onSave: () => void;
   onCancel: () => void;
+  exercise?: Exercise; // Para edição
+  isEditing?: boolean; // Para diferenciar criação vs edição
 }
 
-export const ExerciseForm: React.FC<ExerciseFormProps> = ({ onSave, onCancel }) => {
-  const { addExercise, exercises } = useExerciseStore();
+export const ExerciseForm: React.FC<ExerciseFormProps> = ({ 
+  onSave, 
+  onCancel, 
+  exercise,
+  isEditing = false 
+}) => {
+  const { addExercise, updateExercise } = useExerciseStore();
   const { muscleGroups } = useMuscleGroupStore();
   
-  const [name, setName] = React.useState('');
-  const [selectedMuscleGroupId, setSelectedMuscleGroupId] = React.useState('');
-  const [sets, setSets] = React.useState('3');
-  const [reps, setReps] = React.useState('12');
-  const [restTime, setRestTime] = React.useState('60');
+  const [name, setName] = React.useState(exercise?.name || '');
+  const [selectedMuscleGroupId, setSelectedMuscleGroupId] = React.useState(exercise?.muscleGroupId || '');
+  const [sets, setSets] = React.useState(exercise?.defaultSets.toString() || '3');
+  const [reps, setReps] = React.useState(exercise?.defaultReps.toString() || '12');
+  const [restTime, setRestTime] = React.useState(exercise?.defaultRestTime.toString() || '60');
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSave = async () => {
@@ -31,7 +39,6 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({ onSave, onCancel }) 
     setIsLoading(true);
 
     try {
-      // Encontra o grupo muscular selecionado
       const selectedGroup = muscleGroups.find(group => group.id === selectedMuscleGroupId);
       
       if (!selectedGroup) {
@@ -39,43 +46,39 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({ onSave, onCancel }) 
         return;
       }
 
-      // Adiciona o exercício
-      addExercise({
+      const exerciseData = {
         name: name.trim(),
         muscleGroupId: selectedMuscleGroupId,
         defaultSets: parseInt(sets) || 3,
         defaultReps: parseInt(reps) || 12,
         defaultRestTime: parseInt(restTime) || 60,
-      });
+      };
 
-      // Feedback de sucesso
-      Alert.alert(
-        'Sucesso!', 
-        `Exercício "${name}" salvo no grupo ${selectedGroup.name}`,
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              // Limpa o formulário
-              setName('');
-              setSelectedMuscleGroupId('');
-              setSets('3');
-              setReps('12');
-              setRestTime('60');
-              setIsLoading(false);
-            }
-          }
-        ]
-      );
+      if (isEditing && exercise) {
+        // Modo edição
+        updateExercise(exercise.id, exerciseData);
+        Alert.alert('Sucesso!', `Exercício "${name}" atualizado`);
+      } else {
+        // Modo criação
+        addExercise(exerciseData);
+        Alert.alert('Sucesso!', `Exercício "${name}" criado no grupo ${selectedGroup.name}`);
+      }
 
-      console.log('Exercício salvo! Total de exercícios:', exercises.length + 1);
-      
-      // Chama o callback do pai (se necessário)
+      // Limpa o formulário apenas se for criação
+      if (!isEditing) {
+        setName('');
+        setSelectedMuscleGroupId('');
+        setSets('3');
+        setReps('12');
+        setRestTime('60');
+      }
+
       onSave();
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.error(error);
       Alert.alert('Erro', 'Não foi possível salvar o exercício');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -84,9 +87,10 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({ onSave, onCancel }) 
 
   return (
     <ScrollView style={styles.container}>
-      <Text variant="title" align="center">Novo Exercício</Text>
+      <Text variant="title" align="center">
+        {isEditing ? 'Editar Exercício' : 'Novo Exercício'}
+      </Text>
       
-      {/* Feedback do grupo selecionado */}
       {selectedGroup && (
         <View style={styles.selectedGroup}>
           <Text variant="caption">Grupo selecionado: </Text>
@@ -157,22 +161,17 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({ onSave, onCancel }) 
           disabled={isLoading}
         />
         <Button 
-          title={isLoading ? "Salvando..." : "Salvar Exercício"}
+          title={isLoading ? "Salvando..." : (isEditing ? "Atualizar Exercício" : "Salvar Exercício")}
           onPress={handleSave}
           style={[styles.button, styles.primaryButton]}
           disabled={!name || !selectedMuscleGroupId || isLoading}
         />
       </View>
-
-      {/* Debug info - pode remover depois */}
-      <View style={styles.debugInfo}>
-        <Text variant="caption">Exercícios cadastrados: {exercises.length}</Text>
-        <Text variant="caption">Grupos musculares: {muscleGroups.length}</Text>
-      </View>
     </ScrollView>
   );
 };
 
+// Mantenha os mesmos styles do anterior...
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -219,11 +218,5 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     backgroundColor: '#e0e0e0',
-  },
-  debugInfo: {
-    marginTop: 20,
-    padding: 12,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
   },
 });
