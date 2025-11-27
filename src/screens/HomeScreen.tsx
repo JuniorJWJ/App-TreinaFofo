@@ -63,6 +63,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('AddExercise')}
           style={styles.actionButton} 
         />
+          {/* NOVOS BOTÕES PARA TREINOS */}
+        <Button
+          title="💪 Meus Treinos"
+          onPress={() => navigation.navigate('WorkoutList')}
+          style={styles.actionButton}
+        />
+        
+        <Button
+          title="🆕 Criar Treino"
+          onPress={() => navigation.navigate('CreateWorkout')}
+          style={styles.actionButton} 
+        />
       </View>
 
       {/* Recent Exercises */}

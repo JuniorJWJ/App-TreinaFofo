@@ -6,12 +6,16 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { ExerciseListScreen } from '../screens/ExerciseListScreen';
 import { AddExerciseScreen } from '../screens/AddExerciseScreen';
 import { EditExerciseScreen } from '../screens/EditExerciseScreen';
+import { CreateWorkoutScreen } from '../screens/CreateWorkoutScreen';
+import { WorkoutListScreen } from '../screens/WorkoutListScreen';
 
 export type RootStackParamList = {
   Home: undefined;
   ExerciseList: undefined;
   AddExercise: undefined;
   EditExercise: { exerciseId: string };
+  CreateWorkout: undefined;
+  WorkoutList: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -50,6 +54,16 @@ export const AppNavigator = () => {
           name="EditExercise" 
           component={EditExerciseScreen}
           options={{ title: 'Editar Exercício' }}
+        />
+        <Stack.Screen 
+          name="CreateWorkout" 
+          component={CreateWorkoutScreen}
+          options={{ title: 'Criar Treino' }}
+        />
+        <Stack.Screen 
+          name="WorkoutList" 
+          component={WorkoutListScreen}
+          options={{ title: 'Meus Treinos' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

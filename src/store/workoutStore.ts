@@ -6,9 +6,13 @@ import { Workout, WorkoutFormData, WorkoutSession } from '../types';
 interface WorkoutState {
   workouts: Workout[];
   sessions: WorkoutSession[];
+  activeWorkoutId: string | null;
   isLoading: boolean;
   
   // Actions
+  setActiveWorkout: (workoutId: string | null) => void;
+  getActiveWorkout: () => Workout | undefined;
+  createQuickWorkout: (name: string, exerciseIds: string[]) => void;
   addWorkout: (workoutData: WorkoutFormData) => void;
   updateWorkout: (id: string, updates: Partial<Workout>) => void;
   deleteWorkout: (id: string) => void;
@@ -29,7 +33,53 @@ export const useWorkoutStore = create<WorkoutState>()(
     (set, get) => ({
       workouts: [],
       sessions: [],
+      activeWorkoutId: null,
       isLoading: false,
+
+      // 🔄 **ALTERAÇÕES FEITAS:**
+
+      // 1. NOVO: Definir treino ativo
+      setActiveWorkout: (workoutId) => {
+        console.log('Definindo treino ativo:', workoutId);
+        set({ activeWorkoutId: workoutId });
+      },
+
+      // 2. NOVO: Obter treino ativo
+      getActiveWorkout: () => {
+        const { activeWorkoutId, workouts } = get();
+        const activeWorkout = workouts.find(workout => workout.id === activeWorkoutId);
+        console.log('Treino ativo encontrado:', activeWorkout?.name);
+        return activeWorkout;
+      },
+
+      // 3. NOVO: Criar treino rápido
+      createQuickWorkout: (name, exerciseIds) => {
+        console.log('Criando treino rápido:', name, 'com', exerciseIds.length, 'exercícios');
+        
+        const newWorkout: Workout = {
+          id: `wr-${Date.now()}`,
+          name,
+          description: '',
+          muscleGroupIds: [],
+          exerciseIds,
+          exercises: [],
+          estimatedDuration: exerciseIds.length * 10, // 10 min por exercício
+          difficulty: 'beginner',
+          tags: ['rápido'],
+          timesCompleted: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        
+        set((state) => ({
+          workouts: [...state.workouts, newWorkout],
+          activeWorkoutId: newWorkout.id,
+        }));
+
+        console.log('Treino criado e definido como ativo:', newWorkout.name);
+      },
+
+      // ✅ **MÉTODOS EXISTENTES (mantidos):**
 
       addWorkout: (workoutData) => {
         const newWorkout: Workout = {
@@ -55,8 +105,10 @@ export const useWorkoutStore = create<WorkoutState>()(
       },
 
       deleteWorkout: (id) => {
+        const { activeWorkoutId } = get();
         set((state) => ({
           workouts: state.workouts.filter((workout) => workout.id !== id),
+          activeWorkoutId: activeWorkoutId === id ? null : activeWorkoutId,
         }));
       },
 
@@ -74,7 +126,7 @@ export const useWorkoutStore = create<WorkoutState>()(
           const duplicatedWorkout: Workout = {
             ...workout,
             id: `wr-${Date.now()}`,
-            name: `${workout.name} (Copy)`,
+            name: `${workout.name} (Cópia)`,
             timesCompleted: 0,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -85,6 +137,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         }
       },
 
+      // Session Management (mantido)
       startWorkoutSession: (workoutId) => {
         const sessionId = `ws-${Date.now()}`;
         const newSession: WorkoutSession = {
