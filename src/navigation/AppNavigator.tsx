@@ -8,6 +8,8 @@ import { AddExerciseScreen } from '../screens/AddExerciseScreen';
 import { EditExerciseScreen } from '../screens/EditExerciseScreen';
 import { CreateWorkoutScreen } from '../screens/CreateWorkoutScreen';
 import { WorkoutListScreen } from '../screens/WorkoutListScreen';
+import { CreateWeeklyPlanScreen } from '../screens/CreateWeeklyPlanScreen';
+import { WeeklyPlanListScreen } from '../screens/WeeklyPlanListScreen';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -16,6 +18,8 @@ export type RootStackParamList = {
   EditExercise: { exerciseId: string };
   CreateWorkout: undefined;
   WorkoutList: undefined;
+  CreateWeeklyPlan: { planId?: string }; // Pode receber planId para edição
+  WeeklyPlanList: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -27,7 +31,7 @@ export const AppNavigator = () => {
         initialRouteName="Home"
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#007BFF',
+            backgroundColor: '#d15710ff',
           },
           headerTintColor: '#FFF',
           headerTitleStyle: {
@@ -65,6 +69,16 @@ export const AppNavigator = () => {
           component={WorkoutListScreen}
           options={{ title: 'Meus Treinos' }}
         />
+        <Stack.Screen 
+          name="CreateWeeklyPlan" 
+          component={CreateWeeklyPlanScreen}
+          options={{ title: 'Criar Divisão Semanal' }}
+        />
+        <Stack.Screen 
+          name="WeeklyPlanList" 
+          component={WeeklyPlanListScreen}
+          options={{ title: 'Minhas Divisões' }}
+/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { useExerciseStore } from '../store';
 import { useMuscleGroupStore } from '../store';
+import { useWeeklyPlanStore } from '../store'; // Importação faltando
+import { useWorkoutStore } from '../store'; // Importação faltando
 import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
 
@@ -12,6 +14,12 @@ interface HomeScreenProps {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { exercises } = useExerciseStore();
   const { muscleGroups } = useMuscleGroupStore();
+  const { getActivePlan, getTodaysWorkout, completeDailyWorkout, uncompleteDailyWorkout } = useWeeklyPlanStore(); // Importação e desestruturação
+  const { getWorkout } = useWorkoutStore();
+
+  const activePlan = getActivePlan();
+  const todaysWorkout = activePlan ? getTodaysWorkout(activePlan.id) : null;
+  const todaysWorkoutDetails = todaysWorkout?.workoutId ? getWorkout(todaysWorkout.workoutId) : null;
 
   const stats = {
     totalExercises: exercises.length,
@@ -19,15 +27,26 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     recentExercises: exercises.slice(-3).reverse(),
   };
 
+  // Função para marcar/desmarcar treino como concluído
+  const handleToggleWorkoutCompletion = () => {
+    if (!activePlan || !todaysWorkout) return;
+
+    if (todaysWorkout.isCompleted) {
+      uncompleteDailyWorkout(activePlan.id, todaysWorkout.day);
+    } else {
+      completeDailyWorkout(activePlan.id, todaysWorkout.day);
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text variant="title" align="center">TreinaFofo</Text>
         <Text variant="subtitle" align="center" style={styles.subtitle}>
           Seu app de treino pessoal
         </Text>
-      </View>
+      </View> */}
 
       {/* Stats Cards */}
       <View style={styles.statsContainer}>
@@ -48,7 +67,45 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             Grupos{'\n'}Musculares
           </Text>
         </View>
+        
+        {activePlan && (
+          <View style={styles.statCard}>
+            <Text variant="title" style={styles.statNumber}>
+              {activePlan.completionRate.toFixed(0)}%
+            </Text>
+            <Text variant="caption" align="center">
+              Progresso{'\n'}Semanal
+            </Text>
+          </View>
+        )}
       </View>
+
+      {/* Treino de Hoje */}
+      {activePlan && todaysWorkout && (
+        <View style={styles.todaysWorkoutSection}>
+          <Text variant="subtitle" style={styles.sectionTitle}>
+            Treino de Hoje
+          </Text>
+          <View style={styles.todaysWorkoutCard}>
+            <Text variant="body" style={styles.todaysWorkoutName}>
+              {todaysWorkoutDetails ? todaysWorkoutDetails.name : 'Descanso'}
+            </Text>
+            {todaysWorkoutDetails && (
+              <Text variant="caption">
+                {todaysWorkoutDetails.exerciseIds.length} exercícios • {todaysWorkoutDetails.estimatedDuration} min
+              </Text>
+            )}
+            <Button
+              title={todaysWorkout.isCompleted ? "✓ Concluído" : "Marcar como Feito"}
+              onPress={handleToggleWorkoutCompletion}
+              style={[
+                styles.completeButton,
+                todaysWorkout.isCompleted ? styles.completedButton : styles.pendingButton
+              ]}
+            />
+          </View>
+        </View>
+      )}
 
       {/* Quick Actions */}
       <View style={styles.actionsContainer}>
@@ -63,7 +120,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('AddExercise')}
           style={styles.actionButton} 
         />
-          {/* NOVOS BOTÕES PARA TREINOS */}
+
         <Button
           title="💪 Meus Treinos"
           onPress={() => navigation.navigate('WorkoutList')}
@@ -73,6 +130,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <Button
           title="🆕 Criar Treino"
           onPress={() => navigation.navigate('CreateWorkout')}
+          style={styles.actionButton} 
+        />
+
+        <Button
+          title="📅 Minhas Divisões"
+          onPress={() => navigation.navigate('WeeklyPlanList')}
+          style={styles.actionButton}
+        />
+        
+        <Button
+          title="🆕 Nova Divisão"
+          onPress={() => navigation.navigate('CreateWeeklyPlan')}
           style={styles.actionButton} 
         />
       </View>
@@ -158,7 +227,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   statNumber: {
-    color: '#007BFF',
+    color: '#d15710ff',
     marginBottom: 8,
   },
   actionsContainer: {
@@ -202,5 +271,32 @@ const styles = StyleSheet.create({
   },
   createButton: {
     width: '100%',
+  },
+  // ESTILOS NOVOS ADICIONADOS:
+  todaysWorkoutSection: {
+    backgroundColor: '#FFF',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  todaysWorkoutCard: {
+    alignItems: 'center',
+  },
+  todaysWorkoutName: {
+    fontWeight: '600',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  completeButton: {
+    marginTop: 12,
+    width: '100%',
+  },
+  completedButton: {
+    backgroundColor: '#28A745',
+  },
+  pendingButton: {
+    backgroundColor: '#d15710ff',
   },
 });

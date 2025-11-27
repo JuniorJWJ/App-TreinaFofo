@@ -15,7 +15,7 @@ export const Button: React.FC<ButtonProps> = ({ title, style, ...props }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#e66700ff',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

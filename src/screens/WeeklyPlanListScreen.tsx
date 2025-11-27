@@ -1,92 +1,90 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
-import { useWorkoutStore } from '../store';
-import { useExerciseStore } from '../store';
+import { useWeeklyPlanStore } from '../store';
 import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
 
-interface WorkoutListScreenProps {
+interface WeeklyPlanListScreenProps {
   navigation: any;
 }
 
-export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation }) => {
-  const { workouts, deleteWorkout, setActiveWorkout, activeWorkoutId } = useWorkoutStore();
-  const { exercises } = useExerciseStore();
+export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navigation }) => {
+  const { weeklyPlans, deleteWeeklyPlan, setActivePlan, activePlanId } = useWeeklyPlanStore();
 
-  const getExerciseName = (exerciseId: string) => {
-    const exercise = exercises.find(ex => ex.id === exerciseId);
-    return exercise ? exercise.name : 'Exercício não encontrado';
-  };
-
-  const handleDeleteWorkout = (workoutId: string, workoutName: string) => {
+  const handleDeletePlan = (planId: string, planName: string) => {
     Alert.alert(
-      'Excluir Treino',
-      `Tem certeza que deseja excluir "${workoutName}"?`,
+      'Excluir Plano',
+      `Tem certeza que deseja excluir "${planName}"?`,
       [
         { text: 'Cancelar', style: 'cancel' },
         { 
           text: 'Excluir', 
           style: 'destructive',
-          onPress: () => deleteWorkout(workoutId)
+          onPress: () => deleteWeeklyPlan(planId)
         }
       ]
     );
   };
 
-  const handleSetActiveWorkout = (workoutId: string) => {
-    setActiveWorkout(workoutId);
-    Alert.alert('Sucesso', 'Treino definido como ativo!');
+  const handleSetActivePlan = (planId: string) => {
+    setActivePlan(planId);
+    Alert.alert('Sucesso', 'Plano definido como ativo!');
   };
 
-  const renderWorkoutItem = ({ item }: { item: any }) => (
+  const handleEditPlan = (planId: string) => {
+    navigation.navigate('CreateWeeklyPlan', { planId });
+  };
+
+  const getCompletedWorkouts = (plan: any) => {
+    return plan.days.filter((d: any) => d.isCompleted).length;
+  };
+
+  const renderPlanItem = ({ item }: { item: any }) => (
     <View style={[
-      styles.workoutCard,
-      activeWorkoutId === item.id && styles.activeWorkoutCard
+      styles.planCard,
+      activePlanId === item.id && styles.activePlanCard
     ]}>
-      <View style={styles.workoutHeader}>
-        <Text variant="subtitle" style={styles.workoutName}>
+      <View style={styles.planHeader}>
+        <Text variant="subtitle" style={styles.planName}>
           {item.name}
         </Text>
-        {activeWorkoutId === item.id && (
+        {activePlanId === item.id && (
           <View style={styles.activeBadge}>
             <Text style={styles.activeBadgeText}>ATIVO</Text>
           </View>
         )}
       </View>
       
-      <View style={styles.workoutDetails}>
+      {item.description ? (
+        <Text variant="caption" style={styles.planDescription}>
+          {item.description}
+        </Text>
+      ) : null}
+
+      <View style={styles.planStats}>
         <Text variant="caption">
-          {item.exerciseIds.length} exercício{item.exerciseIds.length !== 1 ? 's' : ''}
+          {getCompletedWorkouts(item)}/{item.days.length} treinos completados
         </Text>
         <Text variant="caption">
-          Criado em: {new Date(item.createdAt).toLocaleDateString('pt-BR')}
+          Progresso: {item.completionRate.toFixed(0)}%
         </Text>
       </View>
 
-      {/* Lista de exercícios */}
-      <View style={styles.exercisesList}>
-        {item.exerciseIds.slice(0, 3).map((exerciseId: string) => (
-          <Text key={exerciseId} variant="caption" style={styles.exerciseItem}>
-            • {getExerciseName(exerciseId)}
-          </Text>
-        ))}
-        {item.exerciseIds.length > 3 && (
-          <Text variant="caption" style={styles.moreExercises}>
-            + {item.exerciseIds.length - 3} mais...
-          </Text>
-        )}
-      </View>
-
-      <View style={styles.workoutActions}>
+      <View style={styles.planActions}>
         <Button
           title="Definir como Ativo"
-          onPress={() => handleSetActiveWorkout(item.id)}
+          onPress={() => handleSetActivePlan(item.id)}
           style={styles.activeButton}
-          disabled={activeWorkoutId === item.id}
+          disabled={activePlanId === item.id}
+        />
+        <Button
+          title="Editar"
+          onPress={() => handleEditPlan(item.id)}
+          style={styles.editButton}
         />
         <Button
           title="Excluir"
-          onPress={() => handleDeleteWorkout(item.id, item.name)}
+          onPress={() => handleDeletePlan(item.id, item.name)}
           style={styles.deleteButton}
         />
       </View>
@@ -96,41 +94,41 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text variant="title">Meus Treinos</Text>
+        <Text variant="title">Minhas Divisões Semanais</Text>
         <Text variant="caption">
-          {workouts.length} treino{workouts.length !== 1 ? 's' : ''} cadastrado{workouts.length !== 1 ? 's' : ''}
+          {weeklyPlans.length} plano{weeklyPlans.length !== 1 ? 's' : ''} cadastrado{weeklyPlans.length !== 1 ? 's' : ''}
         </Text>
       </View>
 
-      {workouts.length === 0 ? (
+      {weeklyPlans.length === 0 ? (
         <View style={styles.emptyState}>
           <Text variant="subtitle" align="center">
-            Nenhum treino cadastrado
+            Nenhum plano semanal cadastrado
           </Text>
           <Text variant="body" align="center" style={styles.emptyText}>
-            Crie seu primeiro treino para começar!
+            Crie seu primeiro plano semanal para organizar seus treinos!
           </Text>
           <Button
-            title="Criar Primeiro Treino"
-            onPress={() => navigation.navigate('CreateWorkout')}
+            title="Criar Primeiro Plano"
+            onPress={() => navigation.navigate('CreateWeeklyPlan')}
             style={styles.createButton}
           />
         </View>
       ) : (
         <FlatList
-          data={workouts}
+          data={weeklyPlans}
           keyExtractor={(item) => item.id}
-          renderItem={renderWorkoutItem}
+          renderItem={renderPlanItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
         />
       )}
 
-      {workouts.length > 0 && (
+      {weeklyPlans.length > 0 && (
         <View style={styles.fabContainer}>
           <Button
-            title="+ Novo Treino"
-            onPress={() => navigation.navigate('CreateWorkout')}
+            title="+ Nova Divisão"
+            onPress={() => navigation.navigate('CreateWeeklyPlan')}
             style={styles.fabButton}
           />
         </View>
@@ -152,7 +150,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 80,
   },
-  workoutCard: {
+  planCard: {
     backgroundColor: '#FFF',
     padding: 16,
     borderRadius: 12,
@@ -160,18 +158,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },
-  activeWorkoutCard: {
+  activePlanCard: {
     borderColor: '#d15710ff',
     borderWidth: 2,
     backgroundColor: '#F0F8FF',
   },
-  workoutHeader: {
+  planHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
   },
-  workoutName: {
+  planName: {
     flex: 1,
   },
   activeBadge: {
@@ -185,33 +183,32 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
-  workoutDetails: {
+  planDescription: {
+    marginBottom: 8,
+    color: '#666',
+  },
+  planStats: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 12,
   },
-  exercisesList: {
-    marginBottom: 12,
-  },
-  exerciseItem: {
-    marginBottom: 2,
-  },
-  moreExercises: {
-    fontStyle: 'italic',
-    color: '#666',
-  },
-  workoutActions: {
+  planActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   activeButton: {
-    flex: 1,
-    marginRight: 8,
+    flex: 2,
+    marginRight: 4,
     backgroundColor: '#28A745',
+  },
+  editButton: {
+    flex: 1,
+    marginHorizontal: 4,
+    backgroundColor: '#FFC107',
   },
   deleteButton: {
     flex: 1,
-    marginLeft: 8,
+    marginLeft: 4,
     backgroundColor: '#DC3545',
   },
   emptyState: {

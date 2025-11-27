@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   primaryButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#d15710ff',
   },
   secondaryButton: {
     backgroundColor: '#e0e0e0',

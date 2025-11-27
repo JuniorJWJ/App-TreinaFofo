@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   selectedExercise: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#d15710ff',
   },
   unselectedExercise: {
     backgroundColor: '#E0E0E0',
