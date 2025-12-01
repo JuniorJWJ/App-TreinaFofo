@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import React, { useState } from 'react'; // Adicione o useState
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'; // Adicione TouchableOpacity
 import { useExerciseStore } from '../store';
 import { useMuscleGroupStore } from '../store';
-import { useWeeklyPlanStore } from '../store'; // Importação faltando
-import { useWorkoutStore } from '../store'; // Importação faltando
+import { useWeeklyPlanStore } from '../store';
+import { useWorkoutStore } from '../store';
 import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
+import { TodayWorkoutModal } from '../components/molecules/TodayWorkoutModal'; // Importe o modal
 
 interface HomeScreenProps {
   navigation: any;
@@ -14,8 +15,11 @@ interface HomeScreenProps {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { exercises } = useExerciseStore();
   const { muscleGroups } = useMuscleGroupStore();
-  const { getActivePlan, getTodaysWorkout, completeDailyWorkout, uncompleteDailyWorkout } = useWeeklyPlanStore(); // Importação e desestruturação
+  const { getActivePlan, getTodaysWorkout, completeDailyWorkout, uncompleteDailyWorkout } = useWeeklyPlanStore();
   const { getWorkout } = useWorkoutStore();
+
+  // Estado para controlar a visibilidade do modal
+  const [isWorkoutModalVisible, setIsWorkoutModalVisible] = useState(false);
 
   const activePlan = getActivePlan();
   const todaysWorkout = activePlan ? getTodaysWorkout(activePlan.id) : null;
@@ -27,7 +31,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     recentExercises: exercises.slice(-3).reverse(),
   };
 
-  // Função para marcar/desmarcar treino como concluído
   const handleToggleWorkoutCompletion = () => {
     if (!activePlan || !todaysWorkout) return;
 
@@ -36,6 +39,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     } else {
       completeDailyWorkout(activePlan.id, todaysWorkout.day);
     }
+  };
+
+  const handleWorkoutCardPress = () => {
+    setIsWorkoutModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsWorkoutModalVisible(false);
   };
 
   return (
@@ -80,9 +91,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         )}
       </View>
 
-      {/* Treino de Hoje */}
+      {/* Treino de Hoje - AGORA CLICÁVEL */}
       {activePlan && todaysWorkout && (
-        <View style={styles.todaysWorkoutSection}>
+        <TouchableOpacity 
+          style={styles.todaysWorkoutSection}
+          onPress={handleWorkoutCardPress}
+          activeOpacity={0.7}
+        >
           <Text variant="subtitle" style={styles.sectionTitle}>
             Treino de Hoje
           </Text>
@@ -95,16 +110,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                 {todaysWorkoutDetails.exerciseIds.length} exercícios • {todaysWorkoutDetails.estimatedDuration} min
               </Text>
             )}
-            <Button
-              title={todaysWorkout.isCompleted ? "✓ Concluído" : "Marcar como Feito"}
-              onPress={handleToggleWorkoutCompletion}
-              style={[
-                styles.completeButton,
-                todaysWorkout.isCompleted ? styles.completedButton : styles.pendingButton
-              ]}
-            />
+            <View style={[
+              styles.statusIndicator,
+              todaysWorkout.isCompleted ? styles.completedIndicator : styles.pendingIndicator
+            ]}>
+              <Text style={styles.statusIndicatorText}>
+                {todaysWorkout.isCompleted ? '✓ Concluído' : 'Toque para ver detalhes'}
+              </Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
 
       {/* Quick Actions */}
@@ -188,6 +203,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           />
         </View>
       )}
+
+      {/* Modal do Treino de Hoje */}
+      <TodayWorkoutModal
+        visible={isWorkoutModalVisible}
+        onClose={handleCloseModal}
+        workout={todaysWorkout}
+        workoutDetails={todaysWorkoutDetails}
+        isCompleted={todaysWorkout?.isCompleted || false}
+        onToggleCompletion={handleToggleWorkoutCompletion}
+      />
     </ScrollView>
   );
 };
@@ -298,5 +323,27 @@ const styles = StyleSheet.create({
   },
   pendingButton: {
     backgroundColor: '#d15710ff',
+  },
+  statusIndicator: {
+    marginTop: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    width: '100%',
+    alignItems: 'center',
+  },
+  completedIndicator: {
+    backgroundColor: '#E8F5E8',
+    borderColor: '#28A745',
+    borderWidth: 1,
+  },
+  pendingIndicator: {
+    backgroundColor: '#E3F2FD',
+    borderColor: '#007BFF',
+    borderWidth: 1,
+  },
+  statusIndicatorText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
