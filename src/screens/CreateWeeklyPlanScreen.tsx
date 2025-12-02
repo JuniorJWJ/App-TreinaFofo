@@ -5,6 +5,7 @@ import { useWorkoutStore } from '../store';
 import { Text } from '../components/atoms/Text';
 import { Input } from '../components/atoms/Input';
 import { Button } from '../components/atoms/Button';
+import { WorkoutSelectorModal } from '../components/molecules/WorkoutSelectorModal';
 import { DayOfWeek, DailyWorkout } from '../types';
 
 interface CreateWeeklyPlanScreenProps {
@@ -22,7 +23,6 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
   const [planName, setPlanName] = useState(existingPlan?.name || '');
   const [description, setDescription] = useState(existingPlan?.description || '');
   
-  // Estado com tipagem correta
   const [days, setDays] = useState<DailyWorkout[]>(existingPlan?.days || [
     { day: 'monday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
     { day: 'tuesday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
@@ -33,7 +33,6 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
     { day: 'sunday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
   ]);
 
-  // Objeto com tipagem correta
   const dayLabels: Record<DayOfWeek, string> = {
     monday: 'Segunda-feira',
     tuesday: 'Terça-feira',
@@ -50,32 +49,24 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
     return workout ? workout.name : 'Treino não encontrado';
   };
 
-  // CORREÇÃO 1: Função com tipagem correta
+  // Estado do Modal
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<DayOfWeek | null>(null);
+
   const handleDayPress = (day: DayOfWeek) => {
-    Alert.alert(
-      `Selecionar treino para ${dayLabels[day]}`,
-      'Escolha um treino ou descanso:',
-      [
-        { text: 'Descanso', onPress: () => updateDayWorkout(day, null) },
-        ...workouts.map(workout => ({
-          text: workout.name,
-          onPress: () => updateDayWorkout(day, workout.id)
-        })),
-        { text: 'Cancelar', style: 'cancel' }
-      ]
-    );
+    setSelectedDay(day);
+    setModalVisible(true);
   };
 
-  // CORREÇÃO 2: Função com tipagem correta
   const updateDayWorkout = (day: DayOfWeek, workoutId: string | null) => {
-    setDays(prevDays => 
-      prevDays.map(d => 
-        d.day === day ? { ...d, workoutId } : d
-      )
-    );
+    setDays(prevDays => prevDays.map(d => d.day === day ? { ...d, workoutId } : d));
   };
 
-  // CORREÇÃO 3: Função handleSave corrigida
+  const handleSelectWorkout = (workoutId: string | null) => {
+    if (selectedDay) updateDayWorkout(selectedDay, workoutId);
+    setModalVisible(false);
+  };
+
   const handleSave = () => {
     if (!planName.trim()) {
       Alert.alert('Atenção', 'Digite um nome para o plano semanal');
@@ -87,7 +78,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
       description: description.trim(),
       days,
       startDate: existingPlan?.startDate || new Date(),
-      endDate: existingPlan?.endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 dias
+      endDate: existingPlan?.endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       workoutSplitId: existingPlan?.workoutSplitId,
       isActive: existingPlan?.isActive || false,
       isTemplate: existingPlan?.isTemplate || false,
@@ -102,7 +93,6 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
         { text: 'OK', onPress: () => navigation.goBack() }
       ]);
     } else {
-      // CORREÇÃO: A função addWeeklyPlan retorna void, então precisamos criar o ID aqui
       const newPlanId = `wp-${Date.now()}`;
       addWeeklyPlan({
         ...planData,
@@ -110,7 +100,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-      
+
       Alert.alert('Sucesso', 'Plano semanal criado!', [
         { 
           text: 'Definir como Ativo', 
@@ -130,77 +120,86 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
   const completedDays = days.filter(d => d.workoutId !== null).length;
 
   return (
-    <ScrollView style={styles.container}>
-      <Text variant="title" align="center">
-        {isEditing ? 'Editar Plano Semanal' : 'Criar Plano Semanal'}
-      </Text>
-
-      <Input
-        placeholder="Nome do plano (ex: Semana 1 - Hipertrofia)"
-        value={planName}
-        onChangeText={setPlanName}
-        style={styles.input}
-      />
-
-      <Input
-        placeholder="Descrição (opcional)"
-        value={description}
-        onChangeText={setDescription}
-        style={styles.input}
-        multiline
-      />
-
-      <View style={styles.stats}>
-        <Text variant="caption">
-          {completedDays}/7 dias com treino definido
+    <>
+      <ScrollView style={styles.container}>
+        <Text variant="title" align="center">
+          {isEditing ? 'Editar Plano Semanal' : 'Criar Plano Semanal'}
         </Text>
-      </View>
 
-      <Text variant="subtitle" style={styles.sectionTitle}>
-        Planejamento da Semana:
-      </Text>
-
-      <View style={styles.daysContainer}>
-        {days.map((day) => (
-          <View key={day.day} style={styles.dayCard}>
-            {/* CORREÇÃO 4: Tipagem correta para dayLabels */}
-            <Text variant="body" style={styles.dayLabel}>
-              {dayLabels[day.day]}
-            </Text>
-            <Button
-              title={getWorkoutName(day.workoutId)}
-              onPress={() => handleDayPress(day.day)}
-              style={[
-                styles.workoutButton,
-                day.workoutId ? styles.hasWorkout : styles.restDay
-              ]}
-            />
-          </View>
-        ))}
-      </View>
-
-      <View style={styles.buttonsContainer}>
-        <Button
-          title="Cancelar"
-          onPress={() => navigation.goBack()}
-          style={[styles.button, styles.cancelButton]}
+        <Input
+          placeholder="Nome do plano (ex: Semana 1 - Hipertrofia)"
+          value={planName}
+          onChangeText={setPlanName}
+          style={styles.input}
         />
-        <Button
-          title={isEditing ? 'Atualizar Plano' : 'Criar Plano'}
-          onPress={handleSave}
-          style={[styles.button, styles.saveButton]}
-          disabled={!planName.trim()}
-        />
-      </View>
 
-      {!isEditing && (
-        <View style={styles.tipContainer}>
-          <Text variant="caption" style={styles.tipText}>
-            💡 Dica: Você pode usar divisões populares como ABC, ABCD, ou Push/Pull/Legs
+        <Input
+          placeholder="Descrição (opcional)"
+          value={description}
+          onChangeText={setDescription}
+          style={styles.input}
+          multiline
+        />
+
+        <View style={styles.stats}>
+          <Text variant="caption">
+            {completedDays}/7 dias com treino definido
           </Text>
         </View>
-      )}
-    </ScrollView>
+
+        <Text variant="subtitle" style={styles.sectionTitle}>
+          Planejamento da Semana:
+        </Text>
+
+        <View style={styles.daysContainer}>
+          {days.map((day) => (
+            <View key={day.day} style={styles.dayCard}>
+              <Text variant="body" style={styles.dayLabel}>
+                {dayLabels[day.day]}
+              </Text>
+              <Button
+                title={getWorkoutName(day.workoutId)}
+                onPress={() => handleDayPress(day.day)}
+                style={[
+                  styles.workoutButton,
+                  day.workoutId ? styles.hasWorkout : styles.restDay
+                ]}
+              />
+            </View>
+          ))}
+        </View>
+
+        <View style={styles.buttonsContainer}>
+          <Button
+            title="Cancelar"
+            onPress={() => navigation.goBack()}
+            style={[styles.button, styles.cancelButton]}
+          />
+          <Button
+            title={isEditing ? 'Atualizar Plano' : 'Criar Plano'}
+            onPress={handleSave}
+            style={[styles.button, styles.saveButton]}
+            disabled={!planName.trim()}
+          />
+        </View>
+
+        {!isEditing && (
+          <View style={styles.tipContainer}>
+            <Text variant="caption" style={styles.tipText}>
+              💡 Dica: Você pode usar divisões como ABC, ABCD, ou Push/Pull/Legs
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+
+      {/* Modal */}
+      <WorkoutSelectorModal
+        visible={isModalVisible}
+        workouts={workouts}
+        onClose={() => setModalVisible(false)}
+        onSelect={handleSelectWorkout}
+      />
+    </>
   );
 };
 

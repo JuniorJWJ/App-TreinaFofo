@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   },
   pendingIndicator: {
     backgroundColor: '#E3F2FD',
-    borderColor: '#007BFF',
+    borderColor: '#c05a06ff',
     borderWidth: 1,
   },
   statusIndicatorText: {

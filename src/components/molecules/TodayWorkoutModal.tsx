@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Modal, ScrollView } from 'react-native';
+import { 
+  View, 
+  StyleSheet, 
+  Modal, 
+  ScrollView, 
+  TouchableOpacity, 
+  TouchableWithoutFeedback 
+} from 'react-native';
 import { Text } from '../atoms/Text';
 import { Button } from '../atoms/Button';
 import { useExerciseStore } from '../../store';
@@ -17,7 +24,7 @@ interface TodayWorkoutModalProps {
 export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   visible,
   onClose,
-  workout,
+  // workout,
   workoutDetails,
   isCompleted,
   onToggleCompletion,
@@ -25,184 +32,247 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   const { exercises } = useExerciseStore();
   const { muscleGroups } = useMuscleGroupStore();
 
-  const getExerciseName = (exerciseId: string) => {
-    const exercise = exercises.find(ex => ex.id === exerciseId);
-    return exercise ? exercise.name : 'Exercício não encontrado';
-  };
+  // const getExerciseName = (exerciseId: string) => {
+  //   const exercise = exercises.find(ex => ex.id === exerciseId);
+  //   return exercise ? exercise.name : 'Exercício não encontrado';
+  // };
 
   const getMuscleGroupName = (muscleGroupId: string) => {
     const group = muscleGroups.find(mg => mg.id === muscleGroupId);
     return group ? group.name : 'Grupo não encontrado';
   };
 
-  if (!workoutDetails) {
-    return (
-      <Modal
-        visible={visible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={onClose}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text variant="title" align="center">Descanso</Text>
-            <Text variant="body" align="center" style={styles.restMessage}>
-              Hoje é seu dia de descanso! 💤
-            </Text>
-            <Text variant="caption" align="center" style={styles.restTip}>
-              O descanso é fundamental para a recuperação muscular e progresso.
-            </Text>
-            <Button
-              title="Fechar"
-              onPress={onClose}
-              style={styles.closeButton}
-            />
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
-  return (
+  // Renderizar conteúdo comum (com botão de fechar)
+  const renderModalContent = (content: React.ReactNode) => (
     <Modal
       visible={visible}
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Header */}
-            <View style={styles.modalHeader}>
-              <Text variant="title" align="center">{workoutDetails.name}</Text>
-              <Text variant="caption" align="center" style={styles.workoutInfo}>
-                {workoutDetails.exerciseIds.length} exercícios • {workoutDetails.estimatedDuration} min
-              </Text>
-            </View>
-
-            {/* Status */}
-            <View style={[
-              styles.statusBadge,
-              isCompleted ? styles.completedStatus : styles.pendingStatus
-            ]}>
-              <Text style={styles.statusText}>
-                {isCompleted ? '✓ CONCLUÍDO' : '🔄 PENDENTE'}
-              </Text>
-            </View>
-
-            {/* Exercícios */}
-            <View style={styles.exercisesSection}>
-              <Text variant="subtitle" style={styles.sectionTitle}>
-                Exercícios do Treino:
-              </Text>
-              
-              {workoutDetails.exerciseIds.map((exerciseId: string, index: number) => {
-                const exercise = exercises.find(ex => ex.id === exerciseId);
-                if (!exercise) return null;
-
-                return (
-                  <View key={exerciseId} style={styles.exerciseItem}>
-                    <View style={styles.exerciseHeader}>
-                      <Text variant="body" style={styles.exerciseName}>
-                        {index + 1}. {exercise.name}
-                      </Text>
-                      <View style={styles.muscleGroupTag}>
-                        <Text style={styles.muscleGroupText}>
-                          {getMuscleGroupName(exercise.muscleGroupId)}
-                        </Text>
-                      </View>
-                    </View>
-                    
-                    <View style={styles.exerciseDetails}>
-                      <Text variant="caption">
-                        {exercise.defaultSets} séries × {exercise.defaultReps} repetições
-                      </Text>
-                      <Text variant="caption">
-                        Descanso: {exercise.defaultRestTime}s
-                      </Text>
-                    </View>
+      {/* Overlay que cobre toda a tela e fecha o modal ao clicar */}
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.modalOverlay}>
+          {/* Conteúdo do modal que NÃO fecha quando clicado */}
+          <TouchableWithoutFeedback>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                {/* Botão de fechar no canto superior direito */}
+                <TouchableOpacity
+                  style={styles.closeIconButton}
+                  onPress={onClose}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.closeIconCircle}>
+                    <Text style={styles.closeIconText}>✕</Text>
                   </View>
-                );
-              })}
+                </TouchableOpacity>
+                
+                {content}
+              </View>
             </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
 
-            {/* Estatísticas Rápidas */}
-            <View style={styles.statsContainer}>
-              <View style={styles.statItem}>
-                <Text variant="title" style={styles.statNumber}>
-                  {workoutDetails.exerciseIds.length}
+  if (!workoutDetails) {
+    return renderModalContent(
+      <View style={styles.restContent}>
+        <Text variant="title" align="center" style={styles.restTitle}>Descanso</Text>
+        <Text variant="body" align="center" style={styles.restMessage}>
+          Hoje é seu dia de descanso! 💤
+        </Text>
+        <Text variant="caption" align="center" style={styles.restTip}>
+          O descanso é fundamental para a recuperação muscular e progresso.
+        </Text>
+      </View>
+    );
+  }
+
+  return renderModalContent(
+    <ScrollView 
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.scrollContent}
+    >
+      {/* Header */}
+      <View style={styles.modalHeader}>
+        <Text variant="title" align="center">{workoutDetails.name}</Text>
+        <Text variant="caption" align="center" style={styles.workoutInfo}>
+          {workoutDetails.exerciseIds.length} exercícios • {workoutDetails.estimatedDuration} min
+        </Text>
+      </View>
+
+      {/* Status */}
+      <View style={[
+        styles.statusBadge,
+        isCompleted ? styles.completedStatus : styles.pendingStatus
+      ]}>
+        <Text style={styles.statusText}>
+          {isCompleted ? '✓ CONCLUÍDO' : '🔄 PENDENTE'}
+        </Text>
+      </View>
+
+      {/* Exercícios */}
+      <View style={styles.exercisesSection}>
+        <Text variant="subtitle" style={styles.sectionTitle}>
+          Exercícios do Treino:
+        </Text>
+        
+        {workoutDetails.exerciseIds.map((exerciseId: string, index: number) => {
+          const exercise = exercises.find(ex => ex.id === exerciseId);
+          if (!exercise) return null;
+
+          return (
+            <View key={exerciseId} style={styles.exerciseItem}>
+              <View style={styles.exerciseHeader}>
+                <Text variant="body" style={styles.exerciseName}>
+                  {index + 1}. {exercise.name}
                 </Text>
-                <Text variant="caption" align="center">
-                  Exercícios
-                </Text>
+                <View style={styles.muscleGroupTag}>
+                  <Text style={styles.muscleGroupText}>
+                    {getMuscleGroupName(exercise.muscleGroupId)}
+                  </Text>
+                </View>
               </View>
               
-              <View style={styles.statItem}>
-                <Text variant="title" style={styles.statNumber}>
-                  {workoutDetails.exerciseIds.reduce((total: number, exerciseId: string) => {
-                    const exercise = exercises.find(ex => ex.id === exerciseId);
-                    return total + (exercise?.defaultSets || 0);
-                  }, 0)}
+              <View style={styles.exerciseDetails}>
+                <Text variant="caption">
+                  {exercise.defaultSets} séries × {exercise.defaultReps} repetições
                 </Text>
-                <Text variant="caption" align="center">
-                  Séries
-                </Text>
-              </View>
-              
-              <View style={styles.statItem}>
-                <Text variant="title" style={styles.statNumber}>
-                  {workoutDetails.estimatedDuration}
-                </Text>
-                <Text variant="caption" align="center">
-                  Minutos
+                <Text variant="caption">
+                  Descanso: {exercise.defaultRestTime}s
                 </Text>
               </View>
             </View>
+          );
+        })}
+      </View>
 
-            {/* Ações */}
-            <View style={styles.actionsContainer}>
-              <Button
-                title={isCompleted ? "✓ Treino Concluído" : "Marcar como Concluído"}
-                onPress={onToggleCompletion}
-                style={[
-                  styles.actionButton,
-                  isCompleted ? styles.completedButton : styles.pendingButton
-                ]}
-              />
-              <Button
-                title="Fechar"
-                onPress={onClose}
-                style={[styles.actionButton, styles.closeButton]}
-                variant="secondary"
-              />
-            </View>
-          </ScrollView>
+      {/* Estatísticas Rápidas */}
+      <View style={styles.statsContainer}>
+        <View style={styles.statItem}>
+          <Text variant="title" style={styles.statNumber}>
+            {workoutDetails.exerciseIds.length}
+          </Text>
+          <Text variant="caption" align="center">
+            Exercícios
+          </Text>
+        </View>
+        
+        <View style={styles.statItem}>
+          <Text variant="title" style={styles.statNumber}>
+            {workoutDetails.exerciseIds.reduce((total: number, exerciseId: string) => {
+              const exercise = exercises.find(ex => ex.id === exerciseId);
+              return total + (exercise?.defaultSets || 0);
+            }, 0)}
+          </Text>
+          <Text variant="caption" align="center">
+            Séries
+          </Text>
+        </View>
+        
+        <View style={styles.statItem}>
+          <Text variant="title" style={styles.statNumber}>
+            {workoutDetails.estimatedDuration}
+          </Text>
+          <Text variant="caption" align="center">
+            Minutos
+          </Text>
         </View>
       </View>
-    </Modal>
+
+      {/* Ações */}
+      <View style={styles.actionsContainer}>
+        <Button
+          title={isCompleted ? "✓ Treino Concluído" : "Marcar como Concluído"}
+          onPress={onToggleCompletion}
+          style={[
+            styles.actionButton,
+            isCompleted ? styles.completedButton : styles.pendingButton
+          ]}
+        />
+        <Button
+          title="Fechar"
+          onPress={onClose}
+          style={[styles.actionButton, styles.closeButton]}
+          //variant="secondary"
+        />
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  // Overlay que cobre toda a tela
+  modalOverlay: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     padding: 20,
   },
+  // Container do modal
+  modalContainer: {
+    width: '100%',
+    maxHeight: '90%',
+  },
+  // Conteúdo do modal
   modalContent: {
     backgroundColor: '#FFF',
     borderRadius: 16,
     padding: 20,
-    maxHeight: '80%',
     width: '100%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 10,
+    position: 'relative',
+  },
+  // Botão de fechar no canto superior direito
+  closeIconButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 10,
+  },
+  closeIconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#6C757D',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  closeIconText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  // Estilos para conteúdo de descanso
+  restContent: {
+    paddingTop: 20,
+    alignItems: 'center',
+  },
+  restTitle: {
+    marginBottom: 16,
+  },
+  restMessage: {
+    marginVertical: 16,
+    fontSize: 18,
+    color: '#666',
+  },
+  restTip: {
+    marginBottom: 20,
+    fontStyle: 'italic',
+  },
+  // Estilos do conteúdo com scroll
+  scrollContent: {
+    paddingTop: 10,
   },
   modalHeader: {
     marginBottom: 16,
@@ -293,6 +363,7 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     gap: 12,
+    marginTop: 10,
   },
   actionButton: {
     marginBottom: 0,
@@ -305,14 +376,5 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     backgroundColor: '#6C757D',
-  },
-  restMessage: {
-    marginVertical: 16,
-    fontSize: 18,
-    color: '#666',
-  },
-  restTip: {
-    marginBottom: 20,
-    fontStyle: 'italic',
   },
 });
