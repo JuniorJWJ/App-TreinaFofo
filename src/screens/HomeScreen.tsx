@@ -159,6 +159,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('CreateWeeklyPlan')}
           style={styles.actionButton} 
         />
+
+        <Button
+          title="💧 Hidratação"
+          onPress={() => navigation.navigate('WaterDashboardScreen')}
+          style={styles.actionButton} 
+        />
+
+        <Button
+          title="💧 Hidratação1"
+          onPress={() => navigation.navigate('WaterSetupScreen')}
+          style={styles.actionButton} 
+        />
+        
       </View>
 
       {/* Recent Exercises */}
@@ -221,7 +234,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#eeddd3ff',
   },
   header: {
     marginBottom: 30,
@@ -297,7 +310,6 @@ const styles = StyleSheet.create({
   createButton: {
     width: '100%',
   },
-  // ESTILOS NOVOS ADICIONADOS:
   todaysWorkoutSection: {
     backgroundColor: '#FFF',
     padding: 16,

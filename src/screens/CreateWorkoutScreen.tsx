@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#e0b9a2ff',
   },
   input: {
     marginBottom: 20,
