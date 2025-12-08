@@ -1,0 +1,166 @@
+{
+  "muscleGroups": [
+    {
+      "id": "chest",
+      "name": "Peito",
+      "subgroups": [
+        {
+          "id": "upper_chest",
+          "name": "Peito Superior",
+          "color": "#FF8A8A",
+          "muscleIds": ["upper_chest", "chest"]
+        },
+        {
+          "id": "middle_chest",
+          "name": "Peito Médio",
+          "color": "#FF6B6B",
+          "muscleIds": ["middle_chest", "chest"]
+        },
+        {
+          "id": "lower_chest",
+          "name": "Peito Inferior",
+          "color": "#FF7F7F",
+          "muscleIds": ["lower_chest", "chest"]
+        }
+      ]
+    },
+    {
+      "id": "back",
+      "name": "Costas",
+      "subgroups": [
+        {
+          "id": "lats",
+          "name": "Dorsais (Lats)",
+          "color": "#7FB3D5",
+          "muscleIds": ["lats", "back"]
+        },
+        {
+          "id": "traps",
+          "name": "Trapézio Médio e Superior",
+          "color": "#F1948A",
+          "muscleIds": ["traps", "back"]
+        },
+        {
+          "id": "lower_back",
+          "name": "Lombar",
+          "color": "#A569BD",
+          "muscleIds": ["lower_back", "back"]
+        },
+        {
+          "id": "serratus",
+          "name": "Serrátil",
+          "color": "#F9E79F",
+          "muscleIds": ["serratus", "back"]
+        }
+      ]
+    },
+    {
+      "id": "shoulders",
+      "name": "Ombros",
+      "subgroups": [
+        {
+          "id": "anterior_delts",
+          "name": "Deltoide Anterior",
+          "color": "#5DADE2",
+          "muscleIds": ["anterior_deltoid", "shoulders"]
+        },
+        {
+          "id": "lateral_delts",
+          "name": "Deltoide Lateral",
+          "color": "#48C9B0",
+          "muscleIds": ["lateral_deltoid", "shoulders"]
+        },
+        {
+          "id": "posterior_delts",
+          "name": "Deltoide Posterior",
+          "color": "#AF7AC5",
+          "muscleIds": ["posterior_deltoid", "shoulders"]
+        }
+      ]
+    },
+    {
+      "id": "arms",
+      "name": "Braços",
+      "subgroups": [
+        {
+          "id": "biceps",
+          "name": "Bíceps Braquial",
+          "color": "#96CEB4",
+          "muscleIds": ["biceps", "arms"]
+        },
+        {
+          "id": "triceps",
+          "name": "Tríceps",
+          "color": "#FFEAA7",
+          "muscleIds": ["triceps", "arms"]
+        },
+        {
+          "id": "forearms",
+          "name": "Antebraço",
+          "color": "#82E0AA",
+          "muscleIds": ["forearms", "arms"]
+        }
+      ]
+    },
+    {
+      "id": "legs",
+      "name": "Pernas",
+      "subgroups": [
+        {
+          "id": "quadriceps",
+          "name": "Quadríceps",
+          "color": "#98D8C8",
+          "muscleIds": ["quadriceps", "legs"]
+        },
+        {
+          "id": "hamstrings",
+          "name": "Posterior de Coxa",
+          "color": "#F7DC6F",
+          "muscleIds": ["hamstrings", "legs"]
+        },
+        {
+          "id": "glutes",
+          "name": "Glúteos",
+          "color": "#BB8FCE",
+          "muscleIds": ["glutes", "legs"]
+        },
+        {
+          "id": "calves",
+          "name": "Panturrilhas",
+          "color": "#85C1E9",
+          "muscleIds": ["calves", "legs"]
+        },
+        {
+          "id": "adductors",
+          "name": "Adutores",
+          "color": "#F5B7B1",
+          "muscleIds": ["adductors", "legs"]
+        },
+        {
+          "id": "abductors",
+          "name": "Abdutores",
+          "color": "#73C6B6",
+          "muscleIds": ["abductors", "legs"]
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "name": "Abdômen",
+      "subgroups": [
+        {
+          "id": "abs",
+          "name": "Reto Abdominal",
+          "color": "#F8C471",
+          "muscleIds": ["abs", "core"]
+        },
+        {
+          "id": "obliques",
+          "name": "Oblíquos",
+          "color": "#E59866",
+          "muscleIds": ["obliques", "core"]
+        }
+      ]
+    }
+  ]
+}

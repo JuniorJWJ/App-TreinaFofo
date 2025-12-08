@@ -165,12 +165,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('WaterDashboardScreen')}
           style={styles.actionButton} 
         />
-
-        <Button
-          title="💧 Hidratação1"
-          onPress={() => navigation.navigate('WaterSetupScreen')}
-          style={styles.actionButton} 
-        />
         
       </View>
 
