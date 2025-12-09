@@ -90,12 +90,12 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text variant="title">Meus Exercícios</Text>
         <Text variant="caption">
           {exercises.length} exercício{exercises.length !== 1 ? 's' : ''} cadastrado{exercises.length !== 1 ? 's' : ''}
         </Text>
-      </View>
+      </View> */}
 
       {exercises.length === 0 ? (
         <View style={styles.emptyState}>

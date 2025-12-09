@@ -19,11 +19,11 @@ interface ExerciseState {
 
 export const useExerciseStore = create<ExerciseState>()(
   persist(
-    (set, get) => ({
+    (set: (partial: Partial<ExerciseState> | ((state: ExerciseState) => Partial<ExerciseState>), replace?: boolean) => void, get: () => ExerciseState) => ({
       exercises: [],
       isLoading: false,
 
-      addExercise: (exerciseData) => {
+      addExercise: (exerciseData: ExerciseFormData) => {
         const newExercise: Exercise = {
           ...exerciseData,
           id: `ex-${Date.now()}`,
@@ -35,7 +35,7 @@ export const useExerciseStore = create<ExerciseState>()(
         }));
       },
 
-      updateExercise: (id, updates) => {
+      updateExercise: (id: string, updates: Partial<Exercise>) => {
         set((state) => ({
           exercises: state.exercises.map((exercise) =>
             exercise.id === id
@@ -45,17 +45,17 @@ export const useExerciseStore = create<ExerciseState>()(
         }));
       },
 
-      deleteExercise: (id) => {
+      deleteExercise: (id: string) => {
         set((state) => ({
           exercises: state.exercises.filter((exercise) => exercise.id !== id),
         }));
       },
 
-      getExercise: (id) => {
+      getExercise: (id: string) => {
         return get().exercises.find((exercise) => exercise.id === id);
       },
 
-      getExercisesByMuscleGroup: (muscleGroupId) => {
+      getExercisesByMuscleGroup: (muscleGroupId: string) => {
         return get().exercises.filter(
           (exercise) => exercise.muscleGroupId === muscleGroupId
         );
@@ -65,7 +65,7 @@ export const useExerciseStore = create<ExerciseState>()(
         return get().exercises;
       },
 
-      searchExercises: (query) => {
+      searchExercises: (query: string) => {
         const lowercaseQuery = query.toLowerCase();
         return get().exercises.filter((exercise) =>
           exercise.name.toLowerCase().includes(lowercaseQuery)
@@ -75,14 +75,14 @@ export const useExerciseStore = create<ExerciseState>()(
     {
       name: 'exercise-store',
       storage: {
-        getItem: async (name) => {
+        getItem: async (name: string) => {
           const value = await AsyncStorage.getItem(name);
           return value ? JSON.parse(value) : null;
         },
-        setItem: async (name, value) => {
+        setItem: async (name: string, value: unknown) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));
         },
-        removeItem: async (name) => {
+        removeItem: async (name: string) => {
           await AsyncStorage.removeItem(name);
         },
       },

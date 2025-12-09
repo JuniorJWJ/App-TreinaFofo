@@ -1,4 +1,4 @@
-// src/screens/WaterDashboardScreen.tsx - ATUALIZADO
+// src/screens/WaterDashboardScreen.tsx 
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
