@@ -169,7 +169,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       </View>
 
       {/* Recent Exercises */}
-      {stats.recentExercises.length > 0 && (
+      {/* {stats.recentExercises.length > 0 && (
         <View style={styles.recentSection}>
           <Text variant="subtitle" style={styles.sectionTitle}>
             Exercícios Recentes
@@ -192,10 +192,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             style={styles.seeAllButton} 
           />
         </View>
-      )}
+      )} */}
 
       {/* Empty State */}
-      {stats.totalExercises === 0 && (
+      {/* {stats.totalExercises === 0 && (
         <View style={styles.emptyState}>
           <Text variant="subtitle" align="center">
             Bem-vindo ao TreinaFofo! 🎉
@@ -209,7 +209,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             style={styles.createButton}
           />
         </View>
-      )}
+      )} */}
 
       {/* Modal do Treino de Hoje */}
       <TodayWorkoutModal

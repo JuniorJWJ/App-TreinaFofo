@@ -1,7 +1,6 @@
 // components/WaterDashboard.tsx
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text } from '../atoms/Text';
+import { View, StyleSheet } from 'react-native'; 
 import { ProgressStatsDisplay } from '../molecules/ProgressStatsDisplay';
 import { QuickWaterAddButtons } from '../molecules/QuickWaterAddButtons';
 import { WaterStatsCard } from '../molecules/WaterStatsCard';
