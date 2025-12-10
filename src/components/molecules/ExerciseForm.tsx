@@ -87,9 +87,9 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
 
   return (
     <ScrollView style={styles.container}>
-      <Text variant="title" align="center">
+      {/* <Text variant="title" align="center">
         {isEditing ? 'Editar Exercício' : 'Novo Exercício'}
-      </Text>
+      </Text> */}
       
       {selectedGroup && (
         <View style={styles.selectedGroup}>

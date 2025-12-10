@@ -69,9 +69,9 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text variant="title" align="center">
+      {/* <Text variant="title" align="center">
         💧 Hidratação Hoje
-      </Text>
+      </Text> */}
       
       <ProgressStatsDisplay
         currentIntake={currentIntake}

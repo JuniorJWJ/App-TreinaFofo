@@ -96,7 +96,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text variant="title">Meus Treinos</Text>
+        {/* <Text variant="title">Meus Treinos</Text> */}
         <Text variant="caption">
           {workouts.length} treino{workouts.length !== 1 ? 's' : ''} cadastrado{workouts.length !== 1 ? 's' : ''}
         </Text>

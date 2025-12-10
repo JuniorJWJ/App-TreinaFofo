@@ -122,9 +122,9 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
   return (
     <>
       <ScrollView style={styles.container}>
-        <Text variant="title" align="center">
+        {/* <Text variant="title" align="center">
           {isEditing ? 'Editar Plano Semanal' : 'Criar Plano Semanal'}
-        </Text>
+        </Text> */}
 
         <Input
           placeholder="Nome do plano (ex: Semana 1 - Hipertrofia)"

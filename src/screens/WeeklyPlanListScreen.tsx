@@ -94,7 +94,7 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text variant="title">Minhas Divisões Semanais</Text>
+        {/* <Text variant="title">Minhas Divisões Semanais</Text> */}
         <Text variant="caption">
           {weeklyPlans.length} plano{weeklyPlans.length !== 1 ? 's' : ''} cadastrado{weeklyPlans.length !== 1 ? 's' : ''}
         </Text>
