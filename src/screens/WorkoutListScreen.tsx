@@ -10,7 +10,7 @@ interface WorkoutListScreenProps {
 }
 
 export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation }) => {
-  const { workouts, deleteWorkout, setActiveWorkout, activeWorkoutId } = useWorkoutStore();
+  const { workouts, deleteWorkout} = useWorkoutStore();
   const { exercises } = useExerciseStore();
 
   const getExerciseName = (exerciseId: string) => {
@@ -33,25 +33,20 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
     );
   };
 
-  const handleSetActiveWorkout = (workoutId: string) => {
-    setActiveWorkout(workoutId);
-    Alert.alert('Sucesso', 'Treino definido como ativo!');
-  };
+  // const handleSetActiveWorkout = (workoutId: string) => {
+  //   setActiveWorkout(workoutId);
+  //   Alert.alert('Sucesso', 'Treino definido como ativo!');
+  // };
 
   const renderWorkoutItem = ({ item }: { item: any }) => (
     <View style={[
       styles.workoutCard,
-      activeWorkoutId === item.id && styles.activeWorkoutCard
+      // activeWorkoutId === item.id && styles.activeWorkoutCard
     ]}>
       <View style={styles.workoutHeader}>
         <Text variant="subtitle" style={styles.workoutName}>
           {item.name}
         </Text>
-        {activeWorkoutId === item.id && (
-          <View style={styles.activeBadge}>
-            <Text style={styles.activeBadgeText}>ATIVO</Text>
-          </View>
-        )}
       </View>
       
       <View style={styles.workoutDetails}>
@@ -83,15 +78,6 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
           title="Editar"
           onPress={() => navigation.navigate('EditWorkout', { workoutId: item.id })}
           style={styles.editButton}
-        />
-        <Button
-          title={activeWorkoutId === item.id ? "Ativo ✓" : "Definir como Ativo"}
-          onPress={() => handleSetActiveWorkout(item.id)}
-          style={[
-            styles.activeButton,
-            activeWorkoutId === item.id && styles.activeButtonSelected
-          ]}
-          disabled={activeWorkoutId === item.id}
         />
       </View>
       
@@ -153,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
   },
   header: {
     alignItems: 'center',
@@ -214,15 +200,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  activeButton: {
-    flex: 1,
-    marginRight: 8,
-    backgroundColor: '#28A745',
-  },
   deleteButton: {
     flex: 1,
     marginLeft: 8,
     backgroundColor: '#DC3545',
+  },
+  editButton: {
+    flex: 2,
+    marginLeft: 8,
+    backgroundColor: '#FFC107', 
   },
   emptyState: {
     flex: 1,
@@ -252,12 +238,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 8,
     gap: 8,
-  },
-  editButton: {
-    flex: 1,
-    backgroundColor: '#FFC107', // Amarelo para editar
-  },
-  activeButtonSelected: {
-    backgroundColor: '#218838', // Verde mais escuro quando já está ativo
   },
 });

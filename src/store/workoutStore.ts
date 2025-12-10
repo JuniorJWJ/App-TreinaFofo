@@ -6,12 +6,12 @@ import { Workout, WorkoutFormData, WorkoutSession } from '../types';
 interface WorkoutState {
   workouts: Workout[];
   sessions: WorkoutSession[];
-  activeWorkoutId: string | null;
+  // activeWorkoutId: string | null;
   isLoading: boolean;
   
   // Actions
-  setActiveWorkout: (workoutId: string | null) => void;
-  getActiveWorkout: () => Workout | undefined;
+  // setActiveWorkout: (workoutId: string | null) => void;
+  //getActiveWorkout: () => Workout | undefined;
   createQuickWorkout: (name: string, exerciseIds: string[]) => void;
   addWorkout: (workoutData: WorkoutFormData) => void;
   updateWorkout: (id: string, updates: Partial<Workout>) => void;
@@ -33,24 +33,24 @@ export const useWorkoutStore = create<WorkoutState>()(
     (set, get) => ({
       workouts: [],
       sessions: [],
-      activeWorkoutId: null,
+      // activeWorkoutId: null,
       isLoading: false,
 
       // 🔄 **ALTERAÇÕES FEITAS:**
 
       // 1. NOVO: Definir treino ativo
-      setActiveWorkout: (workoutId) => {
-        console.log('Definindo treino ativo:', workoutId);
-        set({ activeWorkoutId: workoutId });
-      },
+      // setActiveWorkout: (workoutId) => {
+      //   console.log('Definindo treino ativo:', workoutId);
+      //   set({ activeWorkoutId: workoutId });
+      // },
 
       // 2. NOVO: Obter treino ativo
-      getActiveWorkout: () => {
-        const { activeWorkoutId, workouts } = get();
-        const activeWorkout = workouts.find(workout => workout.id === activeWorkoutId);
-        console.log('Treino ativo encontrado:', activeWorkout?.name);
-        return activeWorkout;
-      },
+      // getActiveWorkout: () => {
+      //   const { activeWorkoutId, workouts } = get();
+      //   const activeWorkout = workouts.find(workout => workout.id === activeWorkoutId);
+      //   console.log('Treino ativo encontrado:', activeWorkout?.name);
+      //   return activeWorkout;
+      // },
 
       // 3. NOVO: Criar treino rápido
       createQuickWorkout: (name, exerciseIds) => {
@@ -73,7 +73,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         
         set((state) => ({
           workouts: [...state.workouts, newWorkout],
-          activeWorkoutId: newWorkout.id,
+          // activeWorkoutId: newWorkout.id,
         }));
 
         console.log('Treino criado e definido como ativo:', newWorkout.name);
@@ -105,10 +105,10 @@ export const useWorkoutStore = create<WorkoutState>()(
       },
 
       deleteWorkout: (id) => {
-        const { activeWorkoutId } = get();
+        // const { activeWorkoutId } = get();
         set((state) => ({
           workouts: state.workouts.filter((workout) => workout.id !== id),
-          activeWorkoutId: activeWorkoutId === id ? null : activeWorkoutId,
+          // activeWorkoutId: activeWorkoutId === id ? null : activeWorkoutId,
         }));
       },
 
