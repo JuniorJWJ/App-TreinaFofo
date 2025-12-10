@@ -84,7 +84,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
           onPress={() => navigation.navigate('EditWorkout', { workoutId: item.id })}
           style={styles.editButton}
         />
-        {/* <Button
+        <Button
           title={activeWorkoutId === item.id ? "Ativo ✓" : "Definir como Ativo"}
           onPress={() => handleSetActiveWorkout(item.id)}
           style={[
@@ -92,7 +92,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
             activeWorkoutId === item.id && styles.activeButtonSelected
           ]}
           disabled={activeWorkoutId === item.id}
-        /> */}
+        />
       </View>
       
       <Button

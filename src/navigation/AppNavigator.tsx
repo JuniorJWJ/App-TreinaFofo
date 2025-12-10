@@ -11,7 +11,7 @@ import { WorkoutListScreen } from '../screens/WorkoutListScreen';
 import { CreateWeeklyPlanScreen } from '../screens/CreateWeeklyPlanScreen';
 import { WeeklyPlanListScreen } from '../screens/WeeklyPlanListScreen';
 import { WaterDashboardScreen } from '../screens/WaterDashboardScreen'; 
-import EditWorkoutScreen from '../screens/EditWorkoutScreen';
+import { EditWorkoutScreen } from '../screens/EditWorkoutScreen';
 
 
 export type RootStackParamList = {
