@@ -11,6 +11,8 @@ import { WorkoutListScreen } from '../screens/WorkoutListScreen';
 import { CreateWeeklyPlanScreen } from '../screens/CreateWeeklyPlanScreen';
 import { WeeklyPlanListScreen } from '../screens/WeeklyPlanListScreen';
 import { WaterDashboardScreen } from '../screens/WaterDashboardScreen'; 
+import EditWorkoutScreen from '../screens/EditWorkoutScreen';
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -22,6 +24,7 @@ export type RootStackParamList = {
   CreateWeeklyPlan: { planId?: string }; // Pode receber planId para edição
   WeeklyPlanList: undefined;
   WaterDashboardScreen: undefined; 
+  EditWorkout: { workoutId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -86,6 +89,11 @@ export const AppNavigator = () => {
           component={WaterDashboardScreen}
           options={{ title: 'Hidratação' }}
         />       
+        <Stack.Screen 
+          name="EditWorkout" 
+          component={EditWorkoutScreen}
+          options={{ title: 'Editar Treino' }}
+        />        
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -77,19 +77,29 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
         )}
       </View>
 
-      <View style={styles.workoutActions}>
+      {/* BOTÕES DE AÇÃO */}
+      <View style={styles.actionRow}>
         <Button
-          title="Definir como Ativo"
+          title="Editar"
+          onPress={() => navigation.navigate('EditWorkout', { workoutId: item.id })}
+          style={styles.editButton}
+        />
+        {/* <Button
+          title={activeWorkoutId === item.id ? "Ativo ✓" : "Definir como Ativo"}
           onPress={() => handleSetActiveWorkout(item.id)}
-          style={styles.activeButton}
+          style={[
+            styles.activeButton,
+            activeWorkoutId === item.id && styles.activeButtonSelected
+          ]}
           disabled={activeWorkoutId === item.id}
-        />
-        <Button
-          title="Excluir"
-          onPress={() => handleDeleteWorkout(item.id, item.name)}
-          style={styles.deleteButton}
-        />
+        /> */}
       </View>
+      
+      <Button
+        title="Excluir"
+        onPress={() => handleDeleteWorkout(item.id, item.name)}
+        style={styles.deleteButton}
+      />
     </View>
   );
 
@@ -236,5 +246,18 @@ const styles = StyleSheet.create({
   },
   fabButton: {
     backgroundColor: '#d15710ff',
+  },
+    actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+    gap: 8,
+  },
+  editButton: {
+    flex: 1,
+    backgroundColor: '#FFC107', // Amarelo para editar
+  },
+  activeButtonSelected: {
+    backgroundColor: '#218838', // Verde mais escuro quando já está ativo
   },
 });
