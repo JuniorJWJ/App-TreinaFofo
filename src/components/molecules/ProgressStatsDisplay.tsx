@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from '../atoms/Text';
 import { ProgressCircle } from 'react-native-svg-charts';
 
+
 interface ProgressStatsDisplayProps {
   currentIntake: number;
   dailyGoal: number;
