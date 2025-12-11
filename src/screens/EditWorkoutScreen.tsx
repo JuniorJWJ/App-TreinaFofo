@@ -22,17 +22,25 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({ navigation
   const [isLoading, setIsLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
 
-  // Carrega os dados do treino uma vez
+  // Carrega os dados do treino
   useEffect(() => {
     if (workoutId) {
       const workout = workouts.find(w => w.id === workoutId);
       if (workout) {
-        setInitialWorkoutName(workout.name);
-        setInitialSelectedExercises(workout.exerciseIds || []);
+        // Só atualiza se os dados realmente mudaram
+        if (workout.name !== initialWorkoutName) {
+          setInitialWorkoutName(workout.name);
+        }
+        const exerciseIds = workout.exerciseIds || [];
+        if (JSON.stringify(exerciseIds) !== JSON.stringify(initialSelectedExercises)) {
+          setInitialSelectedExercises(exerciseIds);
+        }
       }
     }
-    setIsInitializing(false);
-  }, [workoutId]); // Removi 'workouts' da dependência para evitar loops
+    if (isInitializing) {
+      setIsInitializing(false);
+    }
+  }, [workoutId, workouts, initialWorkoutName, initialSelectedExercises, isInitializing]);
 
   const handleSubmit = useCallback(async (workoutName: string, selectedExercises: string[]) => {
     setIsLoading(true);
