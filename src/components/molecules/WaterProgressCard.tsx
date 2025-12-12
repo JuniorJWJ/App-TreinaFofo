@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    color: '#4A90E2',
+    color: '#332B33',
     marginBottom: 4,
   },
   subtitle: {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   percentageText: {
-    color: '#4A90E2',
+    color: '#332B33',
     fontWeight: '600',
     minWidth: 40,
     textAlign: 'right',
@@ -156,15 +156,15 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   quickButton: {
-    backgroundColor: '#E3F2FD',
+    backgroundColor: '#723B73',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#BBDEFB',
+    borderColor: '#985C73',
   },
   quickButtonText: {
-    color: '#1976D2',
+    color: '#fff',
     fontSize: 12,
     fontWeight: '500',
   },

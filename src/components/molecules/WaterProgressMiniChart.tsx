@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   amountText: {
     fontWeight: 'bold',
-    color: '#4A90E2',
+    color: '#332B33',
   },
   goalText: {
     color: '#666',

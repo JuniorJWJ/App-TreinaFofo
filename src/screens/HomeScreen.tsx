@@ -128,12 +128,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       <View style={styles.actionsContainer}>
         <View style={styles.actionRow}>
           <Button
-            title="📋 Exercícios"
+            title="Exercícios"
             onPress={() => navigation.navigate('ExerciseList')}
             style={styles.halfButton}
           />
           <Button
-            title="💪 Treinos"
+            title="Treinos"
             onPress={() => navigation.navigate('WorkoutList')}
             style={styles.halfButton}
           />
@@ -141,12 +141,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         
         <View style={styles.actionRow}>
           <Button
-            title="📅 Divisões"
+            title="Divisões"
             onPress={() => navigation.navigate('WeeklyPlanList')}
             style={styles.halfButton}
           />
           <Button
-            title="💧 Água"
+            title="Água"
             onPress={() => navigation.navigate('WaterDashboardScreen')}
             style={styles.halfButton}
           />
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   statNumber: {
-    color: '#d15710ff',
+    color: '#483148',
     marginBottom: 8,
   },
   waterLabel: {
@@ -256,11 +256,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   pendingIndicator: {
-    backgroundColor: '#E3F2FD',
-    borderColor: '#c05a06ff',
+    backgroundColor: '#483148',
+    borderColor: '#483148',
     borderWidth: 1,
   },
   statusIndicatorText: {
+    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
   },
