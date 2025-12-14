@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   },
   pendingStatus: {
     backgroundColor: '#FFF3CD',
-    borderColor: '#FFC107',
+    borderColor: '#483148',
     borderWidth: 1,
   },
   statusText: {

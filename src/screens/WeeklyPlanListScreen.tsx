@@ -71,12 +71,14 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
       </View>
 
       <View style={styles.planActions}>
-        <Button
-          title="Definir como Ativo"
-          onPress={() => handleSetActivePlan(item.id)}
-          style={styles.activeButton}
-          disabled={activePlanId === item.id}
-        />
+        {activePlanId !== item.id && (
+          <Button
+            title="Definir como Ativo"
+            onPress={() => handleSetActivePlan(item.id)}
+            style={styles.activeButton}
+            disabled={activePlanId === item.id}
+          />
+        )}
         <Button
           title="Editar"
           onPress={() => handleEditPlan(item.id)}
@@ -93,12 +95,12 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}> */}
         {/* <Text variant="title">Minhas Divisões Semanais</Text> */}
-        <Text variant="caption">
+        {/* <Text variant="caption" color="#fff">
           {weeklyPlans.length} plano{weeklyPlans.length !== 1 ? 's' : ''} cadastrado{weeklyPlans.length !== 1 ? 's' : ''}
-        </Text>
-      </View>
+        </Text> */}
+      {/* </View> */}
 
       {weeklyPlans.length === 0 ? (
         <View style={styles.emptyState}>
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   activeBadge: {
-    backgroundColor: '#483148',
+    backgroundColor: '#985C73',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -200,17 +202,17 @@ const styles = StyleSheet.create({
   activeButton: {
     flex: 2,
     marginRight: 4,
-    backgroundColor: '#28A745',
+    backgroundColor: '#985C73',
   },
   editButton: {
     flex: 1,
     marginHorizontal: 4,
-    backgroundColor: '#FFC107',
+    backgroundColor: '#483148',
   },
   deleteButton: {
     flex: 1,
     marginLeft: 4,
-    backgroundColor: '#DC3545',
+    backgroundColor: '#332B33',
   },
   emptyState: {
     flex: 1,

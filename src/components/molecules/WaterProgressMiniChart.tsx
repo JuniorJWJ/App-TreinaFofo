@@ -22,7 +22,7 @@ export const WaterProgressMiniChart: React.FC<WaterProgressMiniChartProps> = ({
   const getProgressColor = () => {
     if (progress >= 1) return "#4CAF50";
     if (progress >= 0.7) return "#8BC34A";
-    if (progress >= 0.4) return "#FFC107";
+    if (progress >= 0.4) return "#483148";
     return "#F44336";
   };
 

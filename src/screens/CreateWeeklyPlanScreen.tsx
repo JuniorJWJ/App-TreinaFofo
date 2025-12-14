@@ -1,10 +1,13 @@
+// CreateWeeklyPlanScreen.tsx (refatorado)
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useWeeklyPlanStore } from '../store';
 import { useWorkoutStore } from '../store';
 import { Text } from '../components/atoms/Text';
-import { Input } from '../components/atoms/Input';
-import { Button } from '../components/atoms/Button';
+import { WeeklyPlanForm } from '../components/molecules/WeeklyPlanForm';
+import { DayScheduleCard } from '../components/molecules/DayScheduleCard';
+import { FormActions } from '../components/molecules/FormActions';
+import { TipCard } from '../components/molecules/TipCard';
 import { WorkoutSelectorModal } from '../components/molecules/WorkoutSelectorModal';
 import { DayOfWeek, DailyWorkout } from '../types';
 
@@ -13,7 +16,10 @@ interface CreateWeeklyPlanScreenProps {
   route?: any;
 }
 
-export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ navigation, route }) => {
+export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
+  navigation, 
+  route 
+}) => {
   const { addWeeklyPlan, updateWeeklyPlan, weeklyPlans, setActivePlan } = useWeeklyPlanStore();
   const { workouts } = useWorkoutStore();
   
@@ -122,33 +128,13 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
   return (
     <>
       <ScrollView style={styles.container}>
-        {/* <Text variant="title" align="center">
-          {isEditing ? 'Editar Plano Semanal' : 'Criar Plano Semanal'}
-        </Text> */}
-
-        <Input
-          placeholder="Nome do plano (ex: Semana 1 - Hipertrofia)"
-          value={planName}
-          onChangeText={setPlanName}
-          style={styles.input}
-          color={'#FFF'}
+        <WeeklyPlanForm
+          planName={planName}
+          onPlanNameChange={setPlanName}
+          description={description}
+          onDescriptionChange={setDescription}
+          completedDays={completedDays}
         />
-
-        <Input
-          placeholder="Descrição (opcional)"
-          value={description}
-          onChangeText={setDescription}
-          style={styles.input}
-          multiline
-          color={'#FFF'}
-          placeholderTextColor="#AAA"
-        />
-
-        <View style={styles.stats}>
-          <Text variant="caption">
-            {completedDays}/7 dias com treino definido
-          </Text>
-        </View>
 
         <Text variant="subtitle" style={styles.sectionTitle}>
           Planejamento da Semana:
@@ -156,42 +142,25 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
 
         <View style={styles.daysContainer}>
           {days.map((day) => (
-            <View key={day.day} style={styles.dayCard}>
-              <Text variant="body" style={styles.dayLabel}>
-                {dayLabels[day.day]}
-              </Text>
-              <Button
-                title={getWorkoutName(day.workoutId)}
-                onPress={() => handleDayPress(day.day)}
-                style={[
-                  styles.workoutButton,
-                  day.workoutId ? styles.hasWorkout : styles.restDay
-                ]}
-              />
-            </View>
+            <DayScheduleCard
+              key={day.day}
+              day={day.day}
+              dayLabel={dayLabels[day.day]}
+              workoutName={getWorkoutName(day.workoutId)}
+              onPress={handleDayPress}
+            />
           ))}
         </View>
 
-        <View style={styles.buttonsContainer}>
-          <Button
-            title={isEditing ? 'Atualizar Plano' : 'Criar Plano'}
-            onPress={handleSave}
-            style={[styles.button, styles.saveButton]}
-            disabled={!planName.trim()}
-          />
-          <Button
-            title="Cancelar"
-            onPress={() => navigation.goBack()}
-            style={[styles.button, styles.cancelButton]}
-          />        
-        </View>
+        <FormActions
+          isEditing={isEditing}
+          onSave={handleSave}
+          onCancel={() => navigation.goBack()}
+          isSaveDisabled={!planName.trim()}
+        />
 
         {!isEditing && (
-          <View style={styles.tipContainer}>
-            <Text variant="caption" style={styles.tipText}>
-              💡 Dica: Você pode usar divisões como ABC, ABCD, ou Push/Pull/Legs
-            </Text>
-          </View>
+          <TipCard tip="💡 Dica: Você pode usar divisões como ABC, ABCD, ou Push/Pull/Legs" />
         )}
       </ScrollView>
 
@@ -212,68 +181,11 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#1b1613ff',
   },
-  input: {
-    marginBottom: 16,
-  },
-  stats: {
-    alignItems: 'center',
-    marginBottom: 20,
-    padding: 12,
-    backgroundColor: '#FFF',
-    borderRadius: 8,
-  },
   sectionTitle: {
     marginBottom: 16,
     color: '#FFF',
   },
   daysContainer: {
     marginBottom: 20,
-  },
-  dayCard: {
-    backgroundColor: '#FFF',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-  },
-  dayLabel: {
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  workoutButton: {
-    marginBottom: 0,
-  },
-  hasWorkout: {
-    backgroundColor: '#483148',
-  },
-  restDay: {
-    backgroundColor: '#6C757D',
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-    paddingBottom: 40,
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 4,
-  },
-  cancelButton: {
-    backgroundColor: '#6C757D',
-  },
-  saveButton: {
-    backgroundColor: '#332B33',
-  },
-  tipContainer: {
-    padding: 12,
-    backgroundColor: '#E7F3FF',
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: '#483148',
-  },
-  tipText: {
-    color: '#0056B3',
   },
 });

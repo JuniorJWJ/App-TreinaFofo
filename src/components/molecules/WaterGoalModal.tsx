@@ -178,14 +178,14 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
 
                 <View style={styles.modalButtons}>
                   <Button
-                    title="Cancelar"
-                    onPress={handleClose}
-                    style={styles.modalCancelButton} 
-                  />
-                  <Button
                     title="Salvar Meta"
                     onPress={handleSave}
                     style={styles.modalSubmitButton}
+                  />                  
+                  <Button
+                    title="Cancelar"
+                    onPress={handleClose}
+                    style={styles.modalCancelButton} 
                   />
                 </View>
 
@@ -307,12 +307,12 @@ const styles = StyleSheet.create({
   },
   modalCancelButton: {
     flex: 1,
-    marginRight: 8,
+    marginLeft: 8,
   },
   modalSubmitButton: {
     flex: 1,
-    marginLeft: 8,
-    backgroundColor: '#2196F3',
+    marginRight: 8,
+    backgroundColor: '#985C73',
   },
   guidelinesContainer: {
     marginTop: 24,

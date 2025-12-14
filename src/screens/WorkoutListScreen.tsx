@@ -91,12 +91,12 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}> */}
         {/* <Text variant="title">Meus Treinos</Text> */}
-        <Text variant="caption" color='#fff'>
+        {/* <Text variant="caption" color='#fff'>
           {workouts.length} treino{workouts.length !== 1 ? 's' : ''} cadastrado{workouts.length !== 1 ? 's' : ''}
-        </Text>
-      </View>
+        </Text> */}
+      {/* </View> */}
 
       {workouts.length === 0 ? (
         <View style={styles.emptyState}>
@@ -204,12 +204,12 @@ const styles = StyleSheet.create({
   deleteButton: {
     flex: 1,
     marginLeft: 8,
-    backgroundColor: '#DC3545',
+    backgroundColor: '#332B33',
   },
   editButton: {
     flex: 2,
     marginLeft: 8,
-    backgroundColor: '#FFC107', 
+    backgroundColor: '#483148', 
   },
   emptyState: {
     flex: 1,

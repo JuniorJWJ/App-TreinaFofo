@@ -20,8 +20,8 @@ interface WorkoutFormProps {
   onCancel: () => void;
   isLoading?: boolean;
   workoutInfo?: {
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
   };
   submitButtonText?: string;
   cancelButtonText?: string;
@@ -99,9 +99,9 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
     return mode === 'create' ? 'Criar Treino' : 'Salvar Alterações';
   };
 
-  const getTitle = () => {
-    return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
-  };
+  // const getTitle = () => {
+  //   return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
+  // };
 
   return (
     <View style={styles.container}>
@@ -109,9 +109,9 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <Text variant="title" align="center" style={styles.title}>
+        {/* <Text variant="title" align="center" style={styles.title}>
           {getTitle()}
-        </Text>
+        </Text> */}
 
         {mode === 'edit' && workoutInfo && (
           <View style={styles.workoutInfo}>
