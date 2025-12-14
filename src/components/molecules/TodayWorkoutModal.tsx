@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   muscleGroupTag: {
-    backgroundColor: '#c05a06ff',
+    backgroundColor: '#332B33',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statNumber: {
-    color: '#c05a06ff',
+    color: '#483148',
     marginBottom: 4,
   },
   actionsContainer: {
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#28A745',
   },
   pendingButton: {
-    backgroundColor: '#c05a06ff',
+    backgroundColor: '#483148',
   },
   closeButton: {
     backgroundColor: '#6C757D',

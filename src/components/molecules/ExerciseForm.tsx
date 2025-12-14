@@ -94,7 +94,7 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
       {selectedGroup && (
         <View style={styles.selectedGroup}>
           <Text variant="caption">Grupo selecionado: </Text>
-          <Text variant="body" style={{ color: selectedGroup.color, fontWeight: 'bold' }}>
+          <Text color='#FFF' variant="body" style={{ color: selectedGroup.color, fontWeight: 'bold' }}>
             {selectedGroup.name}
           </Text>
         </View>
@@ -104,9 +104,10 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
         placeholder="Nome do exercício"
         value={name}
         onChangeText={setName}
+        color='#FFF'
       />
       
-      <Text variant="subtitle">Grupo Muscular:</Text>
+      <Text color='#FFF' variant="subtitle">Grupo Muscular:</Text>
       <View style={styles.muscleGroupsContainer}>
         {muscleGroups.map((group) => (
           <Button
@@ -123,48 +124,51 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
 
       <View style={styles.row}>
         <View style={styles.column}>
-          <Text variant="subtitle">Séries:</Text>
+          <Text color='#FFF'  variant="subtitle">Séries:</Text>
           <Input
             value={sets}
             onChangeText={setSets}
             keyboardType="numeric"
             placeholder="3"
+            color='#FFF'
           />
         </View>
         
         <View style={styles.column}>
-          <Text variant="subtitle">Repetições:</Text>
+          <Text color='#FFF'  variant="subtitle">Repetições:</Text>
           <Input
             value={reps}
             onChangeText={setReps}
             keyboardType="numeric"
             placeholder="12"
+            color='#FFF'
           />
         </View>
         
         <View style={styles.column}>
-          <Text variant="subtitle">Descanso (s):</Text>
+          <Text color='#FFF'  variant="subtitle">Descanso (s):</Text>
           <Input
             value={restTime}
             onChangeText={setRestTime}
             keyboardType="numeric"
             placeholder="60"
+            color='#FFF'
           />
         </View>
       </View>
 
       <View style={styles.buttonsContainer}>
         <Button 
-          title="Cancelar" 
-          onPress={onCancel}
-          style={[styles.button, styles.secondaryButton]}
-          disabled={isLoading}
-        />
-        <Button 
           title={isLoading ? "Salvando..." : (isEditing ? "Atualizar Exercício" : "Salvar Exercício")}
           onPress={handleSave}
           style={[styles.button, styles.primaryButton]}
           disabled={!name || !selectedMuscleGroupId || isLoading}
+        />
+        <Button 
+          title="Cancelar" 
+          onPress={onCancel}
+          style={[styles.button, styles.secondaryButton]}
+          disabled={isLoading}
         />
       </View>
     </ScrollView>
@@ -214,9 +218,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   primaryButton: {
-    backgroundColor: '#d15710ff',
+    backgroundColor: '#483148',
   },
   secondaryButton: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#332B33',
   },
 });

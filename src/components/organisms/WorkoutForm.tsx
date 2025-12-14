@@ -234,16 +234,16 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
         
         <View style={styles.buttonsContainer}>
           <Button
-            title={cancelButtonText}
-            onPress={onCancel}
-            style={[styles.button, styles.cancelButton]}
-            disabled={isLoading}
-          />
-          <Button
             title={getSubmitButtonText()}
             onPress={handleSubmit}
             style={[styles.button, styles.saveButton]}
             disabled={!workoutName.trim() || selectedExercises.length === 0 || isLoading}
+          />          
+          <Button
+            title={cancelButtonText}
+            onPress={onCancel}
+            style={[styles.button, styles.cancelButton]}
+            disabled={isLoading}
           />
         </View>
       </View>
@@ -254,7 +254,7 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
   },
   scrollContent: {
     padding: 16,
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   originalName: {
     fontWeight: '600',
     marginBottom: 4,
-    color: '#d15710ff',
+    color: '#483148',
   },
   input: {
     marginBottom: 20,
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   sectionTitle: {
-    color: '#333',
+    color: '#FFF',
   },
   selectionButtons: {
     flexDirection: 'row',
@@ -300,13 +300,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#d15710ff',
+    borderColor: '#483148',
   },
   disabledButton: {
     borderColor: '#999',
   },
   selectionButtonText: {
-    color: '#d15710ff',
+    color: '#483148',
     fontSize: 12,
     fontWeight: '500',
   },
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   exerciseCardSelected: {
-    borderColor: '#d15710ff',
+    borderColor: '#483148',
     borderWidth: 2,
     backgroundColor: '#FFF5F0',
   },
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   exerciseNameSelected: {
-    color: '#d15710ff',
+    color: '#483148',
   },
   exerciseDetails: {
     fontSize: 12,
@@ -384,8 +384,8 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   selectionIndicatorSelected: {
-    backgroundColor: '#d15710ff',
-    borderColor: '#d15710ff',
+    backgroundColor: '#483148',
+    borderColor: '#483148',
   },
   checkmark: {
     color: '#FFF',
@@ -432,6 +432,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#6C757D',
   },
   saveButton: {
-    backgroundColor: '#d15710ff',
+    backgroundColor: '#483148',
   },
 });

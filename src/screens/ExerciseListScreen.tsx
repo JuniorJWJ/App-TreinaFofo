@@ -122,13 +122,14 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
       )}
 
       {exercises.length > 0 && (
-        <View style={styles.fabContainer}>
-          <Button
-            title="+ Novo Exercício"
-            onPress={() => navigation.navigate('AddExercise')}
-            style={styles.fabButton}
-          />
-        </View>
+      <View style={styles.fabContainer}>
+        <TouchableOpacity 
+          style={styles.fabButton}
+          onPress={() => navigation.navigate('AddExercise')}
+        >
+          <Text style={styles.fabText}>+</Text>
+        </TouchableOpacity>
+      </View>
       )}
     </View>
   );
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
   },
   header: {
     alignItems: 'center',
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
   editButton: {
     flex: 1,
     marginRight: 8,
-    backgroundColor: '#28A745',
+    backgroundColor: '#483148',
   },
   deleteButton: {
     flex: 1,
@@ -215,11 +216,28 @@ const styles = StyleSheet.create({
   },
   fabContainer: {
     position: 'absolute',
-    bottom: 20,
-    left: 16,
-    right: 16,
+    bottom: 40,
+    right: 20,
   },
   fabButton: {
-    backgroundColor: '#d15710ff',
+    width: 60,
+    height: 60,
+    borderRadius: 30, // círculo
+    backgroundColor: '#483148',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    // sombra (Android + iOS)
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+
+  fabText: {
+    color: '#FFF',
+    fontSize: 32,
+    marginTop: -4, // centraliza visualmente o "+"
   },
 });

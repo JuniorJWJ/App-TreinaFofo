@@ -114,13 +114,13 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({ navigation
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   errorContainer: {
     flex: 1,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   backButton: {
-    backgroundColor: '#d15710ff',
+    backgroundColor: '#483148',
     minWidth: 200,
   },
 });

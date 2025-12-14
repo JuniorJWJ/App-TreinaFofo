@@ -1,7 +1,9 @@
 import React from 'react';
 import { TextInput, TextInputProps, StyleSheet } from 'react-native';
 
-interface InputProps extends TextInputProps {}
+interface InputProps extends TextInputProps {
+  color?: string;
+}
 
 export const Input: React.FC<InputProps> = ({ style, ...props }) => {
   return <TextInput style={[styles.input, style]} {...props} />;

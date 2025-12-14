@@ -42,7 +42,7 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({ navigati
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
   },
   bodyText: {
     fontSize: 16,

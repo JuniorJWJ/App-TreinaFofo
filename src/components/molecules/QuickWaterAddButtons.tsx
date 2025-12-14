@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   quickButton: {
-    backgroundColor: '#004170ff',
+    backgroundColor: '#332B33',
     paddingHorizontal: 12,
   },
   customButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#483148',
     marginTop: 10,
   },
 });

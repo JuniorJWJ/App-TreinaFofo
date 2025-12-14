@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
 import { useWeeklyPlanStore } from '../store';
 import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
@@ -125,13 +125,14 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
       )}
 
       {weeklyPlans.length > 0 && (
-        <View style={styles.fabContainer}>
-          <Button
-            title="+ Nova Divisão"
-            onPress={() => navigation.navigate('CreateWeeklyPlan')}
-            style={styles.fabButton}
-          />
-        </View>
+      <View style={styles.fabContainer}>
+        <TouchableOpacity
+          style={styles.fabButton}
+          onPress={() => navigation.navigate('CreateWeeklyPlan')}
+        >
+          <Text style={styles.fabText}>+</Text>
+        </TouchableOpacity>
+      </View>
       )}
     </View>
   );
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
   },
   header: {
     alignItems: 'center',
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
   },
   activePlanCard: {
-    borderColor: '#d15710ff',
+    borderColor: '#483148',
     borderWidth: 2,
     backgroundColor: '#F0F8FF',
   },
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   activeBadge: {
-    backgroundColor: '#d15710ff',
+    backgroundColor: '#483148',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -227,11 +228,29 @@ const styles = StyleSheet.create({
   },
   fabContainer: {
     position: 'absolute',
-    bottom: 20,
-    left: 16,
-    right: 16,
+    bottom: 40,
+    right: 20,
   },
+
   fabButton: {
-    backgroundColor: '#d15710ff',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#483148',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+
+  fabText: {
+    color: '#FFF',
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginTop: -2,
   },
 });

@@ -343,19 +343,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFA',
   },
   optionButtonActive: {
-    borderColor: '#2196F3',
-    backgroundColor: '#E3F2FD',
+    color: '#fff',
+    borderColor: '#433A3D',
+    backgroundColor: '#483148',
   },
   optionText: {
     color: '#333',
   },
   optionTextActive: {
-    color: '#2196F3',
+    color: '#fff',
     fontWeight: '600',
   },
   optionDescription: {
     marginTop: 4,
-    color: '#666',
+    color: '#fff',
     fontStyle: 'italic',
   },
   resultSection: {
@@ -366,16 +367,16 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     borderWidth: 2,
-    borderColor: '#2196F3',
+    borderColor: '#433A3D',
   },
   resultTitle: {
     marginBottom: 8,
-    color: '#2196F3',
+    color: '#433A3D',
     fontSize: 18,
   },
   resultValue: {
     fontSize: 36,
-    color: '#2196F3',
+    color: '#433A3D',
     fontWeight: 'bold',
     marginBottom: 8,
   },
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   saveButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#433A3D',
   },
   recommendationBox: {
     backgroundColor: '#E8F5E9',
@@ -420,17 +421,17 @@ const styles = StyleSheet.create({
     color: '#2E7D32',
   },
   infoContainer: {
-    backgroundColor: '#FFF8E1',
+    backgroundColor: '#483148',
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
   },
   infoTitle: {
-    color: '#FF8F00',
+    color: '#fff',
     marginBottom: 8,
   },
   infoText: {
-    color: '#666',
+    color: '#fff',
     marginBottom: 4,
     lineHeight: 18,
   },

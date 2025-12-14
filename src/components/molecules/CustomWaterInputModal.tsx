@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     margin: 4,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
     borderRadius: 8,
   },
 });

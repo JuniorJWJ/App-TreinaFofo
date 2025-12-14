@@ -131,6 +131,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
           value={planName}
           onChangeText={setPlanName}
           style={styles.input}
+          color={'#FFF'}
         />
 
         <Input
@@ -139,6 +140,8 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
           onChangeText={setDescription}
           style={styles.input}
           multiline
+          color={'#FFF'}
+          placeholderTextColor="#AAA"
         />
 
         <View style={styles.stats}>
@@ -171,16 +174,16 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
 
         <View style={styles.buttonsContainer}>
           <Button
-            title="Cancelar"
-            onPress={() => navigation.goBack()}
-            style={[styles.button, styles.cancelButton]}
-          />
-          <Button
             title={isEditing ? 'Atualizar Plano' : 'Criar Plano'}
             onPress={handleSave}
             style={[styles.button, styles.saveButton]}
             disabled={!planName.trim()}
           />
+          <Button
+            title="Cancelar"
+            onPress={() => navigation.goBack()}
+            style={[styles.button, styles.cancelButton]}
+          />        
         </View>
 
         {!isEditing && (
@@ -207,7 +210,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#e0b9a2ff',
+    backgroundColor: '#1b1613ff',
   },
   input: {
     marginBottom: 16,
@@ -221,6 +224,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginBottom: 16,
+    color: '#FFF',
   },
   daysContainer: {
     marginBottom: 20,
@@ -241,7 +245,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   hasWorkout: {
-    backgroundColor: '#d15710ff',
+    backgroundColor: '#483148',
   },
   restDay: {
     backgroundColor: '#6C757D',
@@ -250,6 +254,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+    paddingBottom: 40,
   },
   button: {
     flex: 1,
@@ -259,14 +264,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#6C757D',
   },
   saveButton: {
-    backgroundColor: '#28A745',
+    backgroundColor: '#332B33',
   },
   tipContainer: {
     padding: 12,
     backgroundColor: '#E7F3FF',
     borderRadius: 8,
     borderLeftWidth: 4,
-    borderLeftColor: '#d15710ff',
+    borderLeftColor: '#483148',
   },
   tipText: {
     color: '#0056B3',

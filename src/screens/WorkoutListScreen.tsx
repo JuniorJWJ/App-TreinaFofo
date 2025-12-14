@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
 import { useWorkoutStore } from '../store';
 import { useExerciseStore } from '../store';
 import { Text } from '../components/atoms/Text';
@@ -73,7 +73,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
       </View>
 
       {/* BOTÕES DE AÇÃO */}
-      <View style={styles.actionRow}>
+      <View>
         <Button
           title="Editar"
           onPress={() => navigation.navigate('EditWorkout', { workoutId: item.id })}
@@ -93,7 +93,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
     <View style={styles.container}>
       <View style={styles.header}>
         {/* <Text variant="title">Meus Treinos</Text> */}
-        <Text variant="caption">
+        <Text variant="caption" color='#fff'>
           {workouts.length} treino{workouts.length !== 1 ? 's' : ''} cadastrado{workouts.length !== 1 ? 's' : ''}
         </Text>
       </View>
@@ -123,13 +123,14 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
       )}
 
       {workouts.length > 0 && (
-        <View style={styles.fabContainer}>
-          <Button
-            title="+ Novo Treino"
-            onPress={() => navigation.navigate('CreateWorkout')}
-            style={styles.fabButton}
-          />
-        </View>
+      <View style={styles.fabContainer}>
+        <TouchableOpacity
+          style={styles.fabButton}
+          onPress={() => navigation.navigate('CreateWorkout')}
+        >
+          <Text style={styles.fabText}>+</Text>
+        </TouchableOpacity>
+      </View>
       )}
     </View>
   );
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
   },
   activeWorkoutCard: {
-    borderColor: '#d15710ff',
+    borderColor: '#483148',
     borderWidth: 2,
     backgroundColor: '#F0F8FF',
   },
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   activeBadge: {
-    backgroundColor: '#d15710ff',
+    backgroundColor: '#483148',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -226,17 +227,30 @@ const styles = StyleSheet.create({
   },
   fabContainer: {
     position: 'absolute',
-    bottom: 20,
-    left: 16,
-    right: 16,
+    bottom: 40,
+    right: 20,
   },
+
   fabButton: {
-    backgroundColor: '#d15710ff',
+    width: 60,
+    height: 60,
+    borderRadius: 30,          // círculo
+    backgroundColor: '#483148', 
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    // sombra
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
-    actionRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-    gap: 8,
+
+  fabText: {
+    color: '#FFF',
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginTop: -2,
   },
 });
