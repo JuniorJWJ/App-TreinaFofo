@@ -47,13 +47,15 @@ export interface WeeklyPlan {
   updatedAt: Date;
 }
 
-// Para criação/edição
-export type WeeklyPlanFormData = Omit<WeeklyPlan, 
-  'createdAt' | 'updatedAt' | 'completedDays' | 'completionRate' | 'currentWeek'
-> & {
-  id?: string; // Opcional para formulários
-};
+// Para criar novo plano (sem createdAt)
+export type CreateWeeklyPlanData = Omit<WeeklyPlan, 
+  'id' | 'createdAt' | 'updatedAt' | 'completedDays' | 'completionRate' | 'currentWeek'
+>;
 
+// Para editar plano existente (com createdAt)
+export type UpdateWeeklyPlanData = Omit<WeeklyPlan, 
+  'updatedAt' | 'completedDays' | 'completionRate' | 'currentWeek'
+>;
 // Para templates
 export interface WeeklyPlanTemplate {
   id: string;

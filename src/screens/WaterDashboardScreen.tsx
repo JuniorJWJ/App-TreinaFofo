@@ -1,5 +1,5 @@
 // screens/WaterDashboardScreen.tsx (atualizado)
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { WaterDashboard } from '../components/molecules/WaterDashboard';
 import { WaterGoalModal } from '../components/molecules/WaterGoalModal';

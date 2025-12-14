@@ -53,9 +53,9 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
         <Text variant="caption">
           {item.exerciseIds.length} exercício{item.exerciseIds.length !== 1 ? 's' : ''}
         </Text>
-        <Text variant="caption">
+        {/* <Text variant="caption">
           Criado em: {new Date(item.createdAt).toLocaleDateString('pt-BR')}
-        </Text>
+        </Text> */}
       </View>
 
       {/* Lista de exercícios */}
@@ -73,19 +73,19 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
       </View>
 
       {/* BOTÕES DE AÇÃO */}
-      <View>
+      <View style={styles.workoutActions}>
         <Button
           title="Editar"
           onPress={() => navigation.navigate('EditWorkout', { workoutId: item.id })}
           style={styles.editButton}
+        />      
+        <Button
+          title="Excluir"
+          onPress={() => handleDeleteWorkout(item.id, item.name)}
+          style={styles.deleteButton}
         />
       </View>
-      
-      <Button
-        title="Excluir"
-        onPress={() => handleDeleteWorkout(item.id, item.name)}
-        style={styles.deleteButton}
-      />
+
     </View>
   );
 
@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#332B33',
   },
   editButton: {
-    flex: 2,
-    marginLeft: 8,
+    flex: 1,
+    marginRight: 8,
     backgroundColor: '#483148', 
   },
   emptyState: {

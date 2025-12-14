@@ -47,14 +47,8 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
 
   // Recalcula automaticamente quando os valores mudam
   useEffect(() => {
-    if (weight && parseFloat(weight) > 0) {
-      recalculateGoal();
-    }
-  }, [weight, activityLevel, climate]);
-
-  const recalculateGoal = () => {
     const weightNum = parseFloat(weight);
-    if (!isNaN(weightNum) && weightNum > 0) {
+    if (weight && weightNum > 0) {
       const goal = calculateWaterGoal({
         weight: weightNum,
         activityLevel,
@@ -66,7 +60,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
         onGoalCalculated(goal);
       }
     }
-  };
+  }, [weight, activityLevel, climate, setWaterGoal, onGoalCalculated]);
 
   const handleSaveProfile = () => {
     const weightNum = parseFloat(weight);

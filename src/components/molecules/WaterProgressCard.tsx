@@ -70,9 +70,6 @@ export const WaterProgressCard: React.FC<WaterProgressCardProps> = ({
 
       {showActions && onQuickAdd && (
         <View style={styles.actionsContainer}>
-          {/* <Text variant="caption" style={styles.quickAddLabel}>
-            Adicionar:
-          </Text> */}
           <View style={styles.quickButtons}>
             {quickAmounts.map(amount => (
               <TouchableOpacity

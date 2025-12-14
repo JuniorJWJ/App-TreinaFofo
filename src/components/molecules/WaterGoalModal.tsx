@@ -20,8 +20,8 @@ interface WaterGoalModalProps {
   onClose: () => void;
   onSave: (goal: number) => void;
   weight?: number;
-  activityLevel?: 'sedentary' | 'light' | 'moderate' | 'intense' | undefined;
-  climate?: 'cold' | 'temperate' | 'hot' | undefined;
+  activityLevel?: 'sedentary' | 'light' | 'moderate' | 'intense' | 'active' | 'athlete' | undefined;
+  climate?: 'cold' | 'temperate' | 'hot' | 'very_hot' | undefined;
   onProfileSave?: (profile: {
     weight: number;
     activityLevel: string;
