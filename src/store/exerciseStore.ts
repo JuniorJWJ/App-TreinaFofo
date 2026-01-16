@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Exercise, ExerciseFormData } from '../types';
 
@@ -19,16 +19,18 @@ interface ExerciseState {
 
 export const useExerciseStore = create<ExerciseState>()(
   persist(
-    (set: (partial: Partial<ExerciseState> | ((state: ExerciseState) => Partial<ExerciseState>), replace?: boolean) => void, get: () => ExerciseState) => ({
+    (set, get) => ({
       exercises: [],
       isLoading: false,
 
       addExercise: (exerciseData: ExerciseFormData) => {
         const newExercise: Exercise = {
           ...exerciseData,
-          id: `ex-${Date.now()}`,
+          id: `ex-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           createdAt: new Date(),
           updatedAt: new Date(),
+          // Garantir valores padrão para arrays
+          warmupSets: exerciseData.warmupSets || [],
         };
         set((state) => ({
           exercises: [...state.exercises, newExercise],
@@ -39,7 +41,13 @@ export const useExerciseStore = create<ExerciseState>()(
         set((state) => ({
           exercises: state.exercises.map((exercise) =>
             exercise.id === id
-              ? { ...exercise, ...updates, updatedAt: new Date() }
+              ? { 
+                  ...exercise, 
+                  ...updates, 
+                  updatedAt: new Date(),
+                  // Garantir que arrays não sejam sobrescritos como undefined
+                  warmupSets: updates.warmupSets !== undefined ? updates.warmupSets : exercise.warmupSets,
+                }
               : exercise
           ),
         }));
@@ -74,17 +82,25 @@ export const useExerciseStore = create<ExerciseState>()(
     }),
     {
       name: 'exercise-store',
-      storage: {
-        getItem: async (name: string) => {
-          const value = await AsyncStorage.getItem(name);
-          return value ? JSON.parse(value) : null;
-        },
-        setItem: async (name: string, value: unknown) => {
-          await AsyncStorage.setItem(name, JSON.stringify(value));
-        },
-        removeItem: async (name: string) => {
-          await AsyncStorage.removeItem(name);
-        },
+      version: 2,
+      storage: createJSONStorage(() => AsyncStorage),
+      migrate: (persistedState: any, version: number) => {
+        if (version === 1) {
+          // Migrar da versão 1 para 2
+          if (persistedState && persistedState.exercises) {
+            persistedState.exercises = persistedState.exercises.map((exercise: any) => ({
+              ...exercise,
+              defaultWeight: exercise.defaultWeight || undefined,
+              weightUnit: exercise.weightUnit || 'kg',
+              warmupSets: exercise.warmupSets || [],
+              progressionType: exercise.progressionType || 'fixed',
+              autoProgression: exercise.autoProgression || false,
+              incrementSize: exercise.incrementSize || 2.5,
+              notes: exercise.notes || undefined,
+            }));
+          }
+        }
+        return persistedState;
       },
     }
   )

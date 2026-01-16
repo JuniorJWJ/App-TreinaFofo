@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, ScrollView, Alert, Switch, TouchableOpacity } from 'react-native';
 import { Input } from '../atoms/Input';
 import { Button } from '../atoms/Button';
 import { Text } from '../atoms/Text';
@@ -10,8 +10,8 @@ import { Exercise } from '../../types';
 interface ExerciseFormProps {
   onSave: () => void;
   onCancel: () => void;
-  exercise?: Exercise; // Para edição
-  isEditing?: boolean; // Para diferenciar criação vs edição
+  exercise?: Exercise;
+  isEditing?: boolean;
 }
 
 export const ExerciseForm: React.FC<ExerciseFormProps> = ({ 
@@ -23,12 +23,27 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
   const { addExercise, updateExercise } = useExerciseStore();
   const { muscleGroups } = useMuscleGroupStore();
   
-  const [name, setName] = React.useState(exercise?.name || '');
-  const [selectedMuscleGroupId, setSelectedMuscleGroupId] = React.useState(exercise?.muscleGroupId || '');
-  const [sets, setSets] = React.useState(exercise?.defaultSets.toString() || '3');
-  const [reps, setReps] = React.useState(exercise?.defaultReps.toString() || '12');
-  const [restTime, setRestTime] = React.useState(exercise?.defaultRestTime.toString() || '60');
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [name, setName] = useState(exercise?.name || '');
+  const [selectedMuscleGroupId, setSelectedMuscleGroupId] = useState(exercise?.muscleGroupId || '');
+  const [sets, setSets] = useState(exercise?.defaultSets.toString() || '3');
+  const [reps, setReps] = useState(exercise?.defaultReps.toString() || '12');
+  const [restTime, setRestTime] = useState(exercise?.defaultRestTime.toString() || '60');
+  
+  // Novos campos
+  const [defaultWeight, setDefaultWeight] = useState(exercise?.defaultWeight?.toString() || '');
+  const [weightUnit, setWeightUnit] = useState<'kg' | 'lb'>(exercise?.weightUnit || 'kg');
+  const [notes, setNotes] = useState(exercise?.notes || '');
+  const [progressionType, setProgressionType] = useState<'fixed' | 'range' | 'linear'>(exercise?.progressionType || 'fixed');
+  const [useWarmupSets, setUseWarmupSets] = useState(exercise?.warmupSets && exercise.warmupSets.length > 0 || false);
+  const [warmupSets, setWarmupSets] = useState<Array<{ reps: string; percentage: string }>>(
+    exercise?.warmupSets 
+      ? exercise.warmupSets.map(set => ({ reps: set.reps.toString(), percentage: set.percentage.toString() }))
+      : [{ reps: '10', percentage: '50' }]
+  );
+  const [autoProgression, setAutoProgression] = useState(exercise?.autoProgression || false);
+  const [incrementSize, setIncrementSize] = useState(exercise?.incrementSize?.toString() || '2.5');
+  
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
     if (!name || !selectedMuscleGroupId) {
@@ -52,25 +67,38 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
         defaultSets: parseInt(sets) || 3,
         defaultReps: parseInt(reps) || 12,
         defaultRestTime: parseInt(restTime) || 60,
+        defaultWeight: defaultWeight ? parseFloat(defaultWeight) : undefined,
+        weightUnit,
+        notes: notes.trim() || undefined,
+        progressionType,
+        warmupSets: useWarmupSets ? warmupSets.map(set => ({
+          reps: parseInt(set.reps) || 10,
+          percentage: parseInt(set.percentage) || 50,
+        })) : [],
+        autoProgression,
+        incrementSize: parseFloat(incrementSize) || 2.5,
       };
 
       if (isEditing && exercise) {
-        // Modo edição
         updateExercise(exercise.id, exerciseData);
         Alert.alert('Sucesso!', `Exercício "${name}" atualizado`);
       } else {
-        // Modo criação
         addExercise(exerciseData);
         Alert.alert('Sucesso!', `Exercício "${name}" criado no grupo ${selectedGroup.name}`);
       }
 
-      // Limpa o formulário apenas se for criação
       if (!isEditing) {
         setName('');
         setSelectedMuscleGroupId('');
         setSets('3');
         setReps('12');
         setRestTime('60');
+        setDefaultWeight('');
+        setNotes('');
+        setProgressionType('fixed');
+        setUseWarmupSets(false);
+        setWarmupSets([{ reps: '10', percentage: '50' }]);
+        setAutoProgression(false);
       }
 
       onSave();
@@ -83,17 +111,29 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
     }
   };
 
+  const addWarmupSet = () => {
+    setWarmupSets([...warmupSets, { reps: '10', percentage: '50' }]);
+  };
+
+  const removeWarmupSet = (index: number) => {
+    const newSets = [...warmupSets];
+    newSets.splice(index, 1);
+    setWarmupSets(newSets);
+  };
+
+  const updateWarmupSet = (index: number, field: 'reps' | 'percentage', value: string) => {
+    const newSets = [...warmupSets];
+    newSets[index][field] = value;
+    setWarmupSets(newSets);
+  };
+
   const selectedGroup = muscleGroups.find(group => group.id === selectedMuscleGroupId);
 
   return (
     <ScrollView style={styles.container}>
-      {/* <Text variant="title" align="center">
-        {isEditing ? 'Editar Exercício' : 'Novo Exercício'}
-      </Text> */}
-      
       {selectedGroup && (
         <View style={styles.selectedGroup}>
-          <Text variant="caption">Grupo selecionado: </Text>
+          <Text color="#FFF" variant="caption">Grupo selecionado: </Text>
           <Text color='#FFF' variant="body" style={{ color: selectedGroup.color, fontWeight: 'bold' }}>
             {selectedGroup.name}
           </Text>
@@ -116,45 +156,179 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
             onPress={() => setSelectedMuscleGroupId(group.id)}
             style={[
               styles.muscleGroupButton,
-              selectedMuscleGroupId === group.id ? styles.primaryButton : styles.secondaryButton,
+              selectedMuscleGroupId === group.id ? styles.selectedMuscleGroup : styles.unselectedMuscleGroup,
             ]}
           />
         ))}
       </View>
 
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Text color='#FFF'  variant="subtitle">Séries:</Text>
-          <Input
-            value={sets}
-            onChangeText={setSets}
-            keyboardType="numeric"
-            placeholder="3"
-            color='#FFF'
-          />
-        </View>
+      <View style={styles.section}>
+        <Text color='#FFF' variant="subtitle">Configuração de Séries:</Text>
         
-        <View style={styles.column}>
-          <Text color='#FFF'  variant="subtitle">Repetições:</Text>
-          <Input
-            value={reps}
-            onChangeText={setReps}
-            keyboardType="numeric"
-            placeholder="12"
-            color='#FFF'
-          />
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <Text color='#FFF' variant="body">Séries:</Text>
+            <Input
+              value={sets}
+              onChangeText={setSets}
+              keyboardType="numeric"
+              placeholder="3"
+              color='#FFF'
+            />
+          </View>
+          
+          <View style={styles.column}>
+            <Text color='#FFF' variant="body">Repetições:</Text>
+            <Input
+              value={reps}
+              onChangeText={setReps}
+              keyboardType="numeric"
+              placeholder="12"
+              color='#FFF'
+            />
+          </View>
+          
+          <View style={styles.column}>
+            <Text color='#FFF' variant="body">Descanso (s):</Text>
+            <Input
+              value={restTime}
+              onChangeText={setRestTime}
+              keyboardType="numeric"
+              placeholder="60"
+              color='#FFF'
+            />
+          </View>
         </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text color='#FFF' variant="subtitle">Configuração de Peso:</Text>
         
-        <View style={styles.column}>
-          <Text color='#FFF'  variant="subtitle">Descanso (s):</Text>
-          <Input
-            value={restTime}
-            onChangeText={setRestTime}
-            keyboardType="numeric"
-            placeholder="60"
-            color='#FFF'
+        <View style={styles.row}>
+          <View style={[styles.column, { flex: 3 }]}>
+            <Text color='#FFF' variant="body">Peso Base:</Text>
+            <Input
+              value={defaultWeight}
+              onChangeText={setDefaultWeight}
+              keyboardType="numeric"
+              placeholder="20"
+              color='#FFF'
+              placeholderTextColor={"#FFF"}
+            />
+          </View>
+          
+          <View style={[styles.column, { flex: 2 }]}>
+            <Text color='#FFF' variant="body">Unidade:</Text>
+            <View style={styles.unitButtons}>
+              <TouchableOpacity
+                style={[
+                  styles.unitButton,
+                  weightUnit === 'kg' && styles.unitButtonSelected
+                ]}
+                onPress={() => setWeightUnit('kg')}
+              >
+                <Text color='#FFF'>kg</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.unitButton,
+                  weightUnit === 'lb' && styles.unitButtonSelected
+                ]}
+                onPress={() => setWeightUnit('lb')}
+              >
+                <Text color='#FFF'>lb</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.switchRow}>
+          <Text color='#FFF' variant="body">Usar séries de aquecimento</Text>
+          <Switch
+            value={useWarmupSets}
+            onValueChange={setUseWarmupSets}
+            trackColor={{ false: '#767577', true: '#483148' }}
           />
         </View>
+
+        {useWarmupSets && (
+          <View style={styles.warmupContainer}>
+            <Text color='#FFF' variant="body">Séries de Aquecimento:</Text>
+            {warmupSets.map((set, index) => (
+              <View key={index} style={styles.warmupRow}>
+                <View style={styles.warmupInput}>
+                  <Text color='#FFF' variant="caption">Reps:</Text>
+                  <Input
+                    value={set.reps}
+                    onChangeText={(value) => updateWarmupSet(index, 'reps', value)}
+                    keyboardType="numeric"
+                    placeholder="10"
+                    color='#FFF'
+                  />
+                </View>
+                <View style={styles.warmupInput}>
+                  <Text color='#FFF' variant="caption">% do peso:</Text>
+                  <Input
+                    value={set.percentage}
+                    onChangeText={(value) => updateWarmupSet(index, 'percentage', value)}
+                    keyboardType="numeric"
+                    placeholder="50"
+                    color='#FFF'
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => removeWarmupSet(index)}
+                >
+                  <Text color='#FFF'>✕</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+            <Button
+              title="Adicionar Série de Aquecimento"
+              onPress={addWarmupSet}
+              style={styles.secondaryButton}
+            />
+          </View>
+        )}
+
+        <View style={styles.switchRow}>
+          <View>
+            <Text color='#FFF' variant="body">Progressão Automática</Text>
+            <Text color='#CCC' variant="caption">Aumentar peso automaticamente</Text>
+          </View>
+          <Switch
+            value={autoProgression}
+            onValueChange={setAutoProgression}
+            trackColor={{ false: '#767577', true: '#483148' }}
+          />
+        </View>
+
+        {autoProgression && (
+          <View style={styles.column}>
+            <Text color='#FFF' variant="body">Incremento:</Text>
+            <Input
+              value={incrementSize}
+              onChangeText={setIncrementSize}
+              keyboardType="numeric"
+              placeholder="2.5"
+              color='#FFF'
+            />
+          </View>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text color='#FFF' variant="subtitle">Notas:</Text>
+        <Input
+          placeholder="Dicas de execução, progressão, etc."
+          value={notes}
+          onChangeText={setNotes}
+          multiline
+          numberOfLines={4}
+          color='#FFF'
+          style={styles.notesInput}
+        />
       </View>
 
       <View style={styles.buttonsContainer}>
@@ -175,19 +349,19 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
   );
 };
 
-// Mantenha os mesmos styles do anterior...
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#1E1E1E',
   },
   selectedGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
-    backgroundColor: '#f8f9fa',
+    padding: 12,
+    backgroundColor: '#2D2D2D',
     borderRadius: 8,
-    marginBottom: 12,
+    marginBottom: 16,
   },
   muscleGroupsContainer: {
     flexDirection: 'row',
@@ -198,20 +372,96 @@ const styles = StyleSheet.create({
     margin: 4,
     flex: 1,
     minWidth: 100,
+    paddingVertical: 8,
+  },
+  selectedMuscleGroup: {
+    backgroundColor: '#483148',
+    borderWidth: 2,
+    borderColor: '#6A4C6A',
+  },
+  unselectedMuscleGroup: {
+    backgroundColor: '#332B33',
+  },
+  section: {
+    marginBottom: 24,
+    padding: 12,
+    backgroundColor: '#2D2D2D',
+    borderRadius: 8,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-end', // Adicionado para alinhar na base
     marginVertical: 8,
   },
   column: {
     flex: 1,
     marginHorizontal: 4,
   },
+  unitButtons: {
+    flexDirection: 'row',
+    marginTop: 8,
+    height: 50, // Altura fixa para corresponder ao Input
+  },
+  unitButton: {
+    flex: 1,
+    padding: 8,
+    marginHorizontal: 2,
+    backgroundColor: '#332B33',
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  unitButtonSelected: {
+    backgroundColor: '#483148',
+    borderWidth: 1,
+    borderColor: '#6A4C6A',
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 8,
+    paddingVertical: 8,
+  },
+  warmupContainer: {
+    marginTop: 12,
+    padding: 12,
+    backgroundColor: '#262626',
+    borderRadius: 6,
+  },
+  warmupRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start', // Mudado para flex-start para alinhar no topo
+    marginVertical: 8, // Aumentado para dar mais espaço
+  },
+  warmupInput: {
+    flex: 1,
+    marginHorizontal: 4,
+  },
+  removeButton: {
+    width: 40, // Largura fixa
+    height: 40, // Altura fixa igual aos inputs
+    backgroundColor: '#FF3B30',
+    borderRadius: 4,
+    marginLeft: 8,
+    marginTop: 24, // Adicionado marginTop para alinhar com os inputs
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  removeButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  notesInput: {
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
+    marginBottom: 40,
   },
   button: {
     flex: 1,

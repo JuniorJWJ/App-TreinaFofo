@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   workoutCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#e9dfdfff',
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
