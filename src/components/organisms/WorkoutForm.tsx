@@ -1,9 +1,13 @@
-// components/organisms/WorkoutForm.tsx
+// src/components/organisms/WorkoutForm.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from '../atoms/Text';
 import { Input } from '../atoms/Input';
 import { Button } from '../atoms/Button';
+import { ExerciseSearchBar } from '../molecules/ExerciseSearchBar';
+import { MuscleGroupFilterChips } from '../molecules/MuscleGroupFilterChips';
+import { WorkoutExerciseCard } from '../molecules/WorkoutExerciseCard';
+import { useExerciseList } from '../../hooks/useExerciseList';
 
 interface WorkoutFormProps {
   mode: 'create' | 'edit';
@@ -12,6 +16,7 @@ interface WorkoutFormProps {
   exercises: Array<{
     id: string;
     name: string;
+    muscleGroupId: string;
     defaultSets: number;
     defaultReps: number;
     defaultRestTime: number;
@@ -46,6 +51,20 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
   const isInitialMount = useRef(true);
   const prevInitialWorkoutName = useRef(initialWorkoutName);
   const prevInitialSelectedExercises = useRef(initialSelectedExercises);
+
+  // Usa o hook useExerciseList com os exercícios customizados
+  const {
+    exercises: filteredExercises,
+    uniqueGroups,
+    search,
+    setSearch,
+    selectedGroup,
+    setSelectedGroup,
+    getMuscleGroupName,
+    getMuscleGroupColor,
+  } = useExerciseList({
+    customExercises: exercises
+  });
 
   // Atualiza os estados apenas quando os valores iniciais mudam DE VERDADE
   useEffect(() => {
@@ -85,13 +104,26 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
   };
 
   const handleSelectAll = () => {
-    if (exercises.length === 0) return;
-    const allExerciseIds = exercises.map(ex => ex.id);
-    setSelectedExercises(allExerciseIds);
+    if (filteredExercises.length === 0) return;
+    const allExerciseIds = filteredExercises.map(ex => ex.id);
+    setSelectedExercises(prev => {
+      // Adiciona apenas os que ainda não estão selecionados
+      const newSelection = [...prev];
+      allExerciseIds.forEach(id => {
+        if (!newSelection.includes(id)) {
+          newSelection.push(id);
+        }
+      });
+      return newSelection;
+    });
   };
 
   const handleClearAll = () => {
-    setSelectedExercises([]);
+    if (filteredExercises.length === 0) return;
+    // Remove apenas os exercícios que estão na lista filtrada
+    setSelectedExercises(prev => 
+      prev.filter(id => !filteredExercises.some(ex => ex.id === id))
+    );
   };
 
   const getSubmitButtonText = () => {
@@ -99,9 +131,14 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
     return mode === 'create' ? 'Criar Treino' : 'Salvar Alterações';
   };
 
-  // const getTitle = () => {
-  //   return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
-  // };
+  const getTitle = () => {
+    return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
+  };
+
+  const handleClearFilters = () => {
+    setSearch('');
+    setSelectedGroup(null);
+  };
 
   return (
     <View style={styles.container}>
@@ -109,9 +146,9 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        {/* <Text variant="title" align="center" style={styles.title}>
+        <Text variant="title" align="center" style={styles.title}>
           {getTitle()}
-        </Text> */}
+        </Text>
 
         {mode === 'edit' && workoutInfo && (
           <View style={styles.workoutInfo}>
@@ -133,22 +170,37 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
           autoFocus={mode === 'create'}
         />
 
+        {/* Barra de busca */}
+        <ExerciseSearchBar
+          search={search}
+          onSearchChange={setSearch}
+          placeholder="Buscar exercícios..."
+        />
+
+        {/* Filtros de grupo muscular */}
+        <MuscleGroupFilterChips
+          groups={uniqueGroups}
+          selectedGroup={selectedGroup}
+          onSelectGroup={setSelectedGroup}
+        />
+
+        {/* Controles de seleção */}
         <View style={styles.selectionHeader}>
           <Text variant="subtitle" style={styles.sectionTitle}>
-            Exercícios ({selectedExercises.length})
+            Exercícios: {selectedExercises.length}/{filteredExercises.length}
           </Text>
           <View style={styles.selectionButtons}>
             <TouchableOpacity 
               onPress={handleSelectAll} 
               style={[
                 styles.selectionButton,
-                exercises.length === 0 && styles.disabledButton
+                filteredExercises.length === 0 && styles.disabledButton
               ]}
-              disabled={exercises.length === 0}
+              disabled={filteredExercises.length === 0}
             >
               <Text style={[
                 styles.selectionButtonText,
-                exercises.length === 0 && styles.disabledText
+                filteredExercises.length === 0 && styles.disabledText
               ]}>
                 Selecionar Todos
               </Text>
@@ -157,69 +209,64 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
               onPress={handleClearAll} 
               style={[
                 styles.selectionButton,
-                selectedExercises.length === 0 && styles.disabledButton
+                (filteredExercises.length === 0 || 
+                 !filteredExercises.some(ex => isExerciseSelected(ex.id))) && styles.disabledButton
               ]}
-              disabled={selectedExercises.length === 0}
+              disabled={filteredExercises.length === 0 || 
+                !filteredExercises.some(ex => isExerciseSelected(ex.id))}
             >
               <Text style={[
                 styles.selectionButtonText,
-                selectedExercises.length === 0 && styles.disabledText
+                (filteredExercises.length === 0 || 
+                 !filteredExercises.some(ex => isExerciseSelected(ex.id))) && styles.disabledText
               ]}>
-                Limpar
+                Limpar Filtrados
               </Text>
             </TouchableOpacity>
           </View>
         </View>
 
+        {/* Lista de exercícios filtrados */}
         <View style={styles.exercisesContainer}>
-          {exercises.length === 0 ? (
+          {filteredExercises.length === 0 ? (
             <View style={styles.emptyExercises}>
-              <Text style={styles.emptyText}>Nenhum exercício cadastrado</Text>
-              <Text style={styles.emptySubtext}>
-                Crie exercícios primeiro para poder adicioná-los ao treino
+              <Text style={styles.emptyText}>
+                {search || selectedGroup 
+                  ? 'Nenhum exercício encontrado' 
+                  : 'Nenhum exercício cadastrado'}
               </Text>
+              <Text style={styles.emptySubtext}>
+                {search || selectedGroup
+                  ? 'Tente ajustar sua busca ou filtro'
+                  : 'Crie exercícios primeiro para poder adicioná-los ao treino'}
+              </Text>
+              {(search || selectedGroup) && (
+                <TouchableOpacity
+                  onPress={handleClearFilters}
+                  style={styles.clearFiltersButton}
+                >
+                  <Text style={styles.clearFiltersButtonText}>
+                    Limpar Filtros
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           ) : (
-            exercises.map(exercise => {
-              const isSelected = isExerciseSelected(exercise.id);
-              return (
-                <TouchableOpacity
-                  key={exercise.id}
-                  style={[
-                    styles.exerciseCard,
-                    isSelected ? styles.exerciseCardSelected : styles.exerciseCardUnselected
-                  ]}
-                  onPress={() => toggleExerciseSelection(exercise.id)}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.exerciseCardContent}>
-                    <View style={styles.exerciseInfo}>
-                      <Text style={[
-                        styles.exerciseName,
-                        isSelected && styles.exerciseNameSelected
-                      ]} numberOfLines={2}>
-                        {exercise.name}
-                      </Text>
-                      <Text style={styles.exerciseDetails}>
-                        {exercise.defaultSets} × {exercise.defaultReps} • {exercise.defaultRestTime}s
-                      </Text>
-                    </View>
-                    <View style={[
-                      styles.selectionIndicator,
-                      isSelected && styles.selectionIndicatorSelected
-                    ]}>
-                      {isSelected && (
-                        <Text style={styles.checkmark}>✓</Text>
-                      )}
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })
+            filteredExercises.map(exercise => (
+              <WorkoutExerciseCard
+                key={exercise.id}
+                exercise={exercise}
+                isSelected={isExerciseSelected(exercise.id)}
+                muscleGroupName={getMuscleGroupName(exercise.muscleGroupId)}
+                muscleGroupColor={getMuscleGroupColor(exercise.muscleGroupId)}
+                onPress={() => toggleExerciseSelection(exercise.id)}
+              />
+            ))
           )}
         </View>
       </ScrollView>
 
+      {/* Footer com botões */}
       <View style={styles.footer}>
         <View style={styles.selectedInfo}>
           <Text variant="caption" style={styles.selectedCount}>
@@ -262,6 +309,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 20,
+    color: '#FFFFFF',
   },
   workoutInfo: {
     backgroundColor: '#FFF',
@@ -277,7 +325,7 @@ const styles = StyleSheet.create({
     color: '#483148',
   },
   input: {
-    marginBottom: 20,
+    marginBottom: 16,
     backgroundColor: '#FFF',
   },
   selectionHeader: {
@@ -289,6 +337,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: '#FFF',
+    flex: 1,
   },
   selectionButtons: {
     flexDirection: 'row',
@@ -334,63 +383,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#999',
     textAlign: 'center',
+    marginBottom: 16,
   },
-  exerciseCard: {
-    backgroundColor: '#FFF',
-    borderRadius: 8,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    overflow: 'hidden',
-  },
-  exerciseCardSelected: {
-    borderColor: '#483148',
-    borderWidth: 2,
-    backgroundColor: '#FFF5F0',
-  },
-  exerciseCardUnselected: {
-    borderColor: '#E0E0E0',
-  },
-  exerciseCardContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 12,
-  },
-  exerciseInfo: {
-    flex: 1,
-    marginRight: 8,
-  },
-  exerciseName: {
-    fontWeight: '500',
-    marginBottom: 2,
-    color: '#333',
-  },
-  exerciseNameSelected: {
-    color: '#483148',
-  },
-  exerciseDetails: {
-    fontSize: 12,
-    color: '#666',
-  },
-  selectionIndicator: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexShrink: 0,
-  },
-  selectionIndicatorSelected: {
+  clearFiltersButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     backgroundColor: '#483148',
-    borderColor: '#483148',
+    borderRadius: 6,
   },
-  checkmark: {
+  clearFiltersButtonText: {
     color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 12,
+    fontWeight: '500',
   },
   footer: {
     position: 'absolute',

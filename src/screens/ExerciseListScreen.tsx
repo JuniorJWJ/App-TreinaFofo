@@ -78,18 +78,19 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
   return (
     <View style={styles.container}>
       {/* Barra de busca */}
-      <ExerciseSearchBar
-        search={search}
-        onSearchChange={setSearch}
-      />
+      <View style={styles.searchAndFilterContainer}>
+        <ExerciseSearchBar
+          search={search}
+          onSearchChange={setSearch}
+        />
 
-      {/* Filtros de grupo muscular */}
-      <MuscleGroupFilterChips
-        groups={uniqueGroups}
-        selectedGroup={selectedGroup}
-        onSelectGroup={setSelectedGroup}
-      />
-
+        {/* Filtros de grupo muscular */}
+        <MuscleGroupFilterChips
+          groups={uniqueGroups}
+          selectedGroup={selectedGroup}
+          onSelectGroup={setSelectedGroup}
+        />
+      </View>
       {/* Lista de exercícios ou estado vazio */}
       {!hasExercises ? (
         <EmptyExerciseList
@@ -129,6 +130,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1b1613ff',
+  },
+  searchAndFilterContainer: {
+    paddingHorizontal: 16, 
   },
   listContent: {
     paddingHorizontal: 16,

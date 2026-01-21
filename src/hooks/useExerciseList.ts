@@ -2,11 +2,23 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useExerciseStore, useMuscleGroupStore } from '../store';
 
-export const useExerciseList = () => {
-  const { exercises, deleteExercise } = useExerciseStore();
+interface UseExerciseListOptions {
+  initialSearch?: string;
+  initialSelectedGroup?: string | null;
+  customExercises?: any[]; // Para usar quando não queremos pegar do store
+}
+
+export const useExerciseList = (options: UseExerciseListOptions = {}) => {
+  const { initialSearch = '', initialSelectedGroup = null, customExercises } = options;
+  
+  const { exercises: storeExercises, deleteExercise } = useExerciseStore();
   const { muscleGroups } = useMuscleGroupStore();
-  const [search, setSearch] = useState('');
-  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  
+  // Usa os exercícios customizados se fornecidos, senão usa do store
+  const exercises = customExercises || storeExercises;
+  
+  const [search, setSearch] = useState(initialSearch);
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(initialSelectedGroup);
 
   // Função para obter nome do grupo muscular
   const getMuscleGroupName = useCallback((muscleGroupId: string): string => {
@@ -68,6 +80,7 @@ export const useExerciseList = () => {
 
   return {
     exercises: sortedExercises,
+    allExercises: exercises, // Para referência
     uniqueGroups,
     search,
     setSearch,
@@ -75,6 +88,6 @@ export const useExerciseList = () => {
     setSelectedGroup,
     getMuscleGroupName,
     getMuscleGroupColor,
-    deleteExercise,
+    deleteExercise, // Apenas se estiver usando exercícios do store
   };
 };

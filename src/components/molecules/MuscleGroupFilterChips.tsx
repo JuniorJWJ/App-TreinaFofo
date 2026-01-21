@@ -64,7 +64,7 @@ export const MuscleGroupFilterChips: React.FC<MuscleGroupFilterChipsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     paddingBottom: 8,
   },
   filterScroll: {
