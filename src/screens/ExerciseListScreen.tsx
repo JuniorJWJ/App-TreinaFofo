@@ -1,5 +1,13 @@
-import React from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { 
+  View, 
+  StyleSheet, 
+  FlatList, 
+  TouchableOpacity, 
+  Alert,
+  TextInput,
+  ScrollView
+} from 'react-native';
 import { useExerciseStore } from '../store';
 import { useMuscleGroupStore } from '../store';
 import { Text } from '../components/atoms/Text';
@@ -12,22 +20,65 @@ interface ExerciseListScreenProps {
 export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigation }) => {
   const { exercises, deleteExercise } = useExerciseStore();
   const { muscleGroups } = useMuscleGroupStore();
+  const [search, setSearch] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
-  const getMuscleGroupName = (muscleGroupId: string) => {
-    const group = muscleGroups.find(g => 
-      g.name.toLowerCase() === muscleGroupId.toLowerCase() || 
-      g.id === muscleGroupId
-    );
+  // Função para obter nome do grupo muscular
+  const getMuscleGroupName = (muscleGroupId: string): string => {
+    if (!muscleGroups || muscleGroups.length === 0) return 'Desconhecido';
+    
+    const group = muscleGroups.find(g => {
+      // Tenta encontrar pelo ID
+      if (g.id === muscleGroupId) return true;
+      // Tenta encontrar pelo nome (case insensitive)
+      if (g.name.toLowerCase() === muscleGroupId.toLowerCase()) return true;
+      return false;
+    });
+    
     return group ? group.name : 'Desconhecido';
   };
 
-  const getMuscleGroupColor = (muscleGroupId: string) => {
-    const group = muscleGroups.find(g => 
-      g.name.toLowerCase() === muscleGroupId.toLowerCase() || 
-      g.id === muscleGroupId
-    );
-    return group ? group.color : '#CCCCCC';
+  // Função para obter cor do grupo muscular
+  const getMuscleGroupColor = (muscleGroupId: string): string => {
+    if (!muscleGroups || muscleGroups.length === 0) return '#CCCCCC';
+    
+    const group = muscleGroups.find(g => {
+      if (g.id === muscleGroupId) return true;
+      if (g.name.toLowerCase() === muscleGroupId.toLowerCase()) return true;
+      return false;
+    });
+    
+    return group ? group.color || '#CCCCCC' : '#CCCCCC';
   };
+
+  // Filtra exercícios por busca e grupo selecionado
+  const filteredExercises = exercises.filter(exercise => {
+    // Verifica se há match com a busca
+    const matchesSearch = search === '' || 
+      exercise.name.toLowerCase().includes(search.toLowerCase());
+    
+    // Verifica se há match com o grupo selecionado
+    const matchesGroup = !selectedGroup || 
+      getMuscleGroupName(exercise.muscleGroupId) === selectedGroup;
+    
+    return matchesSearch && matchesGroup;
+  });
+
+  // Ordena exercícios por grupo muscular e depois por nome
+  const sortedExercises = [...filteredExercises].sort((a, b) => {
+    const groupA = getMuscleGroupName(a.muscleGroupId);
+    const groupB = getMuscleGroupName(b.muscleGroupId);
+    
+    if (groupA < groupB) return -1;
+    if (groupA > groupB) return 1;
+    
+    return a.name.localeCompare(b.name);
+  });
+
+  // Obtém lista de grupos únicos para filtro
+  const uniqueGroups = Array.from(
+    new Set(exercises.map(ex => getMuscleGroupName(ex.muscleGroupId)))
+  ).sort();
 
   const handleDeleteExercise = (exerciseId: string, exerciseName: string) => {
     Alert.alert(
@@ -48,88 +99,194 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
     navigation.navigate('EditExercise', { exerciseId });
   };
 
-  const renderExerciseItem = ({ item }: { item: any }) => (
-    <TouchableOpacity 
-      style={styles.exerciseCard}
-      onPress={() => handleEditExercise(item.id)}
-      onLongPress={() => handleDeleteExercise(item.id, item.name)}
-    >
-      <View style={styles.exerciseHeader}>
-        <Text variant="subtitle" style={styles.exerciseName}>
-          {item.name}
-        </Text>
-        <View 
-          style={[
-            styles.muscleGroupBadge,
-            { backgroundColor: getMuscleGroupColor(item.muscleGroupId) }
-          ]}
-        >
-          <Text style={styles.badgeText}>
-            {getMuscleGroupName(item.muscleGroupId)}
-            {item.muscleGroupName}
-          </Text>
-        </View>
-      </View>
-      
-      <View style={styles.exerciseDetails}>
-        <Text variant="caption">
-          {item.defaultSets} séries × {item.defaultReps} reps
-        </Text>
-        <Text variant="caption">
-          Descanso: {item.defaultRestTime}s
-        </Text>
-      </View>
+  // Renderiza um separador de grupo quando o grupo muda
+  const renderItem = ({ item, index }: { item: any; index: number }) => {
+    const currentGroup = getMuscleGroupName(item.muscleGroupId);
+    const prevGroup = index > 0 
+      ? getMuscleGroupName(sortedExercises[index - 1].muscleGroupId)
+      : null;
+    
+    const showGroupHeader = currentGroup !== prevGroup;
 
-      <View style={styles.exerciseActions}>
-        <Button
-          title="Editar"
+    return (
+      <View>
+        {showGroupHeader && !selectedGroup && (
+          <View style={styles.groupHeader}>
+            <Text style={styles.groupHeaderText}>{currentGroup}</Text>
+          </View>
+        )}
+        
+        <TouchableOpacity 
+          style={styles.exerciseCard}
           onPress={() => handleEditExercise(item.id)}
-          style={styles.editButton}
-        />
-        <Button
-          title="Excluir"
-          onPress={() => handleDeleteExercise(item.id, item.name)}
-          style={styles.deleteButton}
-        />
+          onLongPress={() => handleDeleteExercise(item.id, item.name)}
+        >
+          <View style={styles.exerciseHeader}>
+            <Text variant="subtitle" style={styles.exerciseName}>
+              {item.name}
+            </Text>
+            <View 
+              style={[
+                styles.muscleGroupBadge,
+                { backgroundColor: getMuscleGroupColor(item.muscleGroupId) }
+              ]}
+            >
+              <Text style={styles.badgeText}>
+                {currentGroup}
+              </Text>
+            </View>
+          </View>
+          
+          <View style={styles.exerciseDetails}>
+            <View style={styles.detailRow}>
+              <Text variant="caption">
+                {item.defaultSets} séries × {item.defaultReps} reps
+              </Text>
+              <Text variant="caption">
+                Descanso: {item.defaultRestTime}s
+              </Text>
+            </View>
+            {item.defaultWeight && (
+              <Text variant="caption">
+                Peso: {item.defaultWeight} {item.weightUnit || 'kg'}
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.exerciseActions}>
+            <Button
+              title="Editar"
+              onPress={() => handleEditExercise(item.id)}
+              style={styles.editButton}
+            />
+            <Button
+              title="Excluir"
+              onPress={() => handleDeleteExercise(item.id, item.name)}
+              style={styles.deleteButton}
+            />
+          </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
-      {exercises.length === 0 ? (
+      {/* Barra de busca personalizada */}
+      <View style={styles.searchContainer}>
+        <View style={styles.searchBar}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar exercícios..."
+            placeholderTextColor="#999"
+            value={search}
+            onChangeText={setSearch}
+          />
+          {search.length > 0 && (
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={() => setSearch('')}
+            >
+              <Text style={styles.clearButtonText}>X</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+
+      {/* Filtros de grupo muscular */}
+      {uniqueGroups.length > 0 && (
+        <View style={styles.filterContainer}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            style={styles.filterScroll}
+          >
+            <TouchableOpacity
+              style={[
+                styles.filterChip,
+                !selectedGroup && styles.filterChipActive
+              ]}
+              onPress={() => setSelectedGroup(null)}
+            >
+              <Text style={[
+                styles.filterChipText,
+                !selectedGroup && styles.filterChipTextActive
+              ]}>
+                Todos
+              </Text>
+            </TouchableOpacity>
+            
+            {uniqueGroups.map(group => (
+              <TouchableOpacity
+                key={group}
+                style={[
+                  styles.filterChip,
+                  selectedGroup === group && styles.filterChipActive
+                ]}
+                onPress={() => setSelectedGroup(
+                  selectedGroup === group ? null : group
+                )}
+              >
+                <Text style={[
+                  styles.filterChipText,
+                  selectedGroup === group && styles.filterChipTextActive
+                ]}>
+                  {group}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      )}
+
+      {sortedExercises.length === 0 ? (
         <View style={styles.emptyState}>
           <Text variant="subtitle" align="center">
-            Nenhum exercício cadastrado
+            {search || selectedGroup 
+              ? 'Nenhum exercício encontrado' 
+              : 'Nenhum exercício cadastrado'}
           </Text>
           <Text variant="body" align="center" style={styles.emptyText}>
-            Toque no botão abaixo para criar seu primeiro exercício!
+            {search || selectedGroup
+              ? 'Tente ajustar sua busca ou filtro'
+              : 'Toque no botão abaixo para criar seu primeiro exercício!'}
           </Text>
-          <Button
-            title="Criar Primeiro Exercício"
-            onPress={() => navigation.navigate('AddExercise')}
-            style={styles.createButton}
-          />
+          {(search || selectedGroup) ? (
+            <Button
+              title="Limpar Filtros"
+              onPress={() => {
+                setSearch('');
+                setSelectedGroup(null);
+              }}
+              style={styles.clearFiltersButton}
+            />
+          ) : (
+            <Button
+              title="Criar Primeiro Exercício"
+              onPress={() => navigation.navigate('AddExercise')}
+              style={styles.createButton}
+            />
+          )}
         </View>
       ) : (
         <FlatList
-          data={exercises}
+          data={sortedExercises}
           keyExtractor={(item) => item.id}
-          renderItem={renderExerciseItem}
+          renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
         />
       )}
 
       {exercises.length > 0 && (
-      <View style={styles.fabContainer}>
-        <TouchableOpacity 
-          style={styles.fabButton}
-          onPress={() => navigation.navigate('AddExercise')}
-        >
-          <Text style={styles.fabText}>+</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.fabContainer}>
+          <TouchableOpacity 
+            style={styles.fabButton}
+            onPress={() => navigation.navigate('AddExercise')}
+          >
+            <Text style={styles.fabText}>+</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -138,21 +295,82 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#1b1613ff',
   },
-  header: {
+  searchContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  searchBar: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    backgroundColor: '#e9dfdfff',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    height: 44,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+  },
+  clearButton: {
+    padding: 4,
+    marginLeft: 8,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    color: '#999',
+    fontWeight: 'bold',
+  },
+  filterContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+  },
+  filterScroll: {
+    flexGrow: 0,
+  },
+  filterChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: '#e9dfdfff',
+    borderRadius: 16,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#483148',
+  },
+  filterChipActive: {
+    backgroundColor: '#483148',
+  },
+  filterChipText: {
+    fontSize: 14,
+    color: '#483148',
+  },
+  filterChipTextActive: {
+    color: '#FFFFFF',
   },
   listContent: {
+    paddingHorizontal: 16,
     paddingBottom: 80,
+  },
+  groupHeader: {
+    marginTop: 16,
+    marginBottom: 8,
+    paddingLeft: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#483148',
+  },
+  groupHeaderText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
   exerciseCard: {
     backgroundColor: '#e9dfdfff',
     padding: 16,
     borderRadius: 12,
-    marginBottom: 12,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: '#E0E0E0',
     shadowColor: '#000',
@@ -182,9 +400,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   exerciseDetails: {
+    marginBottom: 12,
+  },
+  detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 4,
   },
   exerciseActions: {
     flexDirection: 'row',
@@ -210,9 +431,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 24,
     color: '#666',
+    textAlign: 'center',
   },
   createButton: {
     width: '100%',
+  },
+  clearFiltersButton: {
+    width: '100%',
+    backgroundColor: '#483148',
   },
   fabContainer: {
     position: 'absolute',
@@ -222,22 +448,19 @@ const styles = StyleSheet.create({
   fabButton: {
     width: 60,
     height: 60,
-    borderRadius: 30, // círculo
+    borderRadius: 30,
     backgroundColor: '#483148',
     justifyContent: 'center',
     alignItems: 'center',
-
-    // sombra (Android + iOS)
     elevation: 6,
     shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-
   fabText: {
     color: '#FFF',
     fontSize: 32,
-    marginTop: -4, // centraliza visualmente o "+"
+    marginTop: -4,
   },
 });
