@@ -7,7 +7,7 @@ export const mockExercises: ExerciseFormData[] = [
   // PEITO
   {
     name: 'Supino Reto com Barra',
-    muscleGroupId: 'Chest',
+    muscleGroupId: 'chest',
     description: 'Exercício fundamental para desenvolvimento do peitoral maior. Executado com barra no banco plano.',
     equipment: 'Banco + Barra + Anilhas',
     difficulty: 'intermediate',

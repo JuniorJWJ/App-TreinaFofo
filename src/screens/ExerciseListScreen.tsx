@@ -14,12 +14,18 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
   const { muscleGroups } = useMuscleGroupStore();
 
   const getMuscleGroupName = (muscleGroupId: string) => {
-    const group = muscleGroups.find(g => g.id === muscleGroupId);
+    const group = muscleGroups.find(g => 
+      g.name.toLowerCase() === muscleGroupId.toLowerCase() || 
+      g.id === muscleGroupId
+    );
     return group ? group.name : 'Desconhecido';
   };
 
   const getMuscleGroupColor = (muscleGroupId: string) => {
-    const group = muscleGroups.find(g => g.id === muscleGroupId);
+    const group = muscleGroups.find(g => 
+      g.name.toLowerCase() === muscleGroupId.toLowerCase() || 
+      g.id === muscleGroupId
+    );
     return group ? group.color : '#CCCCCC';
   };
 
@@ -60,6 +66,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
         >
           <Text style={styles.badgeText}>
             {getMuscleGroupName(item.muscleGroupId)}
+            {item.muscleGroupName}
           </Text>
         </View>
       </View>

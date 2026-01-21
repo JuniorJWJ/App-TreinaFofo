@@ -1,4 +1,3 @@
-// components/molecules/WaterProgressCard.tsx
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { WaterProgressMiniChart } from './WaterProgressMiniChart';
@@ -109,6 +108,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
+    paddingRight: 12,
   },
   title: {
     color: '#332B33',
@@ -150,19 +150,25 @@ const styles = StyleSheet.create({
   },
   quickButtons: {
     flexDirection: 'row',
-    gap: 8,
+    justifyContent: 'space-between',
+    width: '100%',
   },
   quickButton: {
     backgroundColor: '#723B73',
-    paddingHorizontal: 12,
+    paddingHorizontal: 4,
     paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#985C73',
+    marginHorizontal: 2,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   quickButtonText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '500',
+    textAlign: 'center',
   },
 });
