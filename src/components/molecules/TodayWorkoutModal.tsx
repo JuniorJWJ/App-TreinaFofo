@@ -10,7 +10,8 @@ import {
 import { Text } from '../atoms/Text';
 import { Button } from '../atoms/Button';
 import { useExerciseStore } from '../../store';
-import { useMuscleGroupStore } from '../../store';
+// import { useMuscleGroupStore } from '../../store';
+import { useMuscleGroupUtils } from '../../hooks/useMuscleGroupUtils';
 
 interface TodayWorkoutModalProps {
   visible: boolean;
@@ -30,17 +31,8 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   onToggleCompletion,
 }) => {
   const { exercises } = useExerciseStore();
-  const { muscleGroups } = useMuscleGroupStore();
+  const { getMuscleGroupName } = useMuscleGroupUtils();
 
-  // const getExerciseName = (exerciseId: string) => {
-  //   const exercise = exercises.find(ex => ex.id === exerciseId);
-  //   return exercise ? exercise.name : 'Exercício não encontrado';
-  // };
-
-  const getMuscleGroupName = (muscleGroupId: string) => {
-    const group = muscleGroups.find(mg => mg.id === muscleGroupId);
-    return group ? group.name : 'Grupo não encontrado';
-  };
 
   // Renderizar conteúdo comum (com botão de fechar)
   const renderModalContent = (content: React.ReactNode) => (

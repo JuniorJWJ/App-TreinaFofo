@@ -4,7 +4,8 @@
 *Alerta para tomar água
 *Tela de hidratação tá com os botões colados
 *tela de hidratação não tá descendo
-*filtrar exercícios por grupo muscular
+*filtrar exercícios por grupo muscular✅
 *adcionar guia para o primeiro acesso
 *adcionar medidas do usuário
 *alterar nome do grupo muscular em portugues
+*arrumar o grupo muscular quando clicar em treino pela home
