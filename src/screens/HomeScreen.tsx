@@ -10,6 +10,8 @@ import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
 import { WaterProgressCard } from '../components/molecules/WaterProgressCard';
 import { TodayWorkoutModal } from '../components/molecules/TodayWorkoutModal';
+import { HowToStartCard } from '../components/molecules/HowToStartCard';
+import { HowToStartFlow } from '../components/molecules/HowToStartFlow';
 
 interface HomeScreenProps {
   navigation: any;
@@ -23,6 +25,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { currentIntake, dailyGoal, addWater } = useWaterTracker();
 
   const [isWorkoutModalVisible, setIsWorkoutModalVisible] = useState(false);
+  const [showHowToStart, setShowHowToStart] = useState(false);
 
   const activePlan = getActivePlan();
   const todaysWorkout = activePlan ? getTodaysWorkout(activePlan.id) : null;
@@ -92,9 +95,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         onQuickAdd={handleQuickWaterAdd}
         showActions={true}
       />
-
       {/* Treino de Hoje */}
-      {activePlan && todaysWorkout && (
+      {!activePlan || !todaysWorkout ? (
+        <View>
+          <HowToStartCard onPress={() => setShowHowToStart(true)} />
+
+          <HowToStartFlow
+            visible={showHowToStart}
+            onClose={() => setShowHowToStart(false)}
+          />
+        </View>
+      ) : (
         <TouchableOpacity 
           style={styles.todaysWorkoutSection}
           onPress={handleWorkoutCardPress}
