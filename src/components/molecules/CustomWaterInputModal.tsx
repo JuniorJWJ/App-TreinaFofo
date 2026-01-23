@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { Text } from '../atoms/Text';
 import { Button } from '../atoms/Button';
@@ -41,7 +42,7 @@ export const CustomWaterInputModal: React.FC<CustomWaterInputModalProps> = ({
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.modalOverlay}
       >
-        <View style={styles.modalContainer}>
+        <ScrollView style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text variant="title" align="center">
               Adicionar Água Personalizada
@@ -96,7 +97,7 @@ export const CustomWaterInputModal: React.FC<CustomWaterInputModalProps> = ({
               </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </Modal>
   );

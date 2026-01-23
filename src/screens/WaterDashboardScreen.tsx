@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { WaterDashboard } from '../components/molecules/WaterDashboard';
 import { WaterGoalModal } from '../components/molecules/WaterGoalModal';
 import { useWaterStore } from '../store/waterStore';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const WaterDashboardScreen = () => {
   const [goalModalVisible, setGoalModalVisible] = useState(false);
@@ -26,7 +27,7 @@ export const WaterDashboardScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <WaterDashboard
         dailyGoal={dailyGoal}
         currentIntake={currentIntake}
@@ -49,7 +50,7 @@ export const WaterDashboardScreen = () => {
           climate: profile.climate as any,
         })}
       />
-    </View>
+    </ScrollView>
   );
 };
 
