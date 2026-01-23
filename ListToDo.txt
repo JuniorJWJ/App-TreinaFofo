@@ -7,5 +7,5 @@
 *filtrar exercícios por grupo muscular✅
 *adcionar guia para o primeiro acesso
 *adcionar medidas do usuário
-*alterar nome do grupo muscular em portugues
-*arrumar o grupo muscular quando clicar em treino pela home
+*alterar nome do grupo muscular em portugues✅
+*arrumar o grupo muscular quando clicar em treino pela home✅

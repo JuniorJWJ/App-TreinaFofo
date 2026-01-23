@@ -160,7 +160,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
         />
 
         {!isEditing && (
-          <TipCard tip="💡 Dica: Você pode usar divisões como ABC, ABCD, ou Push/Pull/Legs" />
+          <TipCard tip="💡 Dica: Você pode usar divisões como ABC, ABCD, ou Push/Pull/Pernas" />
         )}
       </ScrollView>
 

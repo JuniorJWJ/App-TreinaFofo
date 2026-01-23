@@ -29,7 +29,7 @@ export interface WorkoutSplit {
 export const COMMON_SPLIT_TYPES = {
   FULL_BODY: 'Full Body',
   UPPER_LOWER: 'Upper/Lower',
-  PUSH_PULL_LEGS: 'Push/Pull/Legs',
+  PUSH_PULL_LEGS: 'Push/Pull/Pernas',
   BRO_SPLIT: 'Bro Split',
   CUSTOM: 'Custom'
 } as const;

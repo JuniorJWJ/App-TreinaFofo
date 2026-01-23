@@ -7,7 +7,7 @@ export const mockExercises: ExerciseFormData[] = [
   // PEITO
   {
     name: 'Supino Reto com Barra',
-    muscleGroupId: 'chest',
+    muscleGroupId: 'Peito',
     description: 'Exercício fundamental para desenvolvimento do peitoral maior. Executado com barra no banco plano.',
     equipment: 'Banco + Barra + Anilhas',
     difficulty: 'intermediate',
@@ -29,7 +29,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Supino Inclinado com Halteres',
-    muscleGroupId: 'Chest',
+    muscleGroupId: 'Peito',
     description: 'Variante do supino que enfatiza a porção superior do peitoral maior.',
     equipment: 'Banco Inclinado + Halteres',
     difficulty: 'intermediate',
@@ -48,7 +48,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Crucifixo com Halteres',
-    muscleGroupId: 'Chest',
+    muscleGroupId: 'Peito',
     description: 'Exercício de isolamento para peitoral, excelente para-work o estiramento muscular.',
     equipment: 'Banco Plano + Halteres',
     difficulty: 'beginner',
@@ -63,7 +63,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Peck Deck',
-    muscleGroupId: 'Chest',
+    muscleGroupId: 'Peito',
     description: 'Máquina para isolamento do peitoral com movimento de adução.',
     equipment: 'Máquina Peck Deck',
     difficulty: 'beginner',
@@ -77,7 +77,7 @@ export const mockExercises: ExerciseFormData[] = [
   // COSTAS
   {
     name: 'Puxada Frontal',
-    muscleGroupId: 'Back',
+    muscleGroupId: 'Costas',
     description: 'Exercício compound para dorsais, trapeézio e biceps.',
     equipment: 'Puxador de Alto',
     difficulty: 'beginner',
@@ -97,7 +97,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Barra Fixa',
-    muscleGroupId: 'Back',
+    muscleGroupId: 'Costas',
     description: 'Exercício fundamental para costas e biceps usando peso corporal.',
     equipment: 'Barra Fixa',
     difficulty: 'advanced',
@@ -110,7 +110,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Remada Curva com Barra',
-    muscleGroupId: 'Back',
+    muscleGroupId: 'Costas',
     description: 'Exercício compound para desenvolvimento das dorsais e trapeézio médio.',
     equipment: 'Barra Olga + Anilhas',
     difficulty: 'intermediate',
@@ -129,7 +129,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Remada Unilateral com Haltere',
-    muscleGroupId: 'Back',
+    muscleGroupId: 'Costas',
     description: 'Exercício de isolamento para costas com maior amplitude de movimento.',
     equipment: 'Banco + Haltere',
     difficulty: 'intermediate',
@@ -144,7 +144,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Puxada no Pulley Frontal',
-    muscleGroupId: 'Back',
+    muscleGroupId: 'Costas',
     description: 'Variante de puxada com cabo para maior tensão constante.',
     equipment: 'Pulley + Cabo',
     difficulty: 'intermediate',
@@ -161,7 +161,7 @@ export const mockExercises: ExerciseFormData[] = [
   // OMBROS
   {
     name: 'Desenvolvimento Militar com Barra',
-    muscleGroupId: 'Shoulders',
+    muscleGroupId: 'Ombro',
     description: 'Exercício compound para deltoides anteriores e trapeézio.',
     equipment: 'Barra + Rack',
     difficulty: 'intermediate',
@@ -180,7 +180,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Elevação Lateral com Halteres',
-    muscleGroupId: 'Shoulders',
+    muscleGroupId: 'Ombro',
     description: 'Exercício de isolamento para deltoides laterais (ombro largo).',
     equipment: 'Halteres',
     difficulty: 'beginner',
@@ -196,7 +196,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Elevação Frontal com Barra',
-    muscleGroupId: 'Shoulders',
+    muscleGroupId: 'Ombro',
     description: 'Isolamento para deltoides anteriores.',
     equipment: 'Barra Olga',
     difficulty: 'beginner',
@@ -210,7 +210,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Face Pull com Cabo',
-    muscleGroupId: 'Shoulders',
+    muscleGroupId: 'Ombro',
     description: 'Exercício para deltoides posteriores e rotadores externos.',
     equipment: 'Pulley + Corda',
     difficulty: 'intermediate',
@@ -228,7 +228,7 @@ export const mockExercises: ExerciseFormData[] = [
   // BRAÇOS
   {
     name: 'Rosca Direta com Barra',
-    muscleGroupId: 'Biceps',
+    muscleGroupId: 'Bíceps',
     description: 'Exercício principal para bíceps braquial.',
     equipment: 'Barra Reta',
     difficulty: 'beginner',
@@ -247,7 +247,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Rosca Martelo com Halteres',
-    muscleGroupId: 'Biceps',
+    muscleGroupId: 'Bíceps',
     description: 'Variante de rosca que enfatiza o braquial e o longo da cabeça do bíceps.',
     equipment: 'Halteres',
     difficulty: 'beginner',
@@ -262,7 +262,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Tríceps Pulley',
-    muscleGroupId: 'Triceps',
+    muscleGroupId: 'Tríceps',
     description: 'Exercício de isolamento para tríceps no pulley.',
     equipment: 'Pulley + Barra',
     difficulty: 'beginner',
@@ -277,8 +277,8 @@ export const mockExercises: ExerciseFormData[] = [
     notes: 'Mant os cotovelos próximos ao corpo',
   },
   {
-    name: 'Triceps no Banco',
-    muscleGroupId: 'Triceps',
+    name: 'Tríceps no Banco',
+    muscleGroupId: 'Tríceps',
     description: 'Exercício compound para tríceps usando peso corporal.',
     equipment: 'Banco',
     difficulty: 'beginner',
@@ -291,7 +291,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Rosca 21',
-    muscleGroupId: 'Biceps',
+    muscleGroupId: 'Bíceps',
     description: 'Técnica avançada de rosca com 7 movimentos parciais em cada fase.',
     equipment: 'Barra Olga',
     difficulty: 'advanced',
@@ -308,7 +308,7 @@ export const mockExercises: ExerciseFormData[] = [
   // PERNAS
   {
     name: 'Agachamento com Barra',
-    muscleGroupId: 'Quadriceps',
+    muscleGroupId: 'Quadríceps',
     description: 'Exercício fundamental para quadríceps, gluteos e isquiotibiais.',
     equipment: 'Barra + Rack + Anilhas',
     difficulty: 'intermediate',
@@ -329,7 +329,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Leg Press',
-    muscleGroupId: 'Quadriceps',
+    muscleGroupId: 'Quadríceps',
     description: 'Exercício compound para quadríceps com menor carga na coluna.',
     equipment: 'Máquina Leg Press',
     difficulty: 'beginner',
@@ -348,7 +348,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Cadeira Extensora',
-    muscleGroupId: 'Quadriceps',
+    muscleGroupId: 'Quadríceps',
     description: 'Isolamento para quadríceps.',
     equipment: 'Máquina Extensora',
     difficulty: 'beginner',
@@ -363,7 +363,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Stiff com Barra',
-    muscleGroupId: 'Hamstrings',
+    muscleGroupId: 'Posterior de Coxa',
     description: 'Exercício para isquiotibiais e gluteos com ênfase no alongamento.',
     equipment: 'Barra Olga',
     difficulty: 'intermediate',
@@ -382,7 +382,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Elevação de Panturrilha em Pé',
-    muscleGroupId: 'Calves',
+    muscleGroupId: 'Panturrilha',
     description: 'Isolamento para gastrocnêmio.',
     equipment: 'Máquina ou Banco',
     difficulty: 'beginner',
@@ -398,7 +398,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Afundo com Halteres',
-    muscleGroupId: 'Quadriceps',
+    muscleGroupId: 'Quadríceps',
     description: 'Exercício unilateral para quadríceps, gluteos e equilíbrio.',
     equipment: 'Halteres',
     difficulty: 'intermediate',
@@ -416,7 +416,7 @@ export const mockExercises: ExerciseFormData[] = [
   // ABDÔMEN
   {
     name: 'Abdominal Tradicional',
-    muscleGroupId: 'Abs',
+    muscleGroupId: 'Abdominal',
     description: 'Exercício básico para reto abdominal.',
     equipment: 'Colchão ou Banco',
     difficulty: 'beginner',
@@ -429,7 +429,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Prancha Abdominal',
-    muscleGroupId: 'Abs',
+    muscleGroupId: 'Abdominal',
     description: 'Exercício isométrico para toda a região central.',
     equipment: 'Nenhum (solo)',
     difficulty: 'beginner',
@@ -442,7 +442,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Encolhimento de Ombros no Banco',
-    muscleGroupId: 'Traps',
+    muscleGroupId: 'Trapézio',
     description: 'Foco no oblíquo inferior.',
     equipment: 'Banco + Anilha',
     difficulty: 'intermediate',
@@ -457,7 +457,7 @@ export const mockExercises: ExerciseFormData[] = [
   },
   {
     name: 'Mountain Climber',
-    muscleGroupId: 'Abs',
+    muscleGroupId: 'Abdominal',
     description: 'Exercício cardiovascular para abdômen com movimento alternado.',
     equipment: 'Nenhum (solo)',
     difficulty: 'intermediate',
