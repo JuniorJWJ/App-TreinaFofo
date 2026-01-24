@@ -41,9 +41,9 @@ export const calculateWaterGoal = (config: WaterConfig): number => {
   
   // Arredonda para o múltiplo de 100 mais próximo
   calculatedGoal = Math.round(calculatedGoal / 100) * 100;
-  
-  // Limites saudáveis (min 1500ml, max 4000ml para pessoas sem condições especiais)
-  return Math.max(1500, Math.min(calculatedGoal, 4000));
+
+  // Limites saudáveis (min 1500ml, max 6000ml para pessoas sem condições especiais)
+  return Math.max(1500, Math.min(calculatedGoal, 6000));
 };
 
 /**

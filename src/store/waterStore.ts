@@ -256,7 +256,7 @@ export const useWaterStore = create<WaterStore>()(
           weeklyStats.push({
             date: dateStr,
             intake: Math.floor(Math.random() * 4000),
-            goal: 4000,
+            goal: 6000,
             completed: Math.random() > 0.5,
           });
         }

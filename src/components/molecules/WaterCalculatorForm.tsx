@@ -79,17 +79,53 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
     setShowRecommendation(true);
   };
 
-  const activityLevels: { label: string; value: WaterActivityLevel }[] = [
-    { label: 'Sedentário (pouco ou nenhum exercício)', value: 'sedentary' },
-    { label: 'Moderado (exercício leve 1-3 dias/semana)', value: 'moderate' },
-    { label: 'Ativo (exercício moderado 3-5 dias/semana)', value: 'active' },
-    { label: 'Atleta (exercício intenso 6-7 dias/semana)', value: 'athlete' },
+  const activityLevels: {
+    label: string;
+    shortLabel: string;
+    value: WaterActivityLevel;
+  }[] = [
+    {
+      label: 'Sedentário (pouco ou nenhum exercício)',
+      shortLabel: 'Sedentário',
+      value: 'sedentary',
+    },
+    {
+      label: 'Moderado (exercício leve 1-3 dias/semana)',
+      shortLabel: 'Moderado',
+      value: 'moderate',
+    },
+    {
+      label: 'Ativo (exercício moderado 3-5 dias/semana)',
+      shortLabel: 'Ativo',
+      value: 'active',
+    },
+    {
+      label: 'Atleta (exercício intenso 6-7 dias/semana)',
+      shortLabel: 'Atleta',
+      value: 'athlete',
+    },
   ];
 
-  const climates: { label: string; value: WaterClimate }[] = [
-    { label: 'Temperado (15-25°C)', value: 'temperate' },
-    { label: 'Quente (25-35°C)', value: 'hot' },
-    { label: 'Muito Quente (>35°C ou seco)', value: 'very_hot' },
+  const climates: {
+    label: string;
+    shortLabel: string;
+    value: WaterClimate;
+  }[] = [
+    {
+      label: 'Temperado (15-25°C)',
+      shortLabel: 'Temperado',
+      value: 'temperate',
+    },
+    {
+      label: 'Quente (25-35°C)',
+      shortLabel: 'Quente',
+      value: 'hot',
+    },
+    {
+      label: 'Muito Quente (>35°C ou seco)',
+      shortLabel: 'Muito quente',
+      value: 'very_hot',
+    },
   ];
 
   const getActivityDescription = (level: WaterActivityLevel) => {
@@ -113,10 +149,6 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
 
   return (
     <ScrollView style={styles.container}>
-      <Text variant="title" align="center" style={styles.title}>
-        Calculadora de Hidratação
-      </Text>
-
       <Text variant="body" style={styles.description}>
         Calcule sua necessidade diária de água baseada no seu perfil
       </Text>
@@ -235,7 +267,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
                   Atividade:
                 </Text>
                 <Text variant="body" style={styles.detailValue}>
-                  {activityLevels.find(a => a.value === activityLevel)?.label}
+                  {activityLevels.find(a => a.value === activityLevel)?.shortLabel}
                 </Text>
               </View>
               <View style={styles.detailItem}>
@@ -243,7 +275,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
                   Clima:
                 </Text>
                 <Text variant="body" style={styles.detailValue}>
-                  {climates.find(c => c.value === climate)?.label}
+                  {climates.find(c => c.value === climate)?.shortLabel}
                 </Text>
               </View>
             </View>
@@ -284,7 +316,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
           • Multiplicador de clima: 1.0 a 1.4
         </Text>
         <Text variant="caption" style={styles.infoText}>
-          • Limites saudáveis: 1500ml mínimo, 4000ml máximo
+          • Limites saudáveis: 1500ml mínimo, 6000ml máximo
         </Text>
       </View>
     </ScrollView>

@@ -40,7 +40,7 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
   onSubmit,
   onCancel,
   isLoading = false,
-  workoutInfo,
+  // workoutInfo,
   submitButtonText,
   cancelButtonText = 'Cancelar',
 }) => {
@@ -131,9 +131,9 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
     return mode === 'create' ? 'Criar Treino' : 'Salvar Alterações';
   };
 
-  const getTitle = () => {
-    return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
-  };
+  // const getTitle = () => {
+  //   return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
+  // };
 
   const handleClearFilters = () => {
     setSearch('');
@@ -146,11 +146,11 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <Text variant="title" align="center" style={styles.title}>
+        {/* <Text variant="title" align="center" style={styles.title}>
           {getTitle()}
-        </Text>
+        </Text> */}
 
-        {mode === 'edit' && workoutInfo && (
+        {/* {mode === 'edit' && workoutInfo && (
           <View style={styles.workoutInfo}>
             <Text variant="caption" style={styles.originalName}>
               Editando: {initialWorkoutName}
@@ -160,7 +160,7 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
               {workoutInfo.updatedAt && ` • Atualizado: ${new Date(workoutInfo.updatedAt).toLocaleDateString('pt-BR')}`}
             </Text>
           </View>
-        )}
+        )} */}
 
         <Input
           placeholder="Nome do treino"
