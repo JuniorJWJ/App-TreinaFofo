@@ -3,11 +3,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from '../atoms/Text';
 import { Input } from '../atoms/Input';
-import { Button } from '../atoms/Button';
 import { ExerciseSearchBar } from '../molecules/ExerciseSearchBar';
 import { MuscleGroupFilterChips } from '../molecules/MuscleGroupFilterChips';
-import { WorkoutExerciseCard } from '../molecules/WorkoutExerciseCard';
-import { useExerciseList } from '../../hooks/useExerciseList';
+import { WorkoutExerciseCard } from '../molecules/WorkoutExerciseCard'; 
+import { useExerciseList } from '../../hooks/useExerciseList'; 
+import { FloatingActionButtonWithIcon } from '../molecules/FloatingActionButtonWithIcon';
+
 
 interface WorkoutFormProps {
   mode: 'create' | 'edit';
@@ -38,11 +39,7 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
   initialSelectedExercises = [],
   exercises,
   onSubmit,
-  onCancel,
-  isLoading = false,
-  // workoutInfo,
-  submitButtonText,
-  cancelButtonText = 'Cancelar',
+  // onCancel,
 }) => {
   const [workoutName, setWorkoutName] = useState(initialWorkoutName);
   const [selectedExercises, setSelectedExercises] = useState<string[]>(initialSelectedExercises);
@@ -126,11 +123,6 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
     );
   };
 
-  const getSubmitButtonText = () => {
-    if (submitButtonText) return submitButtonText;
-    return mode === 'create' ? 'Criar Treino' : 'Salvar Alterações';
-  };
-
   // const getTitle = () => {
   //   return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
   // };
@@ -140,27 +132,29 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
     setSelectedGroup(null);
   };
 
+  const isFormValid = workoutName.trim() && selectedExercises.length > 0;
+
   return (
     <View style={styles.container}>
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
+        {/* Header com título e botão de cancelar */}
+      <View style={styles.header}>
+        {/* <TouchableOpacity 
+          style={styles.cancelButtonHeader} 
+          onPress={onCancel}
+          disabled={isLoading}
+        >
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity> */}
         {/* <Text variant="title" align="center" style={styles.title}>
           {getTitle()}
         </Text> */}
-
-        {/* {mode === 'edit' && workoutInfo && (
-          <View style={styles.workoutInfo}>
-            <Text variant="caption" style={styles.originalName}>
-              Editando: {initialWorkoutName}
-            </Text>
-            <Text variant="caption">
-              Criado em: {workoutInfo.createdAt ? new Date(workoutInfo.createdAt).toLocaleDateString('pt-BR') : 'N/A'}
-              {workoutInfo.updatedAt && ` • Atualizado: ${new Date(workoutInfo.updatedAt).toLocaleDateString('pt-BR')}`}
-            </Text>
-          </View>
-        )} */}
+        <View style={styles.headerSpacer} />
+      </View>
 
         <Input
           placeholder="Nome do treino"
@@ -226,6 +220,35 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
           </View>
         </View>
 
+        {/* Indicador de validação
+        <View style={styles.validationContainer}>
+          <View style={styles.validationRow}>
+            <View style={styles.validationItem}>
+              <View style={[
+                styles.validationIcon,
+                workoutName.trim() ? styles.validationIconValid : styles.validationIconInvalid
+              ]}>
+                <Text style={styles.validationIconText}>
+                  {workoutName.trim() ? "✓" : "✗"}
+                </Text>
+              </View>
+              <Text style={styles.validationLabel}>Nome do treino</Text>
+            </View>
+            
+            <View style={styles.validationItem}>
+              <View style={[
+                styles.validationIcon,
+                selectedExercises.length > 0 ? styles.validationIconValid : styles.validationIconInvalid
+              ]}>
+                <Text style={styles.validationIconText}>
+                  {selectedExercises.length > 0 ? "✓" : "✗"}
+                </Text>
+              </View> 
+              <Text style={styles.validationLabel}>{selectedExercises.length} exercício(s)</Text>
+            </View>
+          </View>
+        </View> */}
+
         {/* Lista de exercícios filtrados */}
         <View style={styles.exercisesContainer}>
           {filteredExercises.length === 0 ? (
@@ -266,34 +289,15 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
         </View>
       </ScrollView>
 
-      {/* Footer com botões */}
-      <View style={styles.footer}>
-        <View style={styles.selectedInfo}>
-          <Text variant="caption" style={styles.selectedCount}>
-            {selectedExercises.length} exercício{selectedExercises.length !== 1 ? 's' : ''} selecionado{selectedExercises.length !== 1 ? 's' : ''}
-          </Text>
-          {selectedExercises.length === 0 && (
-            <Text variant="caption" style={styles.warningText}>
-              Selecione pelo menos um exercício
-            </Text>
-          )}
-        </View>
-        
-        <View style={styles.buttonsContainer}>
-          <Button
-            title={getSubmitButtonText()}
-            onPress={handleSubmit}
-            style={[styles.button, styles.saveButton]}
-            disabled={!workoutName.trim() || selectedExercises.length === 0 || isLoading}
-          />          
-          <Button
-            title={cancelButtonText}
-            onPress={onCancel}
-            style={[styles.button, styles.cancelButton]}
-            disabled={isLoading}
-          />
-        </View>
-      </View>
+      {/* Botão Flutuante usando a molécula */}
+      <FloatingActionButtonWithIcon
+        onPress={handleSubmit}
+        disabled={!isFormValid}
+        position='top-right'
+        color="#FFF"
+        size="medium" 
+        iconName="save"
+      />
     </View>
   );
 };
@@ -305,24 +309,26 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 120,
+    paddingBottom: 100, // Espaço para o FAB
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  cancelButtonHeader: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  headerSpacer: {
+    width: 40,
   },
   title: {
-    marginBottom: 20,
     color: '#FFFFFF',
-  },
-  workoutInfo: {
-    backgroundColor: '#FFF',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-  },
-  originalName: {
-    fontWeight: '600',
-    marginBottom: 4,
-    color: '#483148',
+    flex: 1,
+    textAlign: 'center',
   },
   input: {
     marginBottom: 16,
@@ -362,6 +368,52 @@ const styles = StyleSheet.create({
   disabledText: {
     color: '#999',
   },
+    backIcon: {
+    fontSize: 24,
+    color: '#999',
+    fontWeight: 'bold',
+  },
+  validationIconText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  validationContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  validationRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  validationItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  validationIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  validationIconValid: {
+    backgroundColor: '#4CAF50',
+  },
+  validationIconInvalid: {
+    backgroundColor: '#ff6b6b',
+  },
+  validationLabel: {
+    color: '#a8a8a8',
+    fontSize: 12,
+    fontWeight: '500',
+  },
   exercisesContainer: {
     marginBottom: 20,
   },
@@ -395,47 +447,5 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 12,
     fontWeight: '500',
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#FFF',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  selectedInfo: {
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  selectedCount: {
-    fontWeight: '600',
-    color: '#333',
-  },
-  warningText: {
-    color: '#DC3545',
-    fontStyle: 'italic',
-    marginTop: 4,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  button: {
-    flex: 1,
-  },
-  cancelButton: {
-    backgroundColor: '#6C757D',
-  },
-  saveButton: {
-    backgroundColor: '#483148',
   },
 });

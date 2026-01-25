@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { useWorkoutStore } from '../store';
 import { useExerciseStore } from '../store';
 import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
+import { FloatingActionButton } from '../components/molecules/FloatingActionButton';
 
 interface WorkoutListScreenProps {
   navigation: any;
@@ -123,14 +124,16 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
       )}
 
       {workouts.length > 0 && (
-      <View style={styles.fabContainer}>
-        <TouchableOpacity
-          style={styles.fabButton}
-          onPress={() => navigation.navigate('CreateWorkout')}
-        >
-          <Text style={styles.fabText}>+</Text>
-        </TouchableOpacity>
-      </View>
+      <FloatingActionButton
+        onPress={() => navigation.navigate('CreateWorkout')}
+        position="bottom-right"
+        offset={{ bottom: 40, right: 20 }}
+        label="+"
+        backgroundColor="#483148"
+        color="#FFF"
+        size="medium"
+        visible={workouts.length > 0}
+      />
       )}
     </View>
   );
