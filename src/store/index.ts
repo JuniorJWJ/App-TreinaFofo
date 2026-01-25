@@ -1,4 +1,3 @@
-// Barrel export para todas as stores
 export { useMuscleGroupStore } from './muscleGroupStore';
 export { useExerciseStore } from './exerciseStore';
 export { useWorkoutStore } from './workoutStore';

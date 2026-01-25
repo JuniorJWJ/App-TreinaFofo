@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { useWeeklyPlanStore } from '../store';
 import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
+import { FloatingActionButton } from '../components/molecules/FloatingActionButton';
 
 interface WeeklyPlanListScreenProps {
   navigation: any;
@@ -120,14 +121,16 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
       )}
 
       {weeklyPlans.length > 0 && (
-      <View style={styles.fabContainer}>
-        <TouchableOpacity
-          style={styles.fabButton}
-          onPress={() => navigation.navigate('CreateWeeklyPlan')}
-        >
-          <Text style={styles.fabText}>+</Text>
-        </TouchableOpacity>
-      </View>
+      <FloatingActionButton
+        onPress={() => navigation.navigate('CreateWeeklyPlan')}
+        position="bottom-right"
+        offset={{ bottom: 40, right: 20 }}
+        label="+"
+        backgroundColor="#483148"
+        color="#FFF"
+        size="medium"
+        visible={weeklyPlans.length > 0}
+      />
       )}
     </View>
   );

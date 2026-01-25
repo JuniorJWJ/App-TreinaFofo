@@ -1,4 +1,3 @@
-// src/hooks/useFonts.ts
 import { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 

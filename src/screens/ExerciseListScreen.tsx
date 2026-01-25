@@ -1,18 +1,16 @@
-// src/screens/ExerciseListScreen.tsx
 import React from 'react';
 import { 
   View, 
   StyleSheet, 
   FlatList, 
-  Alert,
-  TouchableOpacity 
-} from 'react-native';
-import { Text } from '../components/atoms/Text';
+  Alert, 
+} from 'react-native'; 
 import { ExerciseSearchBar } from '../components/molecules/ExerciseSearchBar';
 import { MuscleGroupFilterChips } from '../components/molecules/MuscleGroupFilterChips';
 import { ExerciseCard } from '../components/molecules/ExerciseCard';
 import { EmptyExerciseList } from '../components/molecules/EmptyExerciseList';
 import { useExerciseList } from '../hooks/useExerciseList';
+import { FloatingActionButton } from '../components/molecules/FloatingActionButton';
 
 interface ExerciseListScreenProps {
   navigation: any;
@@ -111,17 +109,19 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
         />
       )}
 
-      {/* Botão flutuante para adicionar exercício */}
       {hasExercises && (
-        <View style={styles.fabContainer}>
-          <TouchableOpacity 
-            style={styles.fabButton}
-            onPress={() => navigation.navigate('AddExercise')}
-          >
-            <Text style={styles.fabText}>+</Text>
-          </TouchableOpacity>
-        </View>
+      <FloatingActionButton
+        onPress={() => navigation.navigate('AddExercise')}
+        position="bottom-right"
+        offset={{ bottom: 40, right: 20 }}
+        label="+"
+        backgroundColor="#483148"
+        color='#FFF'
+        size='medium'
+        visible={hasExercises}
+      />
       )}
+
     </View>
   );
 };

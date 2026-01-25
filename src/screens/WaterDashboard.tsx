@@ -1,4 +1,3 @@
-// components/WaterDashboard.tsx
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 // @ts-ignore

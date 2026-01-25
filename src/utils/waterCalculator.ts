@@ -1,5 +1,3 @@
-// utils/waterCalculator.ts
-
 /**
  * Calcula a necessidade diária de água baseada em fatores pessoais
  * Referência científica: Institute of Medicine (IOM)

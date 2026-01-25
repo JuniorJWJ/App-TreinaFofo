@@ -1,4 +1,3 @@
-// src/screens/HomeScreen.tsx
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useExerciseStore } from '../store';

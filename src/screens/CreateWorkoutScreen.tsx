@@ -1,4 +1,3 @@
-// screens/CreateWorkoutScreen.tsx
 import React, { useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useWorkoutStore } from '../store';

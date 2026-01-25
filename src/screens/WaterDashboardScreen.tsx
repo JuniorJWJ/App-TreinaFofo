@@ -1,4 +1,3 @@
-// screens/WaterDashboardScreen.tsx (atualizado)
 import React, {  useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { WaterDashboard } from '../components/molecules/WaterDashboard';

@@ -1,4 +1,3 @@
-// src/hooks/useExerciseList.ts
 import { useState, useMemo, useCallback } from 'react';
 import { useExerciseStore, useMuscleGroupStore } from '../store';
 

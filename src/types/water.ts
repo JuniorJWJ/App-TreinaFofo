@@ -1,4 +1,3 @@
-// types/water.ts
 export interface WaterConfig {
   weight: number; // em kg
   age: number;

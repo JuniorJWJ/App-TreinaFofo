@@ -1,4 +1,3 @@
-// hooks/useWaterTracker.ts (atualizado)
 import { useWaterStore, useWaterStats } from '../store/waterStore';
 
 export const useWaterTracker = () => {

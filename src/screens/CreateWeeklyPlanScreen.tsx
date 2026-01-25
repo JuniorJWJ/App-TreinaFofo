@@ -1,4 +1,3 @@
-// CreateWeeklyPlanScreen.tsx (refatorado)
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useWeeklyPlanStore } from '../store';
