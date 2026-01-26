@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, View, StyleSheet } from 'react-native';
+import React, { useRef, useCallback, useEffect, useState } from 'react';
+import { Alert, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useWorkoutStore } from '../store';
 import { useExerciseStore } from '../store';
-import { WorkoutForm } from '../components/organisms/WorkoutForm';
+import { WorkoutForm, WorkoutFormHandle } from '../components/organisms/WorkoutForm';
 import { Text } from '../components/atoms/Text';
-import { Button } from '../components/atoms/Button';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface EditWorkoutScreenProps {
   navigation: any;
@@ -20,6 +20,32 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({ navigation
   const [initialSelectedExercises, setInitialSelectedExercises] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const workoutFormRef = useRef<WorkoutFormHandle>(null);
+
+  // Configura o header com botão de salvar
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={handleSave}
+            disabled={!isFormValid || isLoading}
+            style={{ marginRight: 16, opacity: isFormValid && !isLoading ? 1 : 0.5 }}
+          >
+            <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
+              {isLoading ? 'Salvando...' : 'Salvar'}
+            </Text>
+          </TouchableOpacity>
+        ),
+      });
+
+      return () => {
+        navigation.setOptions({ headerRight: undefined });
+      };
+    }, [navigation, isLoading, isFormValid])
+  );
 
   // Carrega os dados do treino
   useEffect(() => {
@@ -62,14 +88,34 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({ navigation
     }
   }, [updateWorkout, workoutId, navigation]);
 
-  const handleCancel = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+  const handleSave = () => {
+    if (workoutFormRef.current) {
+      const formData = workoutFormRef.current.getFormData();
+      if (formData.workoutName.trim() && formData.selectedExercises.length > 0) {
+        handleSubmit(formData.workoutName, formData.selectedExercises);
+      }
+    }
+  };
+
+  // Atualiza o estado de validade do formulário
+  const updateFormValidity = useCallback(() => {
+    if (workoutFormRef.current) {
+      const formData = workoutFormRef.current.getFormData();
+      const isValid = formData.workoutName.trim() !== '' && formData.selectedExercises.length > 0;
+      setIsFormValid(isValid);
+    }
+  }, []);
+
+  // Listen for form changes to update validity
+  useEffect(() => {
+    const interval = setInterval(updateFormValidity, 500);
+    return () => clearInterval(interval);
+  }, [updateFormValidity]);
 
   if (isInitializing) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Carregando...</Text>
+        <Text style={{ color: '#FFF' }}>Carregando...</Text>
       </View>
     );
   }
@@ -82,35 +128,39 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({ navigation
         <Text variant="body" style={styles.errorSubtext}>
           O treino que você está tentando editar não existe mais.
         </Text>
-        <Button
-          title="Voltar para a lista"
+        <TouchableOpacity
           onPress={() => navigation.navigate('WorkoutList')}
           style={styles.backButton}
-        />
+        >
+          <Text style={{ color: '#FFF' }}>Voltar para a lista</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 
   return (
-    <WorkoutForm
-      mode="edit"
-      initialWorkoutName={initialWorkoutName}
-      initialSelectedExercises={initialSelectedExercises}
-      exercises={exercises}
-      onSubmit={handleSubmit}
-      onCancel={handleCancel}
-      isLoading={isLoading}
-      workoutInfo={{
-        createdAt: workout.createdAt,
-        updatedAt: workout.updatedAt,
-      }}
-      submitButtonText="Salvar Alterações"
-      cancelButtonText="Cancelar"
-    />
+    <View style={styles.container}>
+      <WorkoutForm
+        ref={workoutFormRef}
+        mode="edit"
+        initialWorkoutName={initialWorkoutName}
+        initialSelectedExercises={initialSelectedExercises}
+        exercises={exercises}
+        onSubmit={handleSubmit}
+        workoutInfo={{
+          createdAt: workout.createdAt,
+          updatedAt: workout.updatedAt,
+        }}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#1b1613ff',
+  },
   loadingContainer: {
     flex: 1,
     backgroundColor: '#1b1613ff',
@@ -136,6 +186,9 @@ const styles = StyleSheet.create({
   },
   backButton: {
     backgroundColor: '#483148',
-    minWidth: 200,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
   },
 });

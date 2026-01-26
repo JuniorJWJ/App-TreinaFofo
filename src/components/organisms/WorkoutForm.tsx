@@ -1,5 +1,5 @@
 // src/components/organisms/WorkoutForm.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from '../atoms/Text';
 import { Input } from '../atoms/Input';
@@ -7,8 +7,12 @@ import { ExerciseSearchBar } from '../molecules/ExerciseSearchBar';
 import { MuscleGroupFilterChips } from '../molecules/MuscleGroupFilterChips';
 import { WorkoutExerciseCard } from '../molecules/WorkoutExerciseCard'; 
 import { useExerciseList } from '../../hooks/useExerciseList'; 
-import { FloatingActionButtonWithIcon } from '../molecules/FloatingActionButtonWithIcon';
 
+export interface WorkoutFormHandle {
+  submitForm: () => void;
+  isFormValid: boolean;
+  getFormData: () => { workoutName: string; selectedExercises: string[] };
+}
 
 interface WorkoutFormProps {
   mode: 'create' | 'edit';
@@ -23,7 +27,7 @@ interface WorkoutFormProps {
     defaultRestTime: number;
   }>;
   onSubmit: (workoutName: string, selectedExercises: string[]) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   isLoading?: boolean;
   workoutInfo?: {
     createdAt?: Date;
@@ -33,14 +37,13 @@ interface WorkoutFormProps {
   cancelButtonText?: string;
 }
 
-export const WorkoutForm: React.FC<WorkoutFormProps> = ({
+export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(({
   mode,
   initialWorkoutName = '',
   initialSelectedExercises = [],
   exercises,
   onSubmit,
-  // onCancel,
-}) => {
+}, ref) => {
   const [workoutName, setWorkoutName] = useState(initialWorkoutName);
   const [selectedExercises, setSelectedExercises] = useState<string[]>(initialSelectedExercises);
   
@@ -123,16 +126,22 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
     );
   };
 
-  // const getTitle = () => {
-  //   return mode === 'create' ? 'Criar Novo Treino' : 'Editar Treino';
-  // };
-
   const handleClearFilters = () => {
     setSearch('');
     setSelectedGroup(null);
   };
 
   const isFormValid = workoutName.trim() && selectedExercises.length > 0;
+
+  // Expoe métodos para o componente pai através da ref
+  useImperativeHandle(ref, () => ({
+    submitForm: handleSubmit,
+    isFormValid,
+    getFormData: () => ({
+      workoutName: workoutName.trim(),
+      selectedExercises
+    })
+  }));
 
   return (
     <View style={styles.container}>
@@ -141,21 +150,6 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Header com título e botão de cancelar */}
-      <View style={styles.header}>
-        {/* <TouchableOpacity 
-          style={styles.cancelButtonHeader} 
-          onPress={onCancel}
-          disabled={isLoading}
-        >
-          <Text style={styles.backIcon}>←</Text>
-        </TouchableOpacity> */}
-        {/* <Text variant="title" align="center" style={styles.title}>
-          {getTitle()}
-        </Text> */}
-        <View style={styles.headerSpacer} />
-      </View>
-
         <Input
           placeholder="Nome do treino"
           value={workoutName}
@@ -220,35 +214,6 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
           </View>
         </View>
 
-        {/* Indicador de validação
-        <View style={styles.validationContainer}>
-          <View style={styles.validationRow}>
-            <View style={styles.validationItem}>
-              <View style={[
-                styles.validationIcon,
-                workoutName.trim() ? styles.validationIconValid : styles.validationIconInvalid
-              ]}>
-                <Text style={styles.validationIconText}>
-                  {workoutName.trim() ? "✓" : "✗"}
-                </Text>
-              </View>
-              <Text style={styles.validationLabel}>Nome do treino</Text>
-            </View>
-            
-            <View style={styles.validationItem}>
-              <View style={[
-                styles.validationIcon,
-                selectedExercises.length > 0 ? styles.validationIconValid : styles.validationIconInvalid
-              ]}>
-                <Text style={styles.validationIconText}>
-                  {selectedExercises.length > 0 ? "✓" : "✗"}
-                </Text>
-              </View> 
-              <Text style={styles.validationLabel}>{selectedExercises.length} exercício(s)</Text>
-            </View>
-          </View>
-        </View> */}
-
         {/* Lista de exercícios filtrados */}
         <View style={styles.exercisesContainer}>
           {filteredExercises.length === 0 ? (
@@ -288,19 +253,9 @@ export const WorkoutForm: React.FC<WorkoutFormProps> = ({
           )}
         </View>
       </ScrollView>
-
-      {/* Botão Flutuante usando a molécula */}
-      <FloatingActionButtonWithIcon
-        onPress={handleSubmit}
-        disabled={!isFormValid}
-        position='top-right'
-        color="#FFF"
-        size="medium" 
-        iconName="save"
-      />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -309,26 +264,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 100, // Espaço para o FAB
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  cancelButtonHeader: {
-    padding: 8,
-    borderRadius: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  headerSpacer: {
-    width: 40,
-  },
-  title: {
-    color: '#FFFFFF',
-    flex: 1,
-    textAlign: 'center',
   },
   input: {
     marginBottom: 16,
@@ -367,52 +302,6 @@ const styles = StyleSheet.create({
   },
   disabledText: {
     color: '#999',
-  },
-    backIcon: {
-    fontSize: 24,
-    color: '#999',
-    fontWeight: 'bold',
-  },
-  validationIconText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  validationContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  validationRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  validationItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  validationIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  validationIconValid: {
-    backgroundColor: '#4CAF50',
-  },
-  validationIconInvalid: {
-    backgroundColor: '#ff6b6b',
-  },
-  validationLabel: {
-    color: '#a8a8a8',
-    fontSize: 12,
-    fontWeight: '500',
   },
   exercisesContainer: {
     marginBottom: 20,
