@@ -6,7 +6,9 @@ interface AddExerciseScreenProps {
   navigation: any;
 }
 
-export const AddExerciseScreen: React.FC<AddExerciseScreenProps> = ({ navigation }) => {
+export const AddExerciseScreen: React.FC<AddExerciseScreenProps> = ({
+  navigation,
+}) => {
   const handleSave = () => {
     navigation.goBack();
   };
@@ -17,10 +19,7 @@ export const AddExerciseScreen: React.FC<AddExerciseScreenProps> = ({ navigation
 
   return (
     <View style={styles.container}>
-      <ExerciseForm
-        onSave={handleSave}
-        onCancel={handleCancel}
-      />
+      <ExerciseForm onSave={handleSave} onCancel={handleCancel} />
     </View>
   );
 };

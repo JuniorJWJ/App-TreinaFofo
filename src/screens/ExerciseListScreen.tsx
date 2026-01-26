@@ -1,22 +1,22 @@
 import React from 'react';
-import { 
-  View, 
-  StyleSheet, 
-  FlatList, 
-  Alert, 
-} from 'react-native'; 
+import { View, StyleSheet, FlatList } from 'react-native';
 import { ExerciseSearchBar } from '../components/molecules/ExerciseSearchBar';
 import { MuscleGroupFilterChips } from '../components/molecules/MuscleGroupFilterChips';
 import { ExerciseCard } from '../components/molecules/ExerciseCard';
 import { EmptyExerciseList } from '../components/molecules/EmptyExerciseList';
 import { useExerciseList } from '../hooks/useExerciseList';
 import { FloatingActionButton } from '../components/molecules/FloatingActionButton';
+import { ConfirmationModal } from '../components/molecules/ConfirmationModal';
+import { useConfirmationModal } from '../hooks/useConfirmationModal';
 
 interface ExerciseListScreenProps {
   navigation: any;
 }
 
-export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigation }) => {
+export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
+  navigation,
+}) => {
+  const modal = useConfirmationModal();
   const {
     exercises,
     uniqueGroups,
@@ -30,17 +30,15 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
   } = useExerciseList();
 
   const handleDeleteExercise = (exerciseId: string, exerciseName: string) => {
-    Alert.alert(
-      'Excluir Exercício',
+    modal.showConfirmation(
       `Tem certeza que deseja excluir "${exerciseName}"?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { 
-          text: 'Excluir', 
-          style: 'destructive',
-          onPress: () => deleteExercise(exerciseId)
-        }
-      ]
+      'Excluir Exercício',
+      () => {
+        deleteExercise(exerciseId);
+        modal.hideModal();
+      },
+      'Excluir',
+      'Cancelar',
     );
   };
 
@@ -50,10 +48,9 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
 
   const renderItem = ({ item, index }: { item: any; index: number }) => {
     const currentGroup = getMuscleGroupName(item.muscleGroupId);
-    const prevGroup = index > 0 
-      ? getMuscleGroupName(exercises[index - 1].muscleGroupId)
-      : null;
-    
+    const prevGroup =
+      index > 0 ? getMuscleGroupName(exercises[index - 1].muscleGroupId) : null;
+
     const showGroupHeader = currentGroup !== prevGroup && !selectedGroup;
 
     return (
@@ -75,12 +72,23 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
 
   return (
     <View style={styles.container}>
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={modal.modalConfig.onConfirm}
+          onCancel={modal.modalConfig.onCancel}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
+        />
+      )}
       {/* Barra de busca */}
       <View style={styles.searchAndFilterContainer}>
-        <ExerciseSearchBar
-          search={search}
-          onSearchChange={setSearch}
-        />
+        <ExerciseSearchBar search={search} onSearchChange={setSearch} />
 
         {/* Filtros de grupo muscular */}
         <MuscleGroupFilterChips
@@ -102,7 +110,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
       ) : (
         <FlatList
           data={exercises}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
@@ -110,18 +118,17 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({ navigati
       )}
 
       {hasExercises && (
-      <FloatingActionButton
-        onPress={() => navigation.navigate('AddExercise')}
-        position="bottom-right"
-        offset={{ bottom: 40, right: 20 }}
-        label="+"
-        backgroundColor="#483148"
-        color='#FFF'
-        size='medium'
-        visible={hasExercises}
-      />
+        <FloatingActionButton
+          onPress={() => navigation.navigate('AddExercise')}
+          position="bottom-right"
+          offset={{ bottom: 40, right: 20 }}
+          label="+"
+          backgroundColor="#483148"
+          color="#FFF"
+          size="medium"
+          visible={hasExercises}
+        />
       )}
-
     </View>
   );
 };
@@ -132,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1b1613ff',
   },
   searchAndFilterContainer: {
-    paddingHorizontal: 16, 
+    paddingHorizontal: 16,
   },
   listContent: {
     paddingHorizontal: 16,

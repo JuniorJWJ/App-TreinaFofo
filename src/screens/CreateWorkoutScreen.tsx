@@ -1,110 +1,157 @@
-import React, { useRef, useCallback, useState } from 'react';
-import { Alert, View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { useWorkoutStore } from '../store';
 import { useExerciseStore } from '../store';
-import { WorkoutForm, WorkoutFormHandle } from '../components/organisms/WorkoutForm';
+import {
+  WorkoutForm,
+  WorkoutFormHandle,
+} from '../components/organisms/WorkoutForm';
 import { Text } from '../components/atoms/Text';
 import { useFocusEffect } from '@react-navigation/native';
+import { ConfirmationModal } from '../components/molecules/ConfirmationModal';
+import { useConfirmationModal } from '../hooks/useConfirmationModal';
 
 interface CreateWorkoutScreenProps {
   navigation: any;
 }
 
-export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({ navigation }) => {
+export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
+  navigation,
+}) => {
   const { createQuickWorkout } = useWorkoutStore();
   const { exercises } = useExerciseStore();
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  const workoutFormRef = useRef<WorkoutFormHandle>(null);
 
-  // Configura o header com botão de salvar
+  const workoutFormRef = useRef<WorkoutFormHandle>(null);
+  const modal = useConfirmationModal();
+
+  /**
+   * Submit
+   */
+  const handleSubmit = useCallback(
+    (workoutName: string, selectedExercises: string[]) => {
+      if (!workoutName.trim()) {
+        modal.showWarning('Digite um nome para o treino', 'Atenção!');
+        return;
+      }
+
+      if (selectedExercises.length === 0) {
+        modal.showWarning(
+          'Selecione pelo menos um exercício',
+          'Atenção!',
+        );
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        createQuickWorkout(workoutName, selectedExercises);
+
+        modal.showConfirmation(
+          'Treino criado com sucesso! O que você gostaria de fazer agora?',
+          'Sucesso!',
+          () => navigation.navigate('WorkoutList'),
+          'Ver Treinos',
+          'Criar Outro',
+        );
+      } catch {
+        modal.showError(
+          'Não foi possível criar o treino. Tente novamente.',
+          'Erro!',
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [createQuickWorkout, navigation, modal],
+  );
+
+  /**
+   * Save action
+   */
+  const handleSave = useCallback(() => {
+    if (!workoutFormRef.current) return;
+
+    const formData = workoutFormRef.current.getFormData();
+    if (
+      formData.workoutName.trim() &&
+      formData.selectedExercises.length > 0
+    ) {
+      handleSubmit(
+        formData.workoutName,
+        formData.selectedExercises,
+      );
+    }
+  }, [handleSubmit]);
+
+  /**
+   * Header button (FIX DO WARNING)
+   */
+  const HeaderCreateButton = useCallback(() => {
+    return (
+      <TouchableOpacity
+        onPress={handleSave}
+        disabled={!isFormValid || isLoading}
+        style={{
+          marginRight: 16,
+          opacity: isFormValid && !isLoading ? 1 : 0.5,
+        }}
+      >
+        <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
+          {isLoading ? 'Criando...' : 'Criar'}
+        </Text>
+      </TouchableOpacity>
+    );
+  }, [handleSave, isFormValid, isLoading]);
+
+  /**
+   * Header config
+   */
   useFocusEffect(
     useCallback(() => {
       navigation.setOptions({
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={handleSave}
-            disabled={!isFormValid || isLoading}
-            style={{ marginRight: 16, opacity: isFormValid && !isLoading ? 1 : 0.5 }}
-          >
-            <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-              {isLoading ? 'Salvando...' : 'Criar'}
-            </Text>
-          </TouchableOpacity>
-        ),
+        headerRight: HeaderCreateButton,
       });
 
       return () => {
         navigation.setOptions({ headerRight: undefined });
       };
-    }, [navigation, isLoading, isFormValid])
+    }, [navigation, HeaderCreateButton]),
   );
 
-  const handleSubmit = useCallback((workoutName: string, selectedExercises: string[]) => {
-    if (!workoutName.trim()) {
-      Alert.alert('Atenção', 'Digite um nome para o treino');
-      return;
-    }
-
-    if (selectedExercises.length === 0) {
-      Alert.alert('Atenção', 'Selecione pelo menos um exercício');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      createQuickWorkout(workoutName, selectedExercises);
-      
-      Alert.alert('Sucesso', 'Treino criado com sucesso!', [
-        { 
-          text: 'Ver Treinos', 
-          onPress: () => navigation.navigate('WorkoutList')
-        },
-        { 
-          text: 'Criar Outro', 
-          style: 'cancel',
-          onPress: () => {
-            // Reseta o formulário
-            if (workoutFormRef.current) {
-              // Você pode adicionar um método resetForm no WorkoutForm se necessário
-              // Por enquanto, vamos apenas navegar de volta e reabrir se quiser criar outro
-              navigation.replace('CreateWorkout');
-            }
-          }
-        }
-      ]);
-    } catch (error) {
-      Alert.alert('Erro', 'Não foi possível criar o treino');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [createQuickWorkout, navigation]);
-
-  const handleSave = () => {
-    if (workoutFormRef.current) {
-      const formData = workoutFormRef.current.getFormData();
-      if (formData.workoutName.trim() && formData.selectedExercises.length > 0) {
-        handleSubmit(formData.workoutName, formData.selectedExercises);
-      }
-    }
-  };
-
-  // Atualiza o estado de validade do formulário periodicamente
+  /**
+   * Form validation
+   */
   const updateFormValidity = useCallback(() => {
-    if (workoutFormRef.current) {
-      const formData = workoutFormRef.current.getFormData();
-      const isValid = formData.workoutName.trim() !== '' && formData.selectedExercises.length > 0;
-      setIsFormValid(isValid);
-    }
+    if (!workoutFormRef.current) return;
+
+    const formData = workoutFormRef.current.getFormData();
+    const isValid =
+      formData.workoutName.trim() !== '' &&
+      formData.selectedExercises.length > 0;
+
+    setIsFormValid(isValid);
   }, []);
 
-  // Listen for form changes to update validity
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(updateFormValidity, 500);
     return () => clearInterval(interval);
   }, [updateFormValidity]);
 
+  /**
+   * Screen
+   */
   return (
     <View style={styles.container}>
       <WorkoutForm
@@ -113,6 +160,30 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({ naviga
         exercises={exercises}
         onSubmit={handleSubmit}
       />
+
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          type={modal.modalConfig.type}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={modal.modalConfig.onConfirm ?? (() => {})}
+          onCancel={() => {
+            if (modal.modalConfig?.onCancel) {
+              modal.modalConfig.onCancel();
+            } else {
+              modal.hideModal();
+            }
+
+            navigation.replace('CreateWorkout');
+          }}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
+        />
+      )}
     </View>
   );
 };

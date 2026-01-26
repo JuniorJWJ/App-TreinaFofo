@@ -8,7 +8,10 @@ interface EditExerciseScreenProps {
   route: any;
 }
 
-export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({ navigation, route }) => {
+export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const { exerciseId } = route.params;
   const { exercises } = useExerciseStore();
 
@@ -23,17 +26,22 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({ navigati
   };
 
   if (!exercise) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.bodyText}>Exercício não encontrado</Text>
-        </View>
-      );
-    }
+    return (
+      <View style={styles.container}>
+        <Text style={styles.bodyText}>Exercício não encontrado</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <ExerciseForm
-        {...({ exercise, onSave: handleSave, onCancel: handleCancel, isEditing: true } as any)}
+        {...({
+          exercise,
+          onSave: handleSave,
+          onCancel: handleCancel,
+          isEditing: true,
+        } as any)}
       />
     </View>
   );

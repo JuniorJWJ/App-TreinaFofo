@@ -1,18 +1,22 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { useWorkoutStore } from '../store';
 import { useExerciseStore } from '../store';
 import { Text } from '../components/atoms/Text';
 import { Button } from '../components/atoms/Button';
 import { FloatingActionButton } from '../components/molecules/FloatingActionButton';
-
+import { ConfirmationModal } from '../components/molecules/ConfirmationModal';
+import { useConfirmationModal } from '../hooks/useConfirmationModal';
 interface WorkoutListScreenProps {
   navigation: any;
 }
 
-export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation }) => {
-  const { workouts, deleteWorkout} = useWorkoutStore();
+export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
+  navigation,
+}) => {
+  const { workouts, deleteWorkout } = useWorkoutStore();
   const { exercises } = useExerciseStore();
+  const modal = useConfirmationModal();
 
   const getExerciseName = (exerciseId: string) => {
     const exercise = exercises.find(ex => ex.id === exerciseId);
@@ -20,39 +24,35 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
   };
 
   const handleDeleteWorkout = (workoutId: string, workoutName: string) => {
-    Alert.alert(
+    modal.showConfirmation(
+      `Tem certeza que deseja excluir o treino "${workoutName}"?`,
       'Excluir Treino',
-      `Tem certeza que deseja excluir "${workoutName}"?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { 
-          text: 'Excluir', 
-          style: 'destructive',
-          onPress: () => deleteWorkout(workoutId)
-        }
-      ]
+      () => {
+        deleteWorkout(workoutId);
+        modal.hideModal();
+      },
+      'Excluir',
+      'Cancelar',
     );
   };
 
-  // const handleSetActiveWorkout = (workoutId: string) => {
-  //   setActiveWorkout(workoutId);
-  //   Alert.alert('Sucesso', 'Treino definido como ativo!');
-  // };
-
   const renderWorkoutItem = ({ item }: { item: any }) => (
-    <View style={[
-      styles.workoutCard,
-      // activeWorkoutId === item.id && styles.activeWorkoutCard
-    ]}>
+    <View
+      style={[
+        styles.workoutCard,
+        // activeWorkoutId === item.id && styles.activeWorkoutCard
+      ]}
+    >
       <View style={styles.workoutHeader}>
         <Text variant="subtitle" style={styles.workoutName}>
           {item.name}
         </Text>
       </View>
-      
+
       <View style={styles.workoutDetails}>
         <Text variant="caption">
-          {item.exerciseIds.length} exercício{item.exerciseIds.length !== 1 ? 's' : ''}
+          {item.exerciseIds.length} exercício
+          {item.exerciseIds.length !== 1 ? 's' : ''}
         </Text>
         {/* <Text variant="caption">
           Criado em: {new Date(item.createdAt).toLocaleDateString('pt-BR')}
@@ -77,27 +77,43 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
       <View style={styles.workoutActions}>
         <Button
           title="Editar"
-          onPress={() => navigation.navigate('EditWorkout', { workoutId: item.id })}
+          onPress={() =>
+            navigation.navigate('EditWorkout', { workoutId: item.id })
+          }
           style={styles.editButton}
-        />      
+        />
         <Button
           title="Excluir"
           onPress={() => handleDeleteWorkout(item.id, item.name)}
           style={styles.deleteButton}
         />
       </View>
-
     </View>
   );
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.header}> */}
-        {/* <Text variant="title">Meus Treinos</Text> */}
-        {/* <Text variant="caption" color='#fff'>
-          {workouts.length} treino{workouts.length !== 1 ? 's' : ''} cadastrado{workouts.length !== 1 ? 's' : ''}
-        </Text> */}
-      {/* </View> */}
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          type={modal.modalConfig.type}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={() => {
+            modal.modalConfig?.onConfirm?.();
+            modal.hideModal();
+          }}
+          onCancel={() => {
+            modal.modalConfig?.onCancel?.();
+            modal.hideModal();
+          }}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
+        />
+      )}
 
       {workouts.length === 0 ? (
         <View style={styles.emptyState}>
@@ -116,7 +132,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
       ) : (
         <FlatList
           data={workouts}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={renderWorkoutItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
@@ -124,16 +140,16 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({ navigation
       )}
 
       {workouts.length > 0 && (
-      <FloatingActionButton
-        onPress={() => navigation.navigate('CreateWorkout')}
-        position="bottom-right"
-        offset={{ bottom: 40, right: 20 }}
-        label="+"
-        backgroundColor="#483148"
-        color="#FFF"
-        size="medium"
-        visible={workouts.length > 0}
-      />
+        <FloatingActionButton
+          onPress={() => navigation.navigate('CreateWorkout')}
+          position="bottom-right"
+          offset={{ bottom: 40, right: 20 }}
+          label="+"
+          backgroundColor="#483148"
+          color="#FFF"
+          size="medium"
+          visible={workouts.length > 0}
+        />
       )}
     </View>
   );
@@ -212,7 +228,7 @@ const styles = StyleSheet.create({
   editButton: {
     flex: 1,
     marginRight: 8,
-    backgroundColor: '#483148', 
+    backgroundColor: '#483148',
   },
   emptyState: {
     flex: 1,
@@ -237,8 +253,8 @@ const styles = StyleSheet.create({
   fabButton: {
     width: 60,
     height: 60,
-    borderRadius: 30,          // círculo
-    backgroundColor: '#483148', 
+    borderRadius: 30, // círculo
+    backgroundColor: '#483148',
     justifyContent: 'center',
     alignItems: 'center',
 

@@ -15,28 +15,77 @@ interface CreateWeeklyPlanScreenProps {
   route?: any;
 }
 
-export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({ 
-  navigation, 
-  route 
+export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
+  navigation,
+  route,
 }) => {
-  const { addWeeklyPlan, updateWeeklyPlan, weeklyPlans, setActivePlan } = useWeeklyPlanStore();
+  const { addWeeklyPlan, updateWeeklyPlan, weeklyPlans, setActivePlan } =
+    useWeeklyPlanStore();
   const { workouts } = useWorkoutStore();
-  
+
   const isEditing = route?.params?.planId;
-  const existingPlan = isEditing ? weeklyPlans.find(p => p.id === route.params.planId) : null;
+  const existingPlan = isEditing
+    ? weeklyPlans.find(p => p.id === route.params.planId)
+    : null;
 
   const [planName, setPlanName] = useState(existingPlan?.name || '');
-  const [description, setDescription] = useState(existingPlan?.description || '');
-  
-  const [days, setDays] = useState<DailyWorkout[]>(existingPlan?.days || [
-    { day: 'monday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
-    { day: 'tuesday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
-    { day: 'wednesday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
-    { day: 'thursday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
-    { day: 'friday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
-    { day: 'saturday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
-    { day: 'sunday', workoutId: null, isCompleted: false, completedAt: undefined, notes: '' },
-  ]);
+  const [description, setDescription] = useState(
+    existingPlan?.description || '',
+  );
+
+  const [days, setDays] = useState<DailyWorkout[]>(
+    existingPlan?.days || [
+      {
+        day: 'monday',
+        workoutId: null,
+        isCompleted: false,
+        completedAt: undefined,
+        notes: '',
+      },
+      {
+        day: 'tuesday',
+        workoutId: null,
+        isCompleted: false,
+        completedAt: undefined,
+        notes: '',
+      },
+      {
+        day: 'wednesday',
+        workoutId: null,
+        isCompleted: false,
+        completedAt: undefined,
+        notes: '',
+      },
+      {
+        day: 'thursday',
+        workoutId: null,
+        isCompleted: false,
+        completedAt: undefined,
+        notes: '',
+      },
+      {
+        day: 'friday',
+        workoutId: null,
+        isCompleted: false,
+        completedAt: undefined,
+        notes: '',
+      },
+      {
+        day: 'saturday',
+        workoutId: null,
+        isCompleted: false,
+        completedAt: undefined,
+        notes: '',
+      },
+      {
+        day: 'sunday',
+        workoutId: null,
+        isCompleted: false,
+        completedAt: undefined,
+        notes: '',
+      },
+    ],
+  );
 
   const dayLabels: Record<DayOfWeek, string> = {
     monday: 'Segunda-feira',
@@ -64,7 +113,9 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
   };
 
   const updateDayWorkout = (day: DayOfWeek, workoutId: string | null) => {
-    setDays(prevDays => prevDays.map(d => d.day === day ? { ...d, workoutId } : d));
+    setDays(prevDays =>
+      prevDays.map(d => (d.day === day ? { ...d, workoutId } : d)),
+    );
   };
 
   const handleSelectWorkout = (workoutId: string | null) => {
@@ -83,7 +134,8 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
       description: description.trim(),
       days,
       startDate: existingPlan?.startDate || new Date(),
-      endDate: existingPlan?.endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      endDate:
+        existingPlan?.endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       workoutSplitId: existingPlan?.workoutSplitId,
       isActive: existingPlan?.isActive || false,
       isTemplate: existingPlan?.isTemplate || false,
@@ -95,7 +147,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     if (isEditing && existingPlan) {
       updateWeeklyPlan(existingPlan.id, planData);
       Alert.alert('Sucesso', 'Plano semanal atualizado!', [
-        { text: 'OK', onPress: () => navigation.goBack() }
+        { text: 'OK', onPress: () => navigation.goBack() },
       ]);
     } else {
       const newPlanId = `wp-${Date.now()}`;
@@ -107,17 +159,17 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
       });
 
       Alert.alert('Sucesso', 'Plano semanal criado!', [
-        { 
-          text: 'Definir como Ativo', 
+        {
+          text: 'Definir como Ativo',
           onPress: () => {
             setActivePlan(newPlanId);
             navigation.navigate('WeeklyPlanList');
-          }
+          },
         },
-        { 
-          text: 'OK', 
-          onPress: () => navigation.navigate('WeeklyPlanList')
-        }
+        {
+          text: 'OK',
+          onPress: () => navigation.navigate('WeeklyPlanList'),
+        },
       ]);
     }
   };
@@ -140,7 +192,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
         </Text>
 
         <View style={styles.daysContainer}>
-          {days.map((day) => (
+          {days.map(day => (
             <DayScheduleCard
               key={day.day}
               day={day.day}
