@@ -3,9 +3,9 @@ import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } f
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from '../atoms/Text';
 import { Input } from '../atoms/Input';
-import { ExerciseSearchBar } from '../molecules/ExerciseSearchBar';
-import { MuscleGroupFilterChips } from '../molecules/MuscleGroupFilterChips';
-import { WorkoutExerciseCard } from '../molecules/WorkoutExerciseCard'; 
+import { ExerciseSearchBar } from '../molecules/search-filters/ExerciseSearchBar';
+import { MuscleGroupFilterChips } from '../molecules/search-filters/MuscleGroupFilterChips';
+import { WorkoutExerciseCard } from '../molecules/cards/WorkoutExerciseCard'; 
 import { useExerciseList } from '../../hooks/useExerciseList'; 
 
 export interface WorkoutFormHandle {
@@ -131,7 +131,7 @@ export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(({
     setSelectedGroup(null);
   };
 
-  const isFormValid = workoutName.trim() && selectedExercises.length > 0;
+  const isFormValid = !!workoutName.trim() && selectedExercises.length > 0;
 
   // Expoe métodos para o componente pai através da ref
   useImperativeHandle(ref, () => ({

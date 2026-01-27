@@ -1,16 +1,16 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen } from '../screens/HomeScreen';
-import { ExerciseListScreen } from '../screens/ExerciseListScreen';
-import { AddExerciseScreen } from '../screens/AddExerciseScreen';
-import { EditExerciseScreen } from '../screens/EditExerciseScreen';
-import { CreateWorkoutScreen } from '../screens/CreateWorkoutScreen';
-import { WorkoutListScreen } from '../screens/WorkoutListScreen';
-import { CreateWeeklyPlanScreen } from '../screens/CreateWeeklyPlanScreen';
-import { WeeklyPlanListScreen } from '../screens/WeeklyPlanListScreen';
-import { WaterDashboardScreen } from '../screens/WaterDashboardScreen'; 
-import { EditWorkoutScreen } from '../screens/EditWorkoutScreen';
+import { HomeScreen } from '../screens/home/HomeScreen';
+import { ExerciseListScreen } from '../screens/exercise/ExerciseListScreen';
+import { AddExerciseScreen } from '../screens/exercise/AddExerciseScreen';
+import { EditExerciseScreen } from '../screens/exercise/EditExerciseScreen';
+import { CreateWorkoutScreen } from '../screens/workout/CreateWorkoutScreen';
+import { WorkoutListScreen } from '../screens/workout/WorkoutListScreen';
+import { CreateWeeklyPlanScreen } from '../screens/plan/CreateWeeklyPlanScreen';
+import { WeeklyPlanListScreen } from '../screens/plan/WeeklyPlanListScreen';
+import { WaterDashboardScreen } from '../screens/water/WaterDashboardScreen'; 
+import { EditWorkoutScreen } from '../screens/workout/EditWorkoutScreen';
 
 
 export type RootStackParamList = {
