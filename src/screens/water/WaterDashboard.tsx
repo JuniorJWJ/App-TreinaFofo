@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 // @ts-ignore
 import { ProgressCircle } from 'react-native-svg-charts';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
 import { CustomWaterInputModal } from '../../components/molecules/modals/CustomWaterInputModal';
+import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
+import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 
 interface WaterDashboardProps {
   dailyGoal: number;
@@ -24,6 +26,8 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [customAmount, setCustomAmount] = useState('');
   const [inputError, setInputError] = useState('');
+  
+  const modal = useConfirmationModal();
 
   const progress = Math.min(currentIntake / dailyGoal, 1);
   const remaining = dailyGoal - currentIntake;
@@ -37,13 +41,16 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
   };
   
   const handleReset = () => {
-    Alert.alert(
-      'Resetar Dia',
+    if (!onReset) return;
+    
+    modal.showConfirmation(
       'Tem certeza que deseja zerar a ingestão de água do dia?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Zerar', style: 'destructive', onPress: onReset },
-      ]
+      'Resetar Dia',
+      () => {
+        onReset();
+      },
+      'Zerar',
+      'Cancelar'
     );
   };
 
@@ -176,6 +183,29 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
         onClose={closeModal}
         onSubmit={handleSubmitCustomAmount}
       />
+
+      {/* Modal de confirmação */}
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          type={modal.modalConfig.type}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={() => {
+            modal.modalConfig?.onConfirm?.();
+            modal.hideModal();
+          }}
+          onCancel={() => {
+            modal.modalConfig?.onCancel?.();
+            modal.hideModal();
+          }}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
+        />
+      )}
     </View>
   );
 };

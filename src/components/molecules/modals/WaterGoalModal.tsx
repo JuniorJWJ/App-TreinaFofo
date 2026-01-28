@@ -1,4 +1,3 @@
-// src/components/molecules/WaterGoalModal.tsx - ATUALIZADO
 import React, { useState, useEffect } from 'react';
 import {
   Modal,
@@ -7,12 +6,13 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { Text } from '../../atoms/Text';
 import { Button } from '../../atoms/Button';
-import { WaterCalculatorModal } from './WaterCalculatorModal'; // Importe o novo modal
+import { WaterCalculatorModal } from './WaterCalculatorModal';
+import { ConfirmationModal } from '../modals/ConfirmationModal';
+import { useConfirmationModal } from '../../../hooks/useConfirmationModal';
 
 interface WaterGoalModalProps {
   visible: boolean;
@@ -42,6 +42,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
   const [goal, setGoal] = useState(currentGoal.toString());
   const [inputError, setInputError] = useState('');
   const [calculatorModalVisible, setCalculatorModalVisible] = useState(false);
+  const modal = useConfirmationModal();
 
   useEffect(() => {
     if (visible) {
@@ -50,7 +51,12 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
     }
   }, [visible, currentGoal]);
 
-  const handleSave = () => {
+  const handleSave = (goalNum: number) => {
+    onSave(goalNum);
+    onClose();
+  };
+
+  const handleSaveClick = () => {
     const goalNum = parseInt(goal);
     
     if (isNaN(goalNum) || goalNum <= 0) {
@@ -59,32 +65,23 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
     }
     
     if (goalNum < 1000) {
-      Alert.alert(
-        'Meta Baixa',
+      modal.showConfirmation(
         'Uma meta abaixo de 1000ml pode não ser suficiente para manter uma boa hidratação. Tem certeza?',
-        [
-          { text: 'Cancelar', style: 'cancel' },
-          { text: 'Confirmar', onPress: () => {
-            onSave(goalNum);
-            onClose();
-          }}
-        ]
+        'Meta Baixa',
+        () => handleSave(goalNum),
+        'Confirmar',
+        'Cancelar'
       );
     } else if (goalNum > 5000) {
-      Alert.alert(
-        'Meta Alta',
+      modal.showConfirmation(
         'Uma meta acima de 5000ml pode ser excessiva para a maioria das pessoas. Consulte um médico se necessário. Deseja continuar?',
-        [
-          { text: 'Cancelar', style: 'cancel' },
-          { text: 'Confirmar', onPress: () => {
-            onSave(goalNum);
-            onClose();
-          }}
-        ]
+        'Meta Alta',
+        () => handleSave(goalNum),
+        'Confirmar',
+        'Cancelar'
       );
     } else {
-      onSave(goalNum);
-      onClose();
+      handleSave(goalNum);
     }
   };
 
@@ -179,7 +176,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
                 <View style={styles.modalButtons}>
                   <Button
                     title="Salvar Meta"
-                    onPress={handleSave}
+                    onPress={handleSaveClick}
                     style={styles.modalSubmitButton}
                   />                  
                   <Button
@@ -219,6 +216,29 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
         onSave={handleCalculatorSave}
         onProfileSave={onProfileSave}
       />
+
+      {/* Modal de Confirmação */}
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          type={modal.modalConfig.type}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={() => {
+            modal.modalConfig?.onConfirm?.();
+            modal.hideModal();
+          }}
+          onCancel={() => {
+            modal.modalConfig?.onCancel?.();
+            modal.hideModal();
+          }}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
+        />
+      )}
     </>
   );
 };

@@ -57,7 +57,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
       exercise?.weightUnit || 'kg',
     );
     const [notes, setNotes] = useState(exercise?.notes || '');
-    const [progressionType, setProgressionType] = useState<
+    const [progressionType, ] = useState<
       'fixed' | 'range' | 'linear'
     >(exercise?.progressionType || 'fixed');
     const [useWarmupSets, setUseWarmupSets] = useState(

@@ -29,7 +29,7 @@ export const CustomWaterInputModal: React.FC<CustomWaterInputModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const suggestionAmounts = [150, 200, 300, 400, 500];
+  const suggestionAmounts = [150, 200, 300, 500];
 
   return (
     <Modal
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '90%',
     maxWidth: 400,
+    maxHeight: '50%',
     backgroundColor: 'white',
     borderRadius: 16,
     padding: 0,

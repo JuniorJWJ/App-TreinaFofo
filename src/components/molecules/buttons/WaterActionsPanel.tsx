@@ -1,7 +1,8 @@
-// components/molecules/WaterActionsPanel.tsx
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button } from '../../atoms/Button';
+import { ConfirmationModal } from '../modals/ConfirmationModal';
+import { useConfirmationModal } from '../../../hooks/useConfirmationModal';
 
 interface WaterActionsPanelProps {
   onAdjustGoal?: () => void;
@@ -12,34 +13,64 @@ export const WaterActionsPanel: React.FC<WaterActionsPanelProps> = ({
   onAdjustGoal,
   onReset,
 }) => {
+  const modal = useConfirmationModal();
+
   const handleReset = () => {
-    Alert.alert(
-      'Resetar Dia',
+    if (!onReset) return;
+    
+    modal.showConfirmation(
       'Tem certeza que deseja zerar a ingestão de água do dia?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Zerar', style: 'destructive', onPress: onReset },
-      ]
+      'Resetar Dia',
+      () => {
+        onReset();
+      },
+      'Zerar',
+      'Cancelar'
     );
   };
 
   return (
-    <View style={styles.container}>
-      {onAdjustGoal && (
-        <Button
-          title="Ajustar Meta"
-          onPress={onAdjustGoal}
-          style={styles.actionButton}
+    <>
+      <View style={styles.container}>
+        {onAdjustGoal && (
+          <Button
+            title="Ajustar Meta"
+            onPress={onAdjustGoal}
+            style={styles.actionButton}
+          />
+        )}
+        {onReset && (
+          <Button
+            title="Zerar Hoje"
+            onPress={handleReset}
+            style={[styles.actionButton, styles.resetButton]}
+          />
+        )}
+      </View>
+
+      {/* Modal de confirmação */}
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          type={modal.modalConfig.type}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={() => {
+            modal.modalConfig?.onConfirm?.();
+            modal.hideModal();
+          }}
+          onCancel={() => {
+            modal.modalConfig?.onCancel?.();
+            modal.hideModal();
+          }}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
         />
       )}
-      {onReset && (
-        <Button
-          title="Zerar Hoje"
-          onPress={handleReset}
-          style={[styles.actionButton, styles.resetButton]}
-        />
-      )}
-    </View>
+    </>
   );
 };
 
