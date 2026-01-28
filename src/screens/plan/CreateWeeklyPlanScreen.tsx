@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useWeeklyPlanStore } from '../../store';
 import { useWorkoutStore } from '../../store';
 import { Text } from '../../components/atoms/Text';
 import { WeeklyPlanForm } from '../../components/molecules/forms/WeeklyPlanForm';
 import { DayScheduleCard } from '../../components/molecules/cards/DayScheduleCard';
-import { FormActions } from '../../components/molecules/buttons/FormActions';
 import { TipCard } from '../../components/molecules/cards/TipCard';
 import { WorkoutSelectorModal } from '../../components/molecules/modals/WorkoutSelectorModal';
 import { DayOfWeek, DailyWorkout } from '../../types';
+import { useFocusEffect } from '@react-navigation/native';
+import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
+import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 
 interface CreateWeeklyPlanScreenProps {
   navigation: any;
@@ -32,6 +34,8 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
   const [description, setDescription] = useState(
     existingPlan?.description || '',
   );
+  const [isFormValid, setIsFormValid] = useState(!!existingPlan?.name);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [days, setDays] = useState<DailyWorkout[]>(
     existingPlan?.days || [
@@ -97,6 +101,14 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     sunday: 'Domingo',
   };
 
+  const modal = useConfirmationModal();
+
+  // Validação do formulário
+  useEffect(() => {
+    const isValid = planName.trim() !== '';
+    setIsFormValid(isValid);
+  }, [planName]);
+
   const getWorkoutName = (workoutId: string | null) => {
     if (!workoutId) return 'Descanso';
     const workout = workouts.find(w => w.id === workoutId);
@@ -123,56 +135,120 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     setModalVisible(false);
   };
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (!planName.trim()) {
-      Alert.alert('Atenção', 'Digite um nome para o plano semanal');
+      modal.showWarning('Digite um nome para o plano semanal', 'Atenção!');
       return;
     }
 
-    const planData = {
-      name: planName.trim(),
-      description: description.trim(),
-      days,
-      startDate: existingPlan?.startDate || new Date(),
-      endDate:
-        existingPlan?.endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      workoutSplitId: existingPlan?.workoutSplitId,
-      isActive: existingPlan?.isActive || false,
-      isTemplate: existingPlan?.isTemplate || false,
-      currentWeek: existingPlan?.currentWeek || 1,
-      completedDays: existingPlan?.completedDays || 0,
-      completionRate: existingPlan?.completionRate || 0,
-    };
+    setIsLoading(true);
+    try {
+      const planData = {
+        name: planName.trim(),
+        description: description.trim(),
+        days,
+        startDate: existingPlan?.startDate || new Date(),
+        endDate:
+          existingPlan?.endDate ||
+          new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        workoutSplitId: existingPlan?.workoutSplitId,
+        isActive: existingPlan?.isActive || false,
+        isTemplate: existingPlan?.isTemplate || false,
+        currentWeek: existingPlan?.currentWeek || 1,
+        completedDays: existingPlan?.completedDays || 0,
+        completionRate: existingPlan?.completionRate || 0,
+      };
 
-    if (isEditing && existingPlan) {
-      updateWeeklyPlan(existingPlan.id, planData);
-      Alert.alert('Sucesso', 'Plano semanal atualizado!', [
-        { text: 'OK', onPress: () => navigation.goBack() },
-      ]);
-    } else {
-      const newPlanId = `wp-${Date.now()}`;
-      addWeeklyPlan({
-        ...planData,
-        id: newPlanId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+      if (isEditing && existingPlan) {
+        updateWeeklyPlan(existingPlan.id, planData);
+        modal.showSuccess(
+          'Plano semanal atualizado com sucesso!',
+          'Sucesso!',
+          () => {
+            setIsLoading(false);
+            navigation.goBack();
+          },
+        );
+      } else {
+        const newPlanId = `wp-${Date.now()}`;
+        addWeeklyPlan({
+          ...planData,
+          id: newPlanId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
 
-      Alert.alert('Sucesso', 'Plano semanal criado!', [
-        {
-          text: 'Definir como Ativo',
-          onPress: () => {
+        // Modal com callback correto
+        modal.showModal({
+          type: 'confirmation',
+          title: 'Sucesso!',
+          message:
+            'Plano semanal criado com sucesso! O que você gostaria de fazer agora?',
+          confirmText: 'Definir como Ativo e Ver Lista',
+          cancelText: 'Apenas Ver Lista',
+          onConfirm: () => {
+            setIsLoading(false);
             setActivePlan(newPlanId);
             navigation.navigate('WeeklyPlanList');
           },
-        },
-        {
-          text: 'OK',
-          onPress: () => navigation.navigate('WeeklyPlanList'),
-        },
-      ]);
+          onCancel: () => {
+            setIsLoading(false);
+            navigation.navigate('WeeklyPlanList');
+          },
+          showCancelButton: true,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      modal.showError(
+        'Não foi possível salvar o plano semanal. Tente novamente.',
+        'Erro!',
+      );
     }
-  };
+  }, [
+    planName,
+    description,
+    days,
+    existingPlan,
+    isEditing,
+    updateWeeklyPlan,
+    modal,
+    navigation,
+    addWeeklyPlan,
+    setActivePlan,
+  ]);
+
+  const HeaderSaveButton = useCallback(() => {
+    return (
+      <TouchableOpacity
+        onPress={handleSave}
+        disabled={!isFormValid || isLoading}
+        style={{
+          marginRight: 16,
+          opacity: isFormValid && !isLoading ? 1 : 0.5,
+        }}
+      >
+        <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
+          {isLoading ? 'Salvando...' : isEditing ? 'Atualizar' : 'Criar'}
+        </Text>
+      </TouchableOpacity>
+    );
+  }, [handleSave, isFormValid, isLoading, isEditing]);
+
+  // Configurar o header
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setOptions({
+        title: isEditing ? 'Editar Plano Semanal' : 'Novo Plano Semanal',
+        headerRight: HeaderSaveButton,
+      });
+
+      return () => {
+        navigation.setOptions({ headerRight: undefined });
+      };
+    }, [navigation, HeaderSaveButton, isEditing]),
+  );
 
   const completedDays = days.filter(d => d.workoutId !== null).length;
 
@@ -203,25 +279,43 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
           ))}
         </View>
 
-        <FormActions
-          isEditing={isEditing}
-          onSave={handleSave}
-          onCancel={() => navigation.goBack()}
-          isSaveDisabled={!planName.trim()}
-        />
+        {/* REMOVIDO: FormActions */}
 
         {!isEditing && (
           <TipCard tip="💡 Dica: Você pode usar divisões como ABC, ABCD, ou Push/Pull/Pernas" />
         )}
       </ScrollView>
 
-      {/* Modal */}
+      {/* Modal de seleção de treino */}
       <WorkoutSelectorModal
         visible={isModalVisible}
         workouts={workouts}
         onClose={() => setModalVisible(false)}
         onSelect={handleSelectWorkout}
       />
+
+      {/* Modal de confirmação */}
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          type={modal.modalConfig.type}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={() => {
+            modal.modalConfig?.onConfirm?.();
+            modal.hideModal();
+          }}
+          onCancel={() => {
+            modal.modalConfig?.onCancel?.();
+            modal.hideModal();
+          }}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
+        />
+      )}
     </>
   );
 };
