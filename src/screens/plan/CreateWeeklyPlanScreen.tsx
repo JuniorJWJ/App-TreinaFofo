@@ -184,8 +184,8 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
           title: 'Sucesso!',
           message:
             'Plano semanal criado com sucesso! O que você gostaria de fazer agora?',
-          confirmText: 'Definir como Ativo e Ver Lista',
-          cancelText: 'Apenas Ver Lista',
+          confirmText: 'Definir como Ativo',
+          cancelText: 'Voltar',
           onConfirm: () => {
             setIsLoading(false);
             setActivePlan(newPlanId);

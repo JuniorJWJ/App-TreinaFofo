@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { useWeeklyPlanStore } from '../../store';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
 import { FloatingActionButton } from '../../components/molecules/buttons/FloatingActionButton';
+import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
+import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 
 interface WeeklyPlanListScreenProps {
   navigation: any;
@@ -11,25 +13,31 @@ interface WeeklyPlanListScreenProps {
 
 export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navigation }) => {
   const { weeklyPlans, deleteWeeklyPlan, setActivePlan, activePlanId } = useWeeklyPlanStore();
+  const modal = useConfirmationModal();
 
   const handleDeletePlan = (planId: string, planName: string) => {
-    Alert.alert(
-      'Excluir Plano',
+    modal.showConfirmation(
       `Tem certeza que deseja excluir "${planName}"?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { 
-          text: 'Excluir', 
-          style: 'destructive',
-          onPress: () => deleteWeeklyPlan(planId)
-        }
-      ]
+      'Excluir Plano',
+      () => {
+        deleteWeeklyPlan(planId);
+        modal.showSuccess('Plano excluído com sucesso!', 'Sucesso!');
+      },
+      'Excluir',
+      'Cancelar'
     );
   };
 
-  const handleSetActivePlan = (planId: string) => {
+  const handleSetActivePlan = (planId: string, planName: string) => {
     setActivePlan(planId);
-    Alert.alert('Sucesso', 'Plano definido como ativo!');
+    
+    modal.showSuccess(
+      `"${planName}" definido como plano ativo!`,
+      'Plano Ativo',
+      () => {
+        // Nada a fazer aqui, apenas fecha o modal
+      }
+    );
   };
 
   const handleEditPlan = (planId: string) => {
@@ -75,7 +83,7 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
         {activePlanId !== item.id && (
           <Button
             title="Definir como Ativo"
-            onPress={() => handleSetActivePlan(item.id)}
+            onPress={() => handleSetActivePlan(item.id, item.name)}
             style={styles.activeButton}
             disabled={activePlanId === item.id}
           />
@@ -121,16 +129,39 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
       )}
 
       {weeklyPlans.length > 0 && (
-      <FloatingActionButton
-        onPress={() => navigation.navigate('CreateWeeklyPlan')}
-        position="bottom-right"
-        offset={{ bottom: 40, right: 20 }}
-        label="+"
-        backgroundColor="#483148"
-        color="#FFF"
-        size="medium"
-        visible={weeklyPlans.length > 0}
-      />
+        <FloatingActionButton
+          onPress={() => navigation.navigate('CreateWeeklyPlan')}
+          position="bottom-right"
+          offset={{ bottom: 40, right: 20 }}
+          label="+"
+          backgroundColor="#483148"
+          color="#FFF"
+          size="medium"
+          visible={weeklyPlans.length > 0}
+        />
+      )}
+
+      {/* Modal de confirmação */}
+      {modal.modalConfig && (
+        <ConfirmationModal
+          visible={modal.isVisible}
+          type={modal.modalConfig.type}
+          title={modal.modalConfig.title}
+          message={modal.modalConfig.message}
+          confirmText={modal.modalConfig.confirmText}
+          cancelText={modal.modalConfig.cancelText}
+          onConfirm={() => {
+            modal.modalConfig?.onConfirm?.();
+            modal.hideModal();
+          }}
+          onCancel={() => {
+            modal.modalConfig?.onCancel?.();
+            modal.hideModal();
+          }}
+          showCancelButton={modal.modalConfig.showCancelButton}
+          hideIcon={modal.modalConfig.hideIcon}
+          onClose={modal.hideModal}
+        />
       )}
     </View>
   );
