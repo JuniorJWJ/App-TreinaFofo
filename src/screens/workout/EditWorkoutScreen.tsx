@@ -1,14 +1,5 @@
-import React, {
-  useRef,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useRef, useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useWorkoutStore } from '../../store';
 import { useExerciseStore } from '../../store';
 import {
@@ -34,8 +25,9 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
   const { exercises } = useExerciseStore();
 
   const [initialWorkoutName, setInitialWorkoutName] = useState('');
-  const [initialSelectedExercises, setInitialSelectedExercises] =
-    useState<string[]>([]);
+  const [initialSelectedExercises, setInitialSelectedExercises] = useState<
+    string[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -55,10 +47,8 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
           exerciseIds: selectedExercises,
         });
 
-        modal.showSuccess(
-          'Treino atualizado com sucesso!',
-          'Sucesso!',
-          () => navigation.goBack(),
+        modal.showSuccess('Treino atualizado com sucesso!', 'Sucesso!', () =>
+          navigation.goBack(),
         );
       } catch {
         modal.showError(
@@ -80,14 +70,8 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
 
     const formData = workoutFormRef.current.getFormData();
 
-    if (
-      formData.workoutName.trim() &&
-      formData.selectedExercises.length > 0
-    ) {
-      handleSubmit(
-        formData.workoutName,
-        formData.selectedExercises,
-      );
+    if (formData.workoutName.trim() && formData.selectedExercises.length > 0) {
+      handleSubmit(formData.workoutName, formData.selectedExercises);
     }
   }, [handleSubmit]);
 
@@ -182,7 +166,6 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
           Treino não encontrado
         </Text>
         <Text variant="body" style={styles.errorSubtext}>
-          
           O treino que você está tentando editar não existe mais.
         </Text>
 
@@ -190,9 +173,7 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
           onPress={() => navigation.navigate('WorkoutList')}
           style={styles.backButton}
         >
-          <Text style={{ color: '#FFF' }}>
-            Voltar para a lista
-          </Text>
+          <Text style={{ color: '#FFF' }}>Voltar para a lista</Text>
         </TouchableOpacity>
       </View>
     );

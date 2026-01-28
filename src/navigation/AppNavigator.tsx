@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from '../screens/home/HomeScreen';
 import { ExerciseListScreen } from '../screens/exercise/ExerciseListScreen';
-import { AddExerciseScreen } from '../screens/exercise/AddExerciseScreen';
+import { CreateExerciseScreen } from '../screens/exercise/CreateExerciseScreen';
 import { EditExerciseScreen } from '../screens/exercise/EditExerciseScreen';
 import { CreateWorkoutScreen } from '../screens/workout/CreateWorkoutScreen';
 import { WorkoutListScreen } from '../screens/workout/WorkoutListScreen';
@@ -16,7 +16,7 @@ import { EditWorkoutScreen } from '../screens/workout/EditWorkoutScreen';
 export type RootStackParamList = {
   Home: undefined;
   ExerciseList: undefined;
-  AddExercise: undefined;
+  CreateExercise: undefined;
   EditExercise: { exerciseId: string };
   CreateWorkout: undefined;
   WorkoutList: undefined;
@@ -54,8 +54,8 @@ export const AppNavigator = () => {
           options={{ title: 'Meus Exercícios' }}
         />
         <Stack.Screen 
-          name="AddExercise" 
-          component={AddExerciseScreen}
+          name="CreateExercise" 
+          component={CreateExerciseScreen}
           options={{ title: 'Novo Exercício' }}
         />
         <Stack.Screen 

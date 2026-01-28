@@ -14,9 +14,9 @@ export const initializeAppData = async (): Promise<boolean> => {
       const mockExercises = initializeMockExercises();
       
       // Adicionar cada exercício na store
-      const { addExercise } = useExerciseStore.getState();
+      const { CreateExercise } = useExerciseStore.getState();
       mockExercises.forEach((exercise) => {
-        addExercise(exercise);
+        CreateExercise(exercise);
       });
       
       // Marcar que o app já foi inicializado

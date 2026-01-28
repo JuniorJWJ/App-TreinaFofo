@@ -1,14 +1,5 @@
-import React, {
-  useRef,
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useWorkoutStore } from '../../store';
 import { useExerciseStore } from '../../store';
 import {
@@ -47,10 +38,7 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
       }
 
       if (selectedExercises.length === 0) {
-        modal.showWarning(
-          'Selecione pelo menos um exercício',
-          'Atenção!',
-        );
+        modal.showWarning('Selecione pelo menos um exercício', 'Atenção!');
         return;
       }
 
@@ -84,14 +72,8 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
     if (!workoutFormRef.current) return;
 
     const formData = workoutFormRef.current.getFormData();
-    if (
-      formData.workoutName.trim() &&
-      formData.selectedExercises.length > 0
-    ) {
-      handleSubmit(
-        formData.workoutName,
-        formData.selectedExercises,
-      );
+    if (formData.workoutName.trim() && formData.selectedExercises.length > 0) {
+      handleSubmit(formData.workoutName, formData.selectedExercises);
     }
   }, [handleSubmit]);
 

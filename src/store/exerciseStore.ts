@@ -8,7 +8,7 @@ interface ExerciseState {
   isLoading: boolean;
   
   // Actions
-  addExercise: (exerciseData: ExerciseFormData) => void;
+  CreateExercise: (exerciseData: ExerciseFormData) => void;
   updateExercise: (id: string, updates: Partial<Exercise>) => void;
   deleteExercise: (id: string) => void;
   getExercise: (id: string) => Exercise | undefined;
@@ -23,7 +23,7 @@ export const useExerciseStore = create<ExerciseState>()(
       exercises: [],
       isLoading: false,
 
-      addExercise: (exerciseData: ExerciseFormData) => {
+      CreateExercise: (exerciseData: ExerciseFormData) => {
         const newExercise: Exercise = {
           ...exerciseData,
           id: `ex-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,

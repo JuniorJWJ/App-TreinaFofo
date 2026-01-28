@@ -105,7 +105,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
             setSearch('');
             setSelectedGroup(null);
           }}
-          onCreateFirst={() => navigation.navigate('AddExercise')}
+          onCreateFirst={() => navigation.navigate('CreateExercise')}
         />
       ) : (
         <FlatList
@@ -119,7 +119,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
 
       {hasExercises && (
         <FloatingActionButton
-          onPress={() => navigation.navigate('AddExercise')}
+          onPress={() => navigation.navigate('CreateExercise')}
           position="bottom-right"
           offset={{ bottom: 40, right: 20 }}
           label="+"
