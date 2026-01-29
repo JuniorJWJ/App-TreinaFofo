@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   View, 
   StyleSheet, 
@@ -10,8 +10,10 @@ import {
 import { Text } from '../../atoms/Text';
 import { Button } from '../../atoms/Button';
 import { useExerciseStore } from '../../../store';
-// import { useMuscleGroupStore } from '../../store';
 import { useMuscleGroupUtils } from '../../../hooks/useMuscleGroupUtils';
+import { ExerciseItem } from '../../molecules/ExerciseItem';
+import { WorkoutStats } from '../../molecules/WorkoutStats';
+import { RestDayContent } from '../../molecules/RestDayContent';
 
 interface TodayWorkoutModalProps {
   visible: boolean;
@@ -25,14 +27,23 @@ interface TodayWorkoutModalProps {
 export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   visible,
   onClose,
-  // workout,
   workoutDetails,
   isCompleted,
   onToggleCompletion,
 }) => {
   const { exercises } = useExerciseStore();
   const { getMuscleGroupName } = useMuscleGroupUtils();
+  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(null);
 
+  const toggleExerciseExpand = (exerciseId: string) => {
+    setExpandedExerciseId(expandedExerciseId === exerciseId ? null : exerciseId);
+  };
+
+  // Calcular o total de séries
+  const totalSets = workoutDetails?.exerciseIds?.reduce((total: number, exerciseId: string) => {
+    const exercise = exercises.find(ex => ex.id === exerciseId);
+    return total + (exercise?.defaultSets || 0);
+  }, 0) || 0;
 
   // Renderizar conteúdo comum (com botão de fechar)
   const renderModalContent = (content: React.ReactNode) => (
@@ -70,17 +81,7 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   );
 
   if (!workoutDetails) {
-    return renderModalContent(
-      <View style={styles.restContent}>
-        <Text variant="title" align="center" style={styles.restTitle}>Descanso</Text>
-        <Text variant="body" align="center" style={styles.restMessage}>
-          Hoje é seu dia de descanso! 💤
-        </Text>
-        <Text variant="caption" align="center" style={styles.restTip}>
-          O descanso é fundamental para a recuperação muscular e progresso.
-        </Text>
-      </View>
-    );
+    return renderModalContent(<RestDayContent />);
   }
 
   return renderModalContent(
@@ -116,64 +117,33 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
           const exercise = exercises.find(ex => ex.id === exerciseId);
           if (!exercise) return null;
 
+          const isExpanded = expandedExerciseId === exerciseId;
+          const hasAdditionalDetails = 
+            exercise.defaultWeight || 
+            exercise.notes || 
+            (exercise.warmupSets && exercise.warmupSets.length > 0) ||
+            exercise.progressionType !== 'fixed';
+
           return (
-            <View key={exerciseId} style={styles.exerciseItem}>
-              <View style={styles.exerciseHeader}>
-                <Text variant="body" style={styles.exerciseName}>
-                  {index + 1}. {exercise.name}
-                </Text>
-                <View style={styles.muscleGroupTag}>
-                  <Text style={styles.muscleGroupText}>
-                    {getMuscleGroupName(exercise.muscleGroupId)}
-                  </Text>
-                </View>
-              </View>
-              
-              <View style={styles.exerciseDetails}>
-                <Text variant="caption">
-                  {exercise.defaultSets} séries × {exercise.defaultReps} repetições
-                </Text>
-                <Text variant="caption">
-                  Descanso: {exercise.defaultRestTime}s
-                </Text>
-              </View>
-            </View>
+            <ExerciseItem
+              key={exerciseId}
+              exercise={exercise}
+              index={index}
+              isExpanded={isExpanded}
+              hasAdditionalDetails={!!hasAdditionalDetails}
+              onToggleExpand={() => toggleExerciseExpand(exerciseId)}
+              getMuscleGroupName={getMuscleGroupName}
+            />
           );
         })}
       </View>
 
       {/* Estatísticas Rápidas */}
-      <View style={styles.statsContainer}>
-        <View style={styles.statItem}>
-          <Text variant="title" style={styles.statNumber}>
-            {workoutDetails.exerciseIds.length}
-          </Text>
-          <Text variant="caption" align="center">
-            Exercícios
-          </Text>
-        </View>
-        
-        <View style={styles.statItem}>
-          <Text variant="title" style={styles.statNumber}>
-            {workoutDetails.exerciseIds.reduce((total: number, exerciseId: string) => {
-              const exercise = exercises.find(ex => ex.id === exerciseId);
-              return total + (exercise?.defaultSets || 0);
-            }, 0)}
-          </Text>
-          <Text variant="caption" align="center">
-            Séries
-          </Text>
-        </View>
-        
-        <View style={styles.statItem}>
-          <Text variant="title" style={styles.statNumber}>
-            {workoutDetails.estimatedDuration}
-          </Text>
-          <Text variant="caption" align="center">
-            Minutos
-          </Text>
-        </View>
-      </View>
+      <WorkoutStats
+        exerciseCount={workoutDetails.exerciseIds.length}
+        totalSets={totalSets}
+        estimatedDuration={workoutDetails.estimatedDuration}
+      />
 
       {/* Ações */}
       <View style={styles.actionsContainer}>
@@ -189,7 +159,6 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
           title="Fechar"
           onPress={onClose}
           style={[styles.actionButton, styles.closeButton]}
-          //variant="secondary"
         />
       </View>
     </ScrollView>
@@ -245,23 +214,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  // Estilos para conteúdo de descanso
-  restContent: {
-    paddingTop: 20,
-    alignItems: 'center',
-  },
-  restTitle: {
-    marginBottom: 16,
-  },
-  restMessage: {
-    marginVertical: 16,
-    fontSize: 18,
-    color: '#666',
-  },
-  restTip: {
-    marginBottom: 20,
-    fontStyle: 'italic',
-  },
   // Estilos do conteúdo com scroll
   scrollContent: {
     paddingTop: 10,
@@ -303,55 +255,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 12,
     color: '#333',
-  },
-  exerciseItem: {
-    backgroundColor: '#F8F9FA',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#E9ECEF',
-  },
-  exerciseHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-  },
-  exerciseName: {
-    flex: 1,
-    marginRight: 8,
-    fontWeight: '600',
-  },
-  muscleGroupTag: {
-    backgroundColor: '#332B33',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  muscleGroupText: {
-    color: '#FFF',
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  exerciseDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-    padding: 16,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    color: '#483148',
-    marginBottom: 4,
   },
   actionsContainer: {
     gap: 12,
