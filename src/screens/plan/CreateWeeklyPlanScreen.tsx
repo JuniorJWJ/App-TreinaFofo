@@ -1,16 +1,15 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useCallback } from 'react';
+import {  StyleSheet, ScrollView } from 'react-native';
 import { useWeeklyPlanStore } from '../../store';
 import { useWorkoutStore } from '../../store';
-import { Text } from '../../components/atoms/Text';
-import { WeeklyPlanForm } from '../../components/molecules/forms/WeeklyPlanForm';
-import { DayScheduleCard } from '../../components/molecules/cards/DayScheduleCard';
-import { TipCard } from '../../components/molecules/cards/TipCard';
-import { WorkoutSelectorModal } from '../../components/molecules/modals/WorkoutSelectorModal';
-import { DayOfWeek, DailyWorkout } from '../../types';
 import { useFocusEffect } from '@react-navigation/native';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
+import { WeeklyPlanFormContainer } from '../../components/organisms/WeeklyPlanFormContainer';
+import { WeeklyPlanHeader } from '../../components/molecules/WeeklyPlanHeader';
+import { WorkoutSelectorModal } from '../../components/molecules/modals/WorkoutSelectorModal';
+import { useWeeklyPlanForm } from '../../hooks/useWeeklyPlanForm';
+import { DayOfWeek } from '../../types';
 
 interface CreateWeeklyPlanScreenProps {
   navigation: any;
@@ -30,110 +29,37 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     ? weeklyPlans.find(p => p.id === route.params.planId)
     : null;
 
-  const [planName, setPlanName] = useState(existingPlan?.name || '');
-  const [description, setDescription] = useState(
-    existingPlan?.description || '',
-  );
-  const [isFormValid, setIsFormValid] = useState(!!existingPlan?.name);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [days, setDays] = useState<DailyWorkout[]>(
-    existingPlan?.days || [
-      {
-        day: 'monday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'tuesday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'wednesday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'thursday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'friday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'saturday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'sunday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-    ],
-  );
-
-  const dayLabels: Record<DayOfWeek, string> = {
-    monday: 'Segunda-feira',
-    tuesday: 'Terça-feira',
-    wednesday: 'Quarta-feira',
-    thursday: 'Quinta-feira',
-    friday: 'Sexta-feira',
-    saturday: 'Sábado',
-    sunday: 'Domingo',
-  };
+  const {
+    planName,
+    setPlanName,
+    description,
+    setDescription,
+    isFormValid,
+    isLoading,
+    setIsLoading,
+    days,
+    updateDayWorkout,
+  } = useWeeklyPlanForm(existingPlan, isEditing);
 
   const modal = useConfirmationModal();
+  const [isModalVisible, setModalVisible] = React.useState(false);
+  const [selectedDay, setSelectedDay] = React.useState<DayOfWeek | null>(null);
 
-  // Validação do formulário
-  useEffect(() => {
-    const isValid = planName.trim() !== '';
-    setIsFormValid(isValid);
-  }, [planName]);
-
-  const getWorkoutName = (workoutId: string | null) => {
+  const getWorkoutName = useCallback((workoutId: string | null) => {
     if (!workoutId) return 'Descanso';
     const workout = workouts.find(w => w.id === workoutId);
     return workout ? workout.name : 'Treino não encontrado';
-  };
+  }, [workouts]);
 
-  // Estado do Modal
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<DayOfWeek | null>(null);
-
-  const handleDayPress = (day: DayOfWeek) => {
+  const handleDayPress = useCallback((day: DayOfWeek) => {
     setSelectedDay(day);
     setModalVisible(true);
-  };
+  }, []);
 
-  const updateDayWorkout = (day: DayOfWeek, workoutId: string | null) => {
-    setDays(prevDays =>
-      prevDays.map(d => (d.day === day ? { ...d, workoutId } : d)),
-    );
-  };
-
-  const handleSelectWorkout = (workoutId: string | null) => {
+  const handleSelectWorkout = useCallback((workoutId: string | null) => {
     if (selectedDay) updateDayWorkout(selectedDay, workoutId);
     setModalVisible(false);
-  };
+  }, [selectedDay, updateDayWorkout]);
 
   const handleSave = useCallback(() => {
     if (!planName.trim()) {
@@ -142,24 +68,25 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     }
 
     setIsLoading(true);
-    try {
-      const planData = {
-        name: planName.trim(),
-        description: description.trim(),
-        days,
-        startDate: existingPlan?.startDate || new Date(),
-        endDate:
-          existingPlan?.endDate ||
-          new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        workoutSplitId: existingPlan?.workoutSplitId,
-        isActive: existingPlan?.isActive || false,
-        isTemplate: existingPlan?.isTemplate || false,
-        currentWeek: existingPlan?.currentWeek || 1,
-        completedDays: existingPlan?.completedDays || 0,
-        completionRate: existingPlan?.completionRate || 0,
-      };
+    
+    const planData = {
+      name: planName.trim(),
+      description: description.trim(),
+      days,
+      startDate: existingPlan?.startDate || new Date(),
+      endDate:
+        existingPlan?.endDate ||
+        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      workoutSplitId: existingPlan?.workoutSplitId,
+      isActive: existingPlan?.isActive || false,
+      isTemplate: existingPlan?.isTemplate || false,
+      currentWeek: existingPlan?.currentWeek || 1,
+      completedDays: existingPlan?.completedDays || 0,
+      completionRate: existingPlan?.completionRate || 0,
+    };
 
-      if (isEditing && existingPlan) {
+    if (isEditing && existingPlan) {
+      try {
         updateWeeklyPlan(existingPlan.id, planData);
         modal.showSuccess(
           'Plano semanal atualizado com sucesso!',
@@ -167,9 +94,18 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
           () => {
             setIsLoading(false);
             navigation.goBack();
-          },
+          }
         );
-      } else {
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+        modal.showError(
+          'Não foi possível atualizar o plano semanal. Tente novamente.',
+          'Erro!'
+        );
+      }
+    } else {
+      try {
         const newPlanId = `wp-${Date.now()}`;
         addWeeklyPlan({
           ...planData,
@@ -178,14 +114,13 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
           updatedAt: new Date(),
         });
 
-        // Modal com callback correto
+        // CORREÇÃO AQUI: usar showModal corretamente
         modal.showModal({
           type: 'confirmation',
           title: 'Sucesso!',
-          message:
-            'Plano semanal criado com sucesso! O que você gostaria de fazer agora?',
+          message: 'Plano semanal criado com sucesso! O que você gostaria de fazer agora?',
           confirmText: 'Definir como Ativo',
-          cancelText: 'Voltar',
+          cancelText: 'Voltar para Lista',
           onConfirm: () => {
             setIsLoading(false);
             setActivePlan(newPlanId);
@@ -197,14 +132,14 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
           },
           showCancelButton: true,
         });
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+        modal.showError(
+          'Não foi possível criar o plano semanal. Tente novamente.',
+          'Erro!'
+        );
       }
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      modal.showError(
-        'Não foi possível salvar o plano semanal. Tente novamente.',
-        'Erro!',
-      );
     }
   }, [
     planName,
@@ -217,22 +152,17 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     navigation,
     addWeeklyPlan,
     setActivePlan,
+    setIsLoading,
   ]);
 
   const HeaderSaveButton = useCallback(() => {
     return (
-      <TouchableOpacity
+      <WeeklyPlanHeader
         onPress={handleSave}
         disabled={!isFormValid || isLoading}
-        style={{
-          marginRight: 16,
-          opacity: isFormValid && !isLoading ? 1 : 0.5,
-        }}
-      >
-        <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-          {isLoading ? 'Salvando...' : isEditing ? 'Atualizar' : 'Criar'}
-        </Text>
-      </TouchableOpacity>
+        isLoading={isLoading}
+        isEditing={!!isEditing}
+      />
     );
   }, [handleSave, isFormValid, isLoading, isEditing]);
 
@@ -250,40 +180,19 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     }, [navigation, HeaderSaveButton, isEditing]),
   );
 
-  const completedDays = days.filter(d => d.workoutId !== null).length;
-
   return (
     <>
       <ScrollView style={styles.container}>
-        <WeeklyPlanForm
+        <WeeklyPlanFormContainer
           planName={planName}
           onPlanNameChange={setPlanName}
           description={description}
           onDescriptionChange={setDescription}
-          completedDays={completedDays}
+          days={days}
+          onDayPress={handleDayPress}
+          getWorkoutName={getWorkoutName}
+          isEditing={!!isEditing}
         />
-
-        <Text variant="subtitle" style={styles.sectionTitle}>
-          Planejamento da Semana:
-        </Text>
-
-        <View style={styles.daysContainer}>
-          {days.map(day => (
-            <DayScheduleCard
-              key={day.day}
-              day={day.day}
-              dayLabel={dayLabels[day.day]}
-              workoutName={getWorkoutName(day.workoutId)}
-              onPress={handleDayPress}
-            />
-          ))}
-        </View>
-
-        {/* REMOVIDO: FormActions */}
-
-        {!isEditing && (
-          <TipCard tip="💡 Dica: Você pode usar divisões como ABC, ABCD, ou Push/Pull/Pernas" />
-        )}
       </ScrollView>
 
       {/* Modal de seleção de treino */}
@@ -325,12 +234,5 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#1b1613ff',
-  },
-  sectionTitle: {
-    marginBottom: 16,
-    color: '#FFF',
-  },
-  daysContainer: {
-    marginBottom: 20,
   },
 });
