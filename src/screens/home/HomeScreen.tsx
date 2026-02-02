@@ -42,10 +42,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   const handleWorkoutCardPress = () => {
+    console.log('Opening workout modal'); // Adicione este log
     setIsWorkoutModalVisible(true);
   };
 
   const handleCloseModal = () => {
+    console.log('Closing workout modal'); // Adicione este log
     setIsWorkoutModalVisible(false);
   };
 
@@ -58,58 +60,52 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      {/* <View style={styles.header}>
-        <Text variant="title">Bem-vindo!</Text>
-        <Text variant="body" style={styles.subtitle}>
-          Acompanhe seu progresso diário
-        </Text>
-      </View> */}
-
-      {/* Stats Cards */}
-      <StatsCards 
-        totalExercises={exercises.length}
-        totalMuscleGroups={muscleGroups.length}
-      />
-
-      {/* Card de Água */}
-      <WaterProgressCard
-        currentIntake={currentIntake}
-        dailyGoal={dailyGoal}
-        onPress={handleWaterCardPress}
-        onQuickAdd={handleQuickWaterAdd}
-        showActions={true}
-      />
-
-      {/* Treino de Hoje */}
-      {!activePlan || !todaysWorkout ? (
-        <View>
-          <HowToStartCard onPress={() => setShowHowToStart(true)} />
-          <HowToStartFlow
-            visible={showHowToStart}
-            onClose={() => setShowHowToStart(false)}
-          />
-        </View>
-      ) : (
-        <TodayWorkoutCard
-          workoutName={todaysWorkoutDetails ? todaysWorkoutDetails.name : 'Descanso'}
-          exerciseCount={todaysWorkoutDetails?.exerciseIds.length}
-          estimatedDuration={todaysWorkoutDetails?.estimatedDuration}
-          isCompleted={todaysWorkout.isCompleted}
-          onPress={handleWorkoutCardPress}
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        {/* Stats Cards */}
+        <StatsCards 
+          totalExercises={exercises.length}
+          totalMuscleGroups={muscleGroups.length}
         />
-      )}
 
-      {/* Quick Actions */}
-      <QuickActions
-        onNavigateExercises={() => navigation.navigate('ExerciseList')}
-        onNavigateWorkouts={() => navigation.navigate('WorkoutList')}
-        onNavigateWeeklyPlans={() => navigation.navigate('WeeklyPlanList')}
-        onNavigateWater={() => navigation.navigate('WaterDashboardScreen')}
-      />
+        {/* Card de Água */}
+        <WaterProgressCard
+          currentIntake={currentIntake}
+          dailyGoal={dailyGoal}
+          onPress={handleWaterCardPress}
+          onQuickAdd={handleQuickWaterAdd}
+          showActions={true}
+        />
 
-      {/* Modal do Treino de Hoje */}
+        {/* Treino de Hoje */}
+        {!activePlan || !todaysWorkout ? (
+          <View>
+            <HowToStartCard onPress={() => setShowHowToStart(true)} />
+            <HowToStartFlow
+              visible={showHowToStart}
+              onClose={() => setShowHowToStart(false)}
+            />
+          </View>
+        ) : (
+          <TodayWorkoutCard
+            workoutName={todaysWorkoutDetails ? todaysWorkoutDetails.name : 'Descanso'}
+            exerciseCount={todaysWorkoutDetails?.exerciseIds.length}
+            estimatedDuration={todaysWorkoutDetails?.estimatedDuration}
+            isCompleted={todaysWorkout.isCompleted}
+            onPress={handleWorkoutCardPress}
+          />
+        )}
+
+        {/* Quick Actions */}
+        <QuickActions
+          onNavigateExercises={() => navigation.navigate('ExerciseList')}
+          onNavigateWorkouts={() => navigation.navigate('WorkoutList')}
+          onNavigateWeeklyPlans={() => navigation.navigate('WeeklyPlanList')}
+          onNavigateWater={() => navigation.navigate('WaterDashboardScreen')}
+        />
+      </ScrollView>
+
+      {/* Modal do Treino de Hoje - FORA DO SCROLLVIEW */}
       <TodayWorkoutModal
         visible={isWorkoutModalVisible}
         onClose={handleCloseModal}
@@ -118,15 +114,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         isCompleted={todaysWorkout?.isCompleted || false}
         onToggleCompletion={handleToggleWorkoutCompletion}
       />
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#1b1613ff',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 16,
   },
   header: {
     marginBottom: 20,

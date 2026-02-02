@@ -19,15 +19,15 @@ export const TodayWorkoutCard: React.FC<TodayWorkoutCardProps> = ({
   onPress,
 }) => {
   return (
-    <TouchableOpacity 
-      style={styles.container}
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
+    <View style={styles.container}>
       <Text variant="subtitle" style={styles.sectionTitle}>
         Treino de Hoje
       </Text>
-      <View style={styles.card}>
+      <TouchableOpacity 
+        style={styles.card}
+        onPress={onPress}
+        activeOpacity={0.7}
+      >
         <Text variant="body" style={styles.workoutName}>
           {workoutName}
         </Text>
@@ -44,8 +44,8 @@ export const TodayWorkoutCard: React.FC<TodayWorkoutCardProps> = ({
             {isCompleted ? '✓ Concluído' : 'Toque para ver detalhes'}
           </Text>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 
