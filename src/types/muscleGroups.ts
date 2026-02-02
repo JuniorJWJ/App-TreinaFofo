@@ -23,4 +23,5 @@ export const DEFAULT_MUSCLE_GROUPS: Omit<MuscleGroup, 'id' | 'createdAt' | 'upda
   { name: 'Antebraço', color: '#82E0AA' },
   { name: 'Trapézio', color: '#F1948A' },
   { name: 'Lats', color: '#7FB3D5' },
+  { name: 'Lombar', color: '#A3E4D7' },
 ];

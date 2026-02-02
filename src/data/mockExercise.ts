@@ -8,7 +8,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Supino Reto com Barra',
     muscleGroupId: 'Peito',
-    description: 'Exercício fundamental para desenvolvimento do peitoral maior. Executado com barra no banco plano.',
+    description:
+      'Exercício fundamental para desenvolvimento do peitoral maior. Executado com barra no banco plano.',
     equipment: 'Banco + Barra + Anilhas',
     difficulty: 'intermediate',
     videoUrl: 'https://exemplo.com/videos/supino-reto',
@@ -30,7 +31,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Supino Inclinado com Halteres',
     muscleGroupId: 'Peito',
-    description: 'Variante do supino que enfatiza a porção superior do peitoral maior.',
+    description:
+      'Variante do supino que enfatiza a porção superior do peitoral maior.',
     equipment: 'Banco Inclinado + Halteres',
     difficulty: 'intermediate',
     videoUrl: 'https://exemplo.com/videos/supino-inclinado',
@@ -39,9 +41,7 @@ export const mockExercises: ExerciseFormData[] = [
     defaultRestTime: 60,
     defaultWeight: 20,
     weightUnit: 'kg',
-    warmupSets: [
-      { reps: 12, percentage: 50 },
-    ],
+    warmupSets: [{ reps: 12, percentage: 50 }],
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 2.5,
@@ -49,7 +49,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Crucifixo com Halteres',
     muscleGroupId: 'Peito',
-    description: 'Exercício de isolamento para peitoral, excelente para-work o estiramento muscular.',
+    description:
+      'Exercício de isolamento para peitoral, excelente para-work o estiramento muscular.',
     equipment: 'Banco Plano + Halteres',
     difficulty: 'beginner',
     defaultSets: 3,
@@ -73,7 +74,22 @@ export const mockExercises: ExerciseFormData[] = [
     progressionType: 'fixed',
     autoProgression: false,
   },
-
+  {
+    name: 'Crucifixo no Cabo (Crossover)',
+    muscleGroupId: 'Peito',
+    description:
+      'Isolamento com tensão constante em toda a amplitude de movimento.',
+    equipment: 'Polia Dupla',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+    defaultWeight: 15,
+    weightUnit: 'kg',
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 2.5,
+  },
   // COSTAS
   {
     name: 'Puxada Frontal',
@@ -87,9 +103,7 @@ export const mockExercises: ExerciseFormData[] = [
     defaultRestTime: 90,
     defaultWeight: 40,
     weightUnit: 'kg',
-    warmupSets: [
-      { reps: 8, percentage: 50 },
-    ],
+    warmupSets: [{ reps: 8, percentage: 50 }],
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 2.5,
@@ -98,7 +112,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Barra Fixa',
     muscleGroupId: 'Costas',
-    description: 'Exercício fundamental para costas e biceps usando peso corporal.',
+    description:
+      'Exercício fundamental para costas e biceps usando peso corporal.',
     equipment: 'Barra Fixa',
     difficulty: 'advanced',
     defaultSets: 4,
@@ -111,7 +126,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Remada Curva com Barra',
     muscleGroupId: 'Costas',
-    description: 'Exercício compound para desenvolvimento das dorsais e trapeézio médio.',
+    description:
+      'Exercício compound para desenvolvimento das dorsais e trapeézio médio.',
     equipment: 'Barra Olga + Anilhas',
     difficulty: 'intermediate',
     defaultSets: 4,
@@ -119,9 +135,7 @@ export const mockExercises: ExerciseFormData[] = [
     defaultRestTime: 90,
     defaultWeight: 30,
     weightUnit: 'kg',
-    warmupSets: [
-      { reps: 10, percentage: 50 },
-    ],
+    warmupSets: [{ reps: 10, percentage: 50 }],
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 2.5,
@@ -130,7 +144,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Remada Unilateral com Haltere',
     muscleGroupId: 'Costas',
-    description: 'Exercício de isolamento para costas com maior amplitude de movimento.',
+    description:
+      'Exercício de isolamento para costas com maior amplitude de movimento.',
     equipment: 'Banco + Haltere',
     difficulty: 'intermediate',
     defaultSets: 3,
@@ -157,7 +172,42 @@ export const mockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
   },
-
+  {
+    name: 'Levantamento Terra',
+    muscleGroupId: 'Costas',
+    description: 'Exercício composto massivo para toda a cadeia posterior.',
+    equipment: 'Barra + Anilhas',
+    difficulty: 'advanced',
+    defaultSets: 3,
+    defaultReps: 5,
+    defaultRestTime: 180,
+    defaultWeight: 60,
+    weightUnit: 'kg',
+    warmupSets: [
+      { reps: 8, percentage: 40 },
+      { reps: 5, percentage: 60 },
+    ],
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 5,
+    notes: 'Manter a barra próxima às canelas e coluna neutra',
+  },
+  {
+    name: 'Remada Cavalinho',
+    muscleGroupId: 'Costas',
+    description:
+      'Variação de remada que permite grandes cargas para espessura das costas.',
+    equipment: 'Barra T ou Canto de Parede',
+    difficulty: 'intermediate',
+    defaultSets: 4,
+    defaultReps: 10,
+    defaultRestTime: 90,
+    defaultWeight: 30,
+    weightUnit: 'kg',
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 5,
+  },
   // OMBROS
   {
     name: 'Desenvolvimento Militar com Barra',
@@ -170,18 +220,32 @@ export const mockExercises: ExerciseFormData[] = [
     defaultRestTime: 90,
     defaultWeight: 30,
     weightUnit: 'kg',
-    warmupSets: [
-      { reps: 10, percentage: 50 },
-    ],
+    warmupSets: [{ reps: 10, percentage: 50 }],
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 2.5,
     notes: 'Manter o core contraído e não arquear as costas excessivamente',
   },
   {
+    name: 'Arnold Press',
+    muscleGroupId: 'Ombro',
+    description: 'Desenvolvimento com rotação que atinge todas as cabeças do deltoide.',
+    equipment: 'Halteres',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 75,
+    defaultWeight: 14,
+    weightUnit: 'kg',
+    progressionType: 'range',
+    autoProgression: true,
+    incrementSize: 2,
+  },
+  {
     name: 'Elevação Lateral com Halteres',
     muscleGroupId: 'Ombro',
-    description: 'Exercício de isolamento para deltoides laterais (ombro largo).',
+    description:
+      'Exercício de isolamento para deltoides laterais (ombro largo).',
     equipment: 'Halteres',
     difficulty: 'beginner',
     defaultSets: 3,
@@ -237,9 +301,7 @@ export const mockExercises: ExerciseFormData[] = [
     defaultRestTime: 60,
     defaultWeight: 20,
     weightUnit: 'kg',
-    warmupSets: [
-      { reps: 12, percentage: 50 },
-    ],
+    warmupSets: [{ reps: 12, percentage: 50 }],
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 2.5,
@@ -248,7 +310,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Rosca Martelo com Halteres',
     muscleGroupId: 'Bíceps',
-    description: 'Variante de rosca que enfatiza o braquial e o longo da cabeça do bíceps.',
+    description:
+      'Variante de rosca que enfatiza o braquial e o longo da cabeça do bíceps.',
     equipment: 'Halteres',
     difficulty: 'beginner',
     defaultSets: 3,
@@ -292,7 +355,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Rosca 21',
     muscleGroupId: 'Bíceps',
-    description: 'Técnica avançada de rosca com 7 movimentos parciais em cada fase.',
+    description:
+      'Técnica avançada de rosca com 7 movimentos parciais em cada fase.',
     equipment: 'Barra Olga',
     difficulty: 'advanced',
     defaultSets: 3,
@@ -304,12 +368,42 @@ export const mockExercises: ExerciseFormData[] = [
     autoProgression: false,
     notes: '7 partials baixo + 7 full + 7 partials alto',
   },
-
+{
+    name: 'Tríceps Testa com Barra EZ',
+    muscleGroupId: 'Tríceps',
+    description: 'Isolamento para a cabeça longa do tríceps.',
+    equipment: 'Barra EZ + Banco Plano',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+    defaultWeight: 10,
+    weightUnit: 'kg',
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 2,
+    notes: 'Descer a barra em direção à testa ou levemente atrás da cabeça',
+  },
+  {
+    name: 'Rosca Inversa',
+    muscleGroupId: 'Antebraço',
+    description: 'Foco no braquiorradial e extensores do punho.',
+    equipment: 'Barra ou Polia',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 15,
+    defaultRestTime: 60,
+    defaultWeight: 15,
+    weightUnit: 'kg',
+    progressionType: 'range',
+    autoProgression: false,
+  },
   // PERNAS
   {
     name: 'Agachamento com Barra',
     muscleGroupId: 'Quadríceps',
-    description: 'Exercício fundamental para quadríceps, gluteos e isquiotibiais.',
+    description:
+      'Exercício fundamental para quadríceps, gluteos e isquiotibiais.',
     equipment: 'Barra + Rack + Anilhas',
     difficulty: 'intermediate',
     videoUrl: 'https://exemplo.com/videos/agachamento',
@@ -330,7 +424,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Leg Press',
     muscleGroupId: 'Quadríceps',
-    description: 'Exercício compound para quadríceps com menor carga na coluna.',
+    description:
+      'Exercício compound para quadríceps com menor carga na coluna.',
     equipment: 'Máquina Leg Press',
     difficulty: 'beginner',
     defaultSets: 4,
@@ -338,9 +433,7 @@ export const mockExercises: ExerciseFormData[] = [
     defaultRestTime: 90,
     defaultWeight: 120,
     weightUnit: 'kg',
-    warmupSets: [
-      { reps: 10, percentage: 50 },
-    ],
+    warmupSets: [{ reps: 10, percentage: 50 }],
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 10,
@@ -364,7 +457,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Stiff com Barra',
     muscleGroupId: 'Posterior de Coxa',
-    description: 'Exercício para isquiotibiais e gluteos com ênfase no alongamento.',
+    description:
+      'Exercício para isquiotibiais e gluteos com ênfase no alongamento.',
     equipment: 'Barra Olga',
     difficulty: 'intermediate',
     defaultSets: 4,
@@ -372,9 +466,7 @@ export const mockExercises: ExerciseFormData[] = [
     defaultRestTime: 90,
     defaultWeight: 40,
     weightUnit: 'kg',
-    warmupSets: [
-      { reps: 10, percentage: 50 },
-    ],
+    warmupSets: [{ reps: 10, percentage: 50 }],
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 2.5,
@@ -411,6 +503,51 @@ export const mockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2,
     notes: 'Manter o joelho traseiro apontando para baixo',
+  },
+  {
+    name: 'Mesa Flexora',
+    muscleGroupId: 'Posterior de Coxa',
+    description: 'Isolamento para flexão de joelho.',
+    equipment: 'Máquina Flexora Deitada',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+    defaultWeight: 35,
+    weightUnit: 'kg',
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 5,
+  },
+  {
+    name: 'Agachamento Búlgaro',
+    muscleGroupId: 'Quadríceps',
+    description: 'Exercício unilateral intenso para pernas e glúteos.',
+    equipment: 'Banco + Halteres',
+    difficulty: 'advanced',
+    defaultSets: 3,
+    defaultReps: 10,
+    defaultRestTime: 90,
+    defaultWeight: 10,
+    weightUnit: 'kg',
+    progressionType: 'range',
+    autoProgression: true,
+    notes: 'Um pé apoiado no banco atrás, foco no equilíbrio e profundidade',
+  },
+  {
+    name: 'Elevação Pélvica',
+    muscleGroupId: 'Glúteo',
+    description: 'Melhor exercício para isolamento e força de glúteos.',
+    equipment: 'Barra + Banco',
+    difficulty: 'intermediate',
+    defaultSets: 4,
+    defaultReps: 10,
+    defaultRestTime: 90,
+    defaultWeight: 40,
+    weightUnit: 'kg',
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 5,
   },
 
   // ABDÔMEN
@@ -458,7 +595,8 @@ export const mockExercises: ExerciseFormData[] = [
   {
     name: 'Mountain Climber',
     muscleGroupId: 'Abdominal',
-    description: 'Exercício cardiovascular para abdômen com movimento alternado.',
+    description:
+      'Exercício cardiovascular para abdômen com movimento alternado.',
     equipment: 'Nenhum (solo)',
     difficulty: 'intermediate',
     defaultSets: 3,
@@ -467,6 +605,32 @@ export const mockExercises: ExerciseFormData[] = [
     progressionType: 'range',
     autoProgression: true,
     notes: 'Manter o quadril baixo e alternar as pernas rapidamente',
+  },
+  {
+    name: 'Extensão de Lombar',
+    muscleGroupId: 'Lombar',
+    description: 'Fortalecimento dos eretores da espinha.',
+    equipment: 'Banco Romano / Hiperestensão',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 15,
+    defaultRestTime: 60,
+    progressionType: 'fixed',
+    autoProgression: false,
+    notes: 'Movimento controlado, sem hiperextender demais o pescoço',
+  },
+  {
+    name: 'Abdominal Infra Suspenso',
+    muscleGroupId: 'Abdominal',
+    description: 'Elevação de pernas focada na porção inferior do abdômen.',
+    equipment: 'Barra Fixa',
+    difficulty: 'advanced',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+    progressionType: 'range',
+    autoProgression: true,
+    notes: 'Tentar não balançar o corpo, focar na contração do core',
   },
 ];
 
@@ -482,7 +646,9 @@ export const initializeMockExercises = (): Exercise[] => {
 };
 
 // Função para obter exercícios por grupo muscular
-export const getMockExercisesByMuscleGroup = (muscleGroupId: string): ExerciseFormData[] => {
+export const getMockExercisesByMuscleGroup = (
+  muscleGroupId: string,
+): ExerciseFormData[] => {
   return mockExercises.filter(ex => ex.muscleGroupId === muscleGroupId);
 };
 
@@ -496,6 +662,6 @@ export const getMuscleGroupsWithExercises = (): string[] => {
 export const searchMockExercises = (query: string): ExerciseFormData[] => {
   const lowercaseQuery = query.toLowerCase();
   return mockExercises.filter(exercise =>
-    exercise.name.toLowerCase().includes(lowercaseQuery)
+    exercise.name.toLowerCase().includes(lowercaseQuery),
   );
 };
