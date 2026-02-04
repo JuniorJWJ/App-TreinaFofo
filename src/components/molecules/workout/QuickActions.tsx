@@ -1,7 +1,7 @@
 // components/molecules/QuickActions.tsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button } from '../atoms/Button';
+import { Button } from '../../atoms/Button';
 
 interface QuickActionsProps {
   onNavigateExercises: () => void;

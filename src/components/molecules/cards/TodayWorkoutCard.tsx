@@ -1,7 +1,7 @@
 // components/molecules/TodayWorkoutCard.tsx
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from '../atoms/Text';
+import { Text } from '../../atoms/Text';
 
 interface TodayWorkoutCardProps {
   workoutName: string;

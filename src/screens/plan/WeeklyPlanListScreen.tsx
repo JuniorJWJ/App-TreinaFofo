@@ -4,7 +4,7 @@ import { useWeeklyPlanStore } from '../../store';
 import { FloatingActionButton } from '../../components/molecules/buttons/FloatingActionButton';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { WeeklyPlanList } from '../../components/organisms/WeeklyPlanList';
-import { EmptyWeeklyPlans } from '../../components/molecules/EmptyWeeklyPlans';
+import { EmptyWeeklyPlans } from '../../components/molecules/workout/EmptyWeeklyPlans';
 import { useWeeklyPlanActions } from '../../hooks/useWeeklyPlanActions';
 
 interface WeeklyPlanListScreenProps {

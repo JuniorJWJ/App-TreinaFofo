@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text } from '../atoms/Text';
-import { Button } from '../atoms/Button';
+import { Text } from '../../atoms/Text';
+import { Button } from '../../atoms/Button';
 
 interface EmptyWeeklyPlansProps {
   onCreatePlan: () => void;

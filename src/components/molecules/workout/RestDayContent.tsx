@@ -1,7 +1,7 @@
 // components/molecules/RestDayContent.tsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text } from '../atoms/Text';
+import { Text } from '../../atoms/Text';
 
 export const RestDayContent: React.FC = () => {
   return (

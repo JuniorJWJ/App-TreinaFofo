@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 import { WeeklyPlanFormContainer } from '../../components/organisms/WeeklyPlanFormContainer';
-import { WeeklyPlanHeader } from '../../components/molecules/WeeklyPlanHeader';
+import { WeeklyPlanHeader } from '../../components/molecules/workout/WeeklyPlanHeader';
 import { WorkoutSelectorModal } from '../../components/molecules/modals/WorkoutSelectorModal';
 import { useWeeklyPlanForm } from '../../hooks/useWeeklyPlanForm';
 import { DayOfWeek } from '../../types';

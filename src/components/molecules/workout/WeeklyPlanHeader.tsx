@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Text } from '../atoms/Text';
+import { Text } from '../../atoms/Text';
 
 interface WeeklyPlanHeaderProps {
   onPress: () => void;

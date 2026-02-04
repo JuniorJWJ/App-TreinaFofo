@@ -11,9 +11,9 @@ import { Text } from '../../atoms/Text';
 import { Button } from '../../atoms/Button';
 import { useExerciseStore } from '../../../store';
 import { useMuscleGroupUtils } from '../../../hooks/useMuscleGroupUtils';
-import { ExerciseItem } from '../../molecules/ExerciseItem';
-import { WorkoutStats } from '../../molecules/WorkoutStats';
-import { RestDayContent } from '../../molecules/RestDayContent';
+import { ExerciseItem } from '../workout/ExerciseItem';
+import { WorkoutStats } from '../../molecules/workout/WorkoutStats';
+import { RestDayContent } from '../workout/RestDayContent';
 
 interface TodayWorkoutModalProps {
   visible: boolean;

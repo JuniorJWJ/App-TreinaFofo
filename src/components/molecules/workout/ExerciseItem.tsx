@@ -1,7 +1,7 @@
 // components/molecules/ExerciseItem.tsx
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from '../atoms/Text';
+import { Text } from '../../atoms/Text';
 
 interface ExerciseItemProps {
   exercise: any;
