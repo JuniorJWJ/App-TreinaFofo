@@ -79,66 +79,67 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Stats Cards */}
-        {/* <StatsCards 
-          totalExercises={exercises.length}
-          totalMuscleGroups={muscleGroups.length}
-        /> */}
+        <View style={styles.section}>
+          <WaterProgressCard
+            currentIntake={currentIntake}
+            dailyGoal={dailyGoal}
+            onPress={handleWaterCardPress}
+            onQuickAdd={handleQuickWaterAdd}
+            showActions={true}
+          />
+        </View>
 
-        {/* Card de Água */}
-        <WaterProgressCard
-          currentIntake={currentIntake}
-          dailyGoal={dailyGoal}
-          onPress={handleWaterCardPress}
-          onQuickAdd={handleQuickWaterAdd}
-          showActions={true}
-        />
-
-        <TouchableOpacity
-          onPress={handleTimerToggle}
-          style={styles.timerToggleButton}
-        >
-          <Text style={styles.timerToggleText}>
-            {showTimer ? '👆 Esconder Cronômetro' : '👇 Mostrar Cronômetro'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.section}>
+          <TouchableOpacity
+            onPress={handleTimerToggle}
+            style={styles.timerToggleButton}
+          >
+            <Text style={styles.timerToggleText}>
+              {showTimer ? '👆 Esconder Cronômetro' : '👇 Mostrar Cronômetro'}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {showTimer && (
-          <TimerCard
-            initialTime={0}
-            autoStart={false}
-            onTimeUpdate={time => console.log('Tempo atual:', time)}
-          />
-        )}
-
-        {/* Treino de Hoje */}
-        {!activePlan || !todaysWorkout ? (
-          <View>
-            <HowToStartCard onPress={() => setShowHowToStart(true)} />
-            <HowToStartFlow
-              visible={showHowToStart}
-              onClose={() => setShowHowToStart(false)}
+          <View style={styles.section}>
+            <TimerCard
+              initialTime={0}
+              autoStart={false}
+              onTimeUpdate={time => console.log('Tempo atual:', time)}
             />
           </View>
-        ) : (
-          <TodayWorkoutCard
-            workoutName={
-              todaysWorkoutDetails ? todaysWorkoutDetails.name : 'Descanso'
-            }
-            exerciseCount={todaysWorkoutDetails?.exerciseIds.length}
-            estimatedDuration={todaysWorkoutDetails?.estimatedDuration}
-            isCompleted={todaysWorkout.isCompleted}
-            onPress={handleWorkoutCardPress}
-          />
         )}
 
-        {/* Quick Actions */}
-        <QuickActions
-          onNavigateExercises={() => navigation.navigate('ExerciseList')}
-          onNavigateWorkouts={() => navigation.navigate('WorkoutList')}
-          onNavigateWeeklyPlans={() => navigation.navigate('WeeklyPlanList')}
-          onNavigateWater={() => navigation.navigate('WaterDashboardScreen')}
-        />
+        <View style={styles.section}>
+          {!activePlan || !todaysWorkout ? (
+            <>
+              <HowToStartCard onPress={() => setShowHowToStart(true)} />
+              <HowToStartFlow
+                visible={showHowToStart}
+                onClose={() => setShowHowToStart(false)}
+              />
+            </>
+          ) : (
+            <TodayWorkoutCard
+              workoutName={
+                todaysWorkoutDetails ? todaysWorkoutDetails.name : 'Descanso'
+              }
+              exerciseCount={todaysWorkoutDetails?.exerciseIds.length}
+              estimatedDuration={todaysWorkoutDetails?.estimatedDuration}
+              isCompleted={todaysWorkout.isCompleted}
+              onPress={handleWorkoutCardPress}
+            />
+          )}
+        </View>
+
+        <View style={styles.section}>
+          <QuickActions
+            onNavigateExercises={() => navigation.navigate('ExerciseList')}
+            onNavigateWorkouts={() => navigation.navigate('WorkoutList')}
+            onNavigateWeeklyPlans={() => navigation.navigate('WeeklyPlanList')}
+            onNavigateWater={() => navigation.navigate('WaterDashboardScreen')}
+          />
+        </View>
       </ScrollView>
 
       {/* Modal do Treino de Hoje - FORA DO SCROLLVIEW */}
@@ -165,20 +166,16 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
   },
-  header: {
-    marginBottom: 20,
-    marginTop: 10,
+
+  section: {
+    marginBottom: 10, // 🔥 espaçamento padrão entre TODOS os elementos
   },
-  subtitle: {
-    color: '#666',
-    marginTop: 8,
-  },
+
   timerToggleButton: {
     backgroundColor: '#483148',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
-    marginVertical: 8,
   },
   timerToggleText: {
     color: '#FFFFFF',

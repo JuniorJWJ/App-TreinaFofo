@@ -49,8 +49,8 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 16,
-    marginBottom: 30,
+    // marginTop: 16,
+    // marginBottom: 30,
   },
   actionRow: {
     flexDirection: 'row',
