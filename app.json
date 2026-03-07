@@ -1,4 +1,7 @@
 {
   "name": "TreinaFofo",
-  "displayName": "TreinaFofo"
+  "displayName": "TreinaFofo",
+  "android": {
+    "package": "com.anonymous.treinafofo"
+  }
 }

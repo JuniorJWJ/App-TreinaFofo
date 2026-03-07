@@ -26,6 +26,7 @@ export interface WaterConfig {
   wakeUpTime: Date | null;
   sleepTime: Date | null;
   notificationsEnabled: boolean;
+  notificationIntervalMinutes: number;
 }
 
 interface WaterStoreState {
@@ -82,6 +83,7 @@ const initialState: WaterStoreState = {
     wakeUpTime: null,
     sleepTime: null,
     notificationsEnabled: false,
+    notificationIntervalMinutes: 120,
   },
   todayEntries: [],
   weeklyStats: [],
