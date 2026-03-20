@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -38,8 +38,25 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
     null,
   );
 
+  const [completedExerciseIds, setCompletedExerciseIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!visible) {
+      setCompletedExerciseIds([]);
+      setExpandedExerciseId(null);
+    }
+  }, [visible]);
+
   const toggleExerciseExpand = (exerciseId: string) => {
     setExpandedExerciseId(expandedExerciseId === exerciseId ? null : exerciseId);
+  };
+
+  const toggleExerciseCompletion = (exerciseId: string) => {
+    setCompletedExerciseIds(prev =>
+      prev.includes(exerciseId)
+        ? prev.filter(id => id !== exerciseId)
+        : [...prev, exerciseId],
+    );
   };
 
   const totalSets =
@@ -47,6 +64,9 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
       const exercise = exercises.find(ex => ex.id === exerciseId);
       return total + (exercise?.defaultSets || 0);
     }, 0) || 0;
+
+  const totalExercises = workoutDetails?.exerciseIds?.length || 0;
+  const completedCount = completedExerciseIds.length;
 
   const renderModalContent = (content: React.ReactNode) => (
     <Modal
@@ -89,7 +109,7 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
       contentContainerStyle={styles.scrollContent}
     >
       <View style={styles.modalHeader}>
-        <Text variant="title" align="center">
+        <Text variant="title" align="center" style={styles.titleText}>
           {workoutDetails.name}
         </Text>
         <Text variant="caption" align="center" style={styles.workoutInfo}>
@@ -109,6 +129,12 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
         </Text>
       </View>
 
+      <View style={styles.progressRow}>
+        <Text variant="caption" style={styles.progressText}>
+          Concluídos: {completedCount}/{totalExercises}
+        </Text>
+      </View>
+
       <View style={styles.exercisesSection}>
         <Text variant="subtitle" style={styles.sectionTitle}>
           Exercícios do Treino:
@@ -120,10 +146,12 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
 
           const isExpanded = expandedExerciseId === exerciseId;
           const hasAdditionalDetails =
-            exercise.defaultWeight ||
-            exercise.notes ||
+            (exercise.defaultWeight !== undefined &&
+              exercise.defaultWeight !== null) ||
+            !!exercise.notes ||
             (exercise.warmupSets && exercise.warmupSets.length > 0) ||
-            exercise.progressionType !== 'fixed';
+            (exercise.progressionType && exercise.progressionType !== 'fixed') ||
+            !!exercise.autoProgression;
 
           return (
             <View key={exerciseId} style={styles.exerciseBlock}>
@@ -131,8 +159,10 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
                 exercise={exercise}
                 index={index}
                 isExpanded={isExpanded}
+                isCompleted={completedExerciseIds.includes(exerciseId)}
                 hasAdditionalDetails={!!hasAdditionalDetails}
                 onToggleExpand={() => toggleExerciseExpand(exerciseId)}
+                onToggleCompleted={() => toggleExerciseCompletion(exerciseId)}
                 getMuscleGroupName={getMuscleGroupName}
               />
 
@@ -144,12 +174,17 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
                     contentFit="contain"
                     transition={200}
                   />
+                  <Text variant="caption" style={styles.gifCaption}>
+                    Demonstração do exercício
+                  </Text>
                 </View>
               )}
             </View>
           );
         })}
       </View>
+
+      <View style={styles.sectionDivider} />
 
       <WorkoutStats
         exerciseCount={workoutDetails.exerciseIds.length}
@@ -179,7 +214,7 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -190,14 +225,14 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#FFF',
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 20,
     width: '100%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 10,
+    shadowRadius: 12,
+    elevation: 12,
     position: 'relative',
   },
   closeIconButton: {
@@ -226,9 +261,12 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     marginBottom: 16,
-    paddingBottom: 16,
+    paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
+  },
+  titleText: {
+    color: '#2B1D2E',
   },
   workoutInfo: {
     marginTop: 8,
@@ -255,6 +293,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+  progressRow: {
+    alignSelf: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    marginBottom: 16,
+    backgroundColor: '#F2EEF5',
+    borderWidth: 1,
+    borderColor: '#E6E0E8',
+  },
+  progressText: {
+    color: '#483148',
+    fontWeight: '600',
+  },
   exercisesSection: {
     marginBottom: 20,
   },
@@ -267,13 +319,26 @@ const styles = StyleSheet.create({
   },
   gifContainer: {
     marginTop: 8,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 10,
-    padding: 8,
+    backgroundColor: '#F7F4F8',
+    borderRadius: 12,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#E6E0E8',
   },
   gifImage: {
     width: '100%',
-    height: 220,
+    height: 230,
+    borderRadius: 8,
+  },
+  gifCaption: {
+    marginTop: 6,
+    color: '#6B5B6E',
+    textAlign: 'center',
+  },
+  sectionDivider: {
+    height: 1,
+    backgroundColor: '#EFE9F1',
+    marginBottom: 16,
   },
   actionsContainer: {
     gap: 12,
