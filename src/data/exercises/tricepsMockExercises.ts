@@ -1,0 +1,238 @@
+import { ExerciseFormData } from '../../types';
+
+export const tricepsMockExercises: ExerciseFormData[] = [
+  {
+    name: 'Tríceps Pulley',
+    muscleGroupId: 'Tríceps',
+    description: 'Exercício de isolamento para tríceps no pulley.',
+    equipment: 'Pulley + Barra',
+    difficulty: 'beginner',
+    defaultSets: 4,
+    defaultReps: 15,
+    defaultRestTime: 60,
+    defaultWeight: 25,
+    weightUnit: 'kg',
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 2.5,
+    notes: 'Mant os cotovelos próximos ao corpo',
+  },
+  {
+    name: 'Tríceps no Banco',
+    muscleGroupId: 'Tríceps',
+    description: 'Exercício compound para tríceps usando peso corporal.',
+    equipment: 'Banco',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 15,
+    defaultRestTime: 60,
+    progressionType: 'range',
+    autoProgression: true,
+    notes: 'Para aumentar dificuldade, coloque peso no colo',
+  },
+  {
+    name: 'Tríceps Testa com Barra EZ',
+    muscleGroupId: 'Tríceps',
+    description: 'Isolamento para a cabeça longa do tríceps.',
+    equipment: 'Barra EZ + Banco Plano',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+    defaultWeight: 10,
+    weightUnit: 'kg',
+    progressionType: 'linear',
+    autoProgression: true,
+    incrementSize: 2,
+    notes: 'Descer a barra em direção à testa ou levemente atrás da cabeça',
+  },
+  // =======================
+  // POLIA / CABO
+  // =======================
+  {
+    name: 'Tríceps Pulley com Corda',
+    muscleGroupId: 'Tríceps',
+    description: 'Maior amplitude e contração no final.',
+    equipment: 'Polia + Corda',
+    difficulty: 'beginner',
+    defaultSets: 4,
+    defaultReps: 12,
+    defaultRestTime: 60,
+    progressionType: 'linear',
+    autoProgression: true,
+  },
+  {
+    name: 'Tríceps Inverso no Pulley',
+    muscleGroupId: 'Tríceps',
+    description: 'Pegada supinada para foco diferente.',
+    equipment: 'Polia',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 15,
+    defaultRestTime: 60,
+  },
+  {
+    name: 'Tríceps Unilateral no Cabo',
+    muscleGroupId: 'Tríceps',
+    description: 'Execução com um braço para correção de assimetrias.',
+    equipment: 'Polia',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+  },
+
+  // =======================
+  // OVERHEAD (CABEÇA LONGA)
+  // =======================
+  {
+    name: 'Tríceps Francês com Halter',
+    muscleGroupId: 'Tríceps',
+    description: 'Foco na cabeça longa.',
+    equipment: 'Halter',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+  },
+  {
+    name: 'Tríceps Francês com Barra',
+    muscleGroupId: 'Tríceps',
+    description: 'Permite maior carga.',
+    equipment: 'Barra',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 10,
+    defaultRestTime: 60,
+  },
+  {
+    name: 'Tríceps Overhead no Cabo',
+    muscleGroupId: 'Tríceps',
+    description: 'Tensão constante durante o movimento.',
+    equipment: 'Polia + Corda',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+  },
+
+  // =======================
+  // COMPOSTOS
+  // =======================
+  {
+    name: 'Supino Fechado',
+    muscleGroupId: 'Tríceps',
+    description: 'Supino com pegada fechada para foco no tríceps.',
+    equipment: 'Barra + Banco',
+    difficulty: 'intermediate',
+    defaultSets: 4,
+    defaultReps: 8,
+    defaultRestTime: 120,
+    defaultWeight: 40,
+    weightUnit: 'kg',
+  },
+  {
+    name: 'Mergulho em Paralelas',
+    muscleGroupId: 'Tríceps',
+    description: 'Exercício composto com peso corporal.',
+    equipment: 'Paralelas',
+    difficulty: 'advanced',
+    defaultSets: 4,
+    defaultReps: 10,
+    defaultRestTime: 90,
+    progressionType: 'range',
+  },
+  {
+    name: 'Mergulho com Peso',
+    muscleGroupId: 'Tríceps',
+    description: 'Versão avançada com sobrecarga.',
+    equipment: 'Paralelas + Carga',
+    difficulty: 'advanced',
+    defaultSets: 4,
+    defaultReps: 8,
+    defaultRestTime: 60,
+  },
+
+  // =======================
+  // HALTERES
+  // =======================
+  {
+    name: 'Coice de Tríceps',
+    muscleGroupId: 'Tríceps',
+    description: 'Isolamento com halter.',
+    equipment: 'Halter',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 15,
+    defaultRestTime: 60,
+  },
+  {
+    name: 'Coice de Tríceps no Cabo',
+    muscleGroupId: 'Tríceps',
+    description: 'Versão com tensão constante.',
+    equipment: 'Polia',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 15,
+    defaultRestTime: 60,
+  },
+
+  // =======================
+  // MÁQUINAS
+  // =======================
+  {
+    name: 'Tríceps na Máquina',
+    muscleGroupId: 'Tríceps',
+    description: 'Execução guiada.',
+    equipment: 'Máquina',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+  },
+  {
+    name: 'Mergulho na Máquina',
+    muscleGroupId: 'Tríceps',
+    description: 'Versão assistida do mergulho.',
+    equipment: 'Máquina',
+    difficulty: 'beginner',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+  },
+
+  // =======================
+  // VARIAÇÕES AVANÇADAS
+  // =======================
+  {
+    name: 'Tríceps Testa com Halteres',
+    muscleGroupId: 'Tríceps',
+    description: 'Versão com maior controle.',
+    equipment: 'Halteres',
+    difficulty: 'intermediate',
+    defaultSets: 3,
+    defaultReps: 12,
+    defaultRestTime: 60,
+  },
+  {
+    name: 'JM Press',
+    muscleGroupId: 'Tríceps',
+    description: 'Mistura de supino e tríceps testa.',
+    equipment: 'Barra',
+    difficulty: 'advanced',
+    defaultSets: 4,
+    defaultReps: 8,
+    defaultRestTime: 60,
+  },
+  {
+    name: 'Tríceps Pulley Drop Set',
+    muscleGroupId: 'Tríceps',
+    description: 'Redução de carga após falha.',
+    equipment: 'Polia',
+    difficulty: 'advanced',
+    defaultSets: 3,
+    defaultReps: 15,
+    notes: 'Diminuir peso após falha',
+    defaultRestTime: 60,
+  },
+];

@@ -1,5 +1,5 @@
 import { useExerciseStore } from '../store/exerciseStore';
-import { initializeMockExercises } from '../data/mockExercise';
+import { initializeMockExercises } from '../data/mockExercises';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FIRST_LAUNCH_KEY = '@gymtrack-first-launch';
@@ -10,19 +10,28 @@ export const initializeAppData = async (): Promise<boolean> => {
     const isFirstLaunch = await AsyncStorage.getItem(FIRST_LAUNCH_KEY);
     
     if (isFirstLaunch === null) {
+      const { exercises, CreateExercise } = useExerciseStore.getState();
+
+      // Se já houver exercícios (ex: store já inicializou), não duplicar
+      if (exercises.length > 0) {
+        await AsyncStorage.setItem(FIRST_LAUNCH_KEY, 'false');
+        return false;
+      }
+
       // Primeira vez: carregar exercícios mockados
       const mockExercises = initializeMockExercises();
-      
+
       // Adicionar cada exercício na store
-      const { CreateExercise } = useExerciseStore.getState();
       mockExercises.forEach((exercise) => {
         CreateExercise(exercise);
       });
-      
+
       // Marcar que o app já foi inicializado
       await AsyncStorage.setItem(FIRST_LAUNCH_KEY, 'false');
-      
-      console.log(`[Initialization] ${mockExercises.length} exercícios mockados carregados com sucesso`);
+
+      console.log(
+        `[Initialization] ${mockExercises.length} exercícios mockados carregados com sucesso`,
+      );
       return true;
     }
     

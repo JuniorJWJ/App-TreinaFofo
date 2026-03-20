@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Exercise, ExerciseFormData } from '../types';
-import { initializeMockExercises, mockExercises } from '../data/mockExercise';
+import { initializeMockExercises, mockExercises } from '../data/mockExercises';
 
 const mockGifByName = new Map(
   mockExercises
@@ -27,7 +27,7 @@ interface ExerciseState {
 export const useExerciseStore = create<ExerciseState>()(
   persist(
     (set, get) => ({
-      exercises: initializeMockExercises(),
+      exercises: [],
       isLoading: false,
 
       CreateExercise: (exerciseData: ExerciseFormData) => {
@@ -116,7 +116,7 @@ export const useExerciseStore = create<ExerciseState>()(
       },
       onRehydrateStorage: () => (state) => {
         if (state && state.exercises.length === 0) {
-          state.exercises = initializeMockExercises();
+          // Mantém vazio para evitar duplicação; initializeAppData fará o populate
         }
       },
     }

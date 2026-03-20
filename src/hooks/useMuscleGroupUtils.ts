@@ -4,12 +4,14 @@ import { useMuscleGroupStore } from '../store';
 export const useMuscleGroupUtils = () => {
   const { muscleGroups } = useMuscleGroupStore();
 
+  const normalize = (value: string) => value.trim().toLowerCase();
+
   const getMuscleGroupName = useCallback((muscleGroupId: string): string => {
     if (!muscleGroups || muscleGroups.length === 0) return 'Desconhecido';
 
     const group = muscleGroups.find(g =>
       g.id === muscleGroupId ||
-      g.name.toLowerCase() === muscleGroupId.toLowerCase()
+      normalize(g.name) === normalize(muscleGroupId)
     );
 
     return group ? group.name : 'Desconhecido';
@@ -20,7 +22,7 @@ export const useMuscleGroupUtils = () => {
 
     const group = muscleGroups.find(g =>
       g.id === muscleGroupId ||
-      g.name.toLowerCase() === muscleGroupId.toLowerCase()
+      normalize(g.name) === normalize(muscleGroupId)
     );
 
     return group?.color ?? '#CCCCCC';

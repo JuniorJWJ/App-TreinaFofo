@@ -17,7 +17,7 @@ export const DEFAULT_MUSCLE_GROUPS: Omit<MuscleGroup, 'id' | 'createdAt' | 'upda
   { name: 'Pernas', color: '#DDA0DD' },
   { name: 'Quadríceps', color: '#98D8C8' },
   { name: 'Posterior de Coxa', color: '#F7DC6F' },
-  { name: 'Glúteo ', color: '#BB8FCE' },
+  { name: 'Glúteos', color: '#BB8FCE' },
   { name: 'Panturrilha', color: '#85C1E9' },
   { name: 'Abdominal', color: '#F8C471' },
   { name: 'Antebraço', color: '#82E0AA' },
