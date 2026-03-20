@@ -9,7 +9,7 @@ interface MuscleGroupState {
   
   // Actions
   initializeDefaultGroups: () => void;
-  addMuscleGroup: (name: string, color?: string) => void;
+  addMuscleGroup: (name: string, color: string) => void;
   updateMuscleGroup: (id: string, updates: Partial<MuscleGroup>) => void;
   deleteMuscleGroup: (id: string) => void;
   getMuscleGroup: (id: string) => MuscleGroup | undefined;
@@ -56,7 +56,7 @@ export const useMuscleGroupStore = create<MuscleGroupState>()(
         set((state) => ({
           muscleGroups: state.muscleGroups.map((group) =>
             group.id === id
-              ? { ...group, ...updates, updatedAt: new Date() }
+               { ...group, ...updates, updatedAt: new Date() }
               : group
           ),
         }));
@@ -81,7 +81,7 @@ export const useMuscleGroupStore = create<MuscleGroupState>()(
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
-          return value ? JSON.parse(value) : null;
+          return value  JSON.parse(value) : null;
         },
         setItem: async (name, value) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));

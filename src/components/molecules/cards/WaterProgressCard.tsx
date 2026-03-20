@@ -6,9 +6,9 @@ import { Text } from '../../atoms/Text';
 interface WaterProgressCardProps {
   currentIntake: number;
   dailyGoal: number;
-  onPress?: () => void;
-  onQuickAdd?: (amount: number) => void;
-  showActions?: boolean;
+  onPress: () => void;
+  onQuickAdd: (amount: number) => void;
+  showActions: boolean;
 }
 
 export const WaterProgressCard: React.FC<WaterProgressCardProps> = ({

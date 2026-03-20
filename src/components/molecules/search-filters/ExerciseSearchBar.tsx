@@ -7,7 +7,7 @@ import { SearchInput } from '../../atoms/SearchInput';
 interface ExerciseSearchBarProps {
   search: string;
   onSearchChange: (text: string) => void;
-  placeholder?: string;
+  placeholder: string;
 }
 
 export const ExerciseSearchBar: React.FC<ExerciseSearchBarProps> = ({

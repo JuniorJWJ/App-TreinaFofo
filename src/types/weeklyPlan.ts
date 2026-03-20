@@ -13,16 +13,16 @@ export type DayOfWeek =
 export interface DailyWorkout {
   day: DayOfWeek;
   workoutId: string | null; // null = rest day
-  workout?: Workout;
+  workout: Workout;
   isCompleted: boolean;
-  completedAt?: Date;
-  notes?: string;
+  completedAt: Date;
+  notes: string;
 }
 
 export interface WeeklyPlan {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   
   // Estrutura semanal
   days: DailyWorkout[];
@@ -30,8 +30,8 @@ export interface WeeklyPlan {
   endDate: Date;
   
   // Relacionamentos
-  workoutSplitId?: string;
-  workoutSplit?: WorkoutSplit;
+  workoutSplitId: string;
+  workoutSplit: WorkoutSplit;
   
   // Progresso
   currentWeek: number;
@@ -60,7 +60,7 @@ export type UpdateWeeklyPlanData = Omit<WeeklyPlan,
 export interface WeeklyPlanTemplate {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   days: Omit<DailyWorkout, 'isCompleted' | 'completedAt'>[];
   totalWeeks: number;
   tags: string[];

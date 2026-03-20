@@ -2,9 +2,9 @@ import { useState, useMemo, useCallback } from 'react';
 import { useExerciseStore, useMuscleGroupStore } from '../store';
 
 interface UseExerciseListOptions {
-  initialSearch?: string;
-  initialSelectedGroup?: string | null;
-  customExercises?: any[]; // Para usar quando não queremos pegar do store
+  initialSearch: string;
+  initialSelectedGroup: string | null;
+  customExercises: any[]; // Para usar quando não queremos pegar do store
 }
 
 export const useExerciseList = (options: UseExerciseListOptions = {}) => {
@@ -29,7 +29,7 @@ export const useExerciseList = (options: UseExerciseListOptions = {}) => {
       return false;
     });
     
-    return group ? group.name : 'Desconhecido';
+    return group  group.name : 'Desconhecido';
   }, [muscleGroups]);
 
   // Função para obter cor do grupo muscular
@@ -42,7 +42,7 @@ export const useExerciseList = (options: UseExerciseListOptions = {}) => {
       return false;
     });
     
-    return group ? group.color || '#CCCCCC' : '#CCCCCC';
+    return group  group.color || '#CCCCCC' : '#CCCCCC';
   };
 
   // Filtra exercícios por busca e grupo selecionado

@@ -6,8 +6,8 @@ import { Button } from '../../atoms/Button';
 
 interface EmptyExerciseListProps {
   hasSearchOrFilter: boolean;
-  onClearFilters?: () => void;
-  onCreateFirst?: () => void;
+  onClearFilters: () => void;
+  onCreateFirst: () => void;
 }
 
 export const EmptyExerciseList: React.FC<EmptyExerciseListProps> = ({
@@ -19,15 +19,15 @@ export const EmptyExerciseList: React.FC<EmptyExerciseListProps> = ({
     <View style={styles.container}>
       <Text variant="subtitle" align="center">
         {hasSearchOrFilter 
-          ? 'Nenhum exercício encontrado' 
+           'Nenhum exercício encontrado' 
           : 'Nenhum exercício cadastrado'}
       </Text>
       <Text variant="body" align="center" style={styles.message}>
         {hasSearchOrFilter
-          ? 'Tente ajustar sua busca ou filtro'
+           'Tente ajustar sua busca ou filtro'
           : 'Toque no botão abaixo para criar seu primeiro exercício!'}
       </Text>
-      {hasSearchOrFilter ? (
+      {hasSearchOrFilter  (
         <Button
           title="Limpar Filtros"
           onPress={onClearFilters}

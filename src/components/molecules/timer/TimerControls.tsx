@@ -6,8 +6,8 @@ interface TimerControlsProps {
   isRunning: boolean;
   onStartPause: () => void;
   onReset: () => void;
-  onAddLap?: () => void;
-  showLapButton?: boolean;
+  onAddLap: () => void;
+  showLapButton: boolean;
 }
 
 export const TimerControls: React.FC<TimerControlsProps> = ({
@@ -31,7 +31,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
         onPress={onStartPause}
       >
         <Text style={styles.iconText}>
-          {isRunning ? '⏸️' : '▶️'}
+          {isRunning  '⏸️' : '▶️'}
         </Text>
       </TouchableOpacity>
 

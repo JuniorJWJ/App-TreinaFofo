@@ -7,7 +7,7 @@ export const useWeeklyPlanActions = () => {
 
   const handleDeletePlan = (planId: string, planName: string) => {
     modal.showConfirmation(
-      `Tem certeza que deseja excluir "${planName}"?`,
+      `Tem certeza que deseja excluir "${planName}"`,
       'Excluir Plano',
       () => {
         deleteWeeklyPlan(planId);

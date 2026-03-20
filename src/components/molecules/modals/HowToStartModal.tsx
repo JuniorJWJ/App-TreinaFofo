@@ -7,9 +7,9 @@ type Props = {
   visible: boolean;
   title: string;
   description: string;
-  onNext?: () => void;
+  onNext: () => void;
   onClose: () => void;
-  isLastStep?: boolean;
+  isLastStep: boolean;
 };
 
 export const HowToStartModal = ({
@@ -30,8 +30,8 @@ export const HowToStartModal = ({
           </Text>
 
           <Button
-            title={isLastStep ? 'Entendi' : 'Próximo'}
-            onPress={isLastStep ? onClose : onNext}
+            title={isLastStep  'Entendi' : 'Próximo'}
+            onPress={isLastStep  onClose : onNext}
           />
         </View>
       </View>

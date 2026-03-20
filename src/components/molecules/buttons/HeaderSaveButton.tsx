@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 interface HeaderSaveButtonProps {
   onPress: () => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 export const HeaderSaveButton: React.FC<HeaderSaveButtonProps> = ({ 

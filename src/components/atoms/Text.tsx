@@ -2,9 +2,9 @@ import React from 'react';
 import { Text as RNText, TextProps as RNTextProps, StyleSheet } from 'react-native';
 
 interface TextProps extends RNTextProps {
-  variant?: 'title' | 'subtitle' | 'body' | 'caption';
-  color?: string;
-  align?: 'left' | 'center' | 'right';
+  variant: 'title' | 'subtitle' | 'body' | 'caption';
+  color: string;
+  align: 'left' | 'center' | 'right';
 }
 
 export const Text: React.FC<TextProps> = ({ 

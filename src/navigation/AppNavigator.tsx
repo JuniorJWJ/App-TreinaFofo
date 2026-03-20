@@ -6,6 +6,7 @@ import { HomeScreen } from '../screens/home/HomeScreen';
 import { ExerciseListScreen } from '../screens/exercise/ExerciseListScreen';
 import { CreateExerciseScreen } from '../screens/exercise/CreateExerciseScreen';
 import { EditExerciseScreen } from '../screens/exercise/EditExerciseScreen';
+import { ExerciseDetailScreen } from '../screens/exercise/ExerciseDetailScreen';
 import { CreateWorkoutScreen } from '../screens/workout/CreateWorkoutScreen';
 import { WorkoutListScreen } from '../screens/workout/WorkoutListScreen';
 import { CreateWeeklyPlanScreen } from '../screens/plan/CreateWeeklyPlanScreen';
@@ -19,9 +20,10 @@ export type RootStackParamList = {
   ExerciseList: undefined;
   CreateExercise: undefined;
   EditExercise: { exerciseId: string };
+  ExerciseDetail: { exerciseId: string };
   CreateWorkout: undefined;
   WorkoutList: undefined;
-  CreateWeeklyPlan: { planId?: string };
+  CreateWeeklyPlan: { planId: string };
   WeeklyPlanList: undefined;
   WaterDashboardScreen: undefined;
   EditWorkout: { workoutId: string };
@@ -30,7 +32,7 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 // Componente de Logo direto para reutilização
-const LogoHeader = ({ isHome = false }: { isHome?: boolean }) => {
+const LogoHeader = ({ isHome = false }: { isHome: boolean }) => {
   return <HeaderLogo isHome={isHome} />;
 };
 
@@ -79,6 +81,14 @@ export const AppNavigator = () => {
           options={{
             headerTitle: () => <LogoHeader />,
             title: 'Novo Exercício',
+          }}
+        />
+        <Stack.Screen
+          name="ExerciseDetail"
+          component={ExerciseDetailScreen}
+          options={{
+            headerTitle: () => <LogoHeader />,
+            title: 'Detalhes do Exerccio',
           }}
         />
         <Stack.Screen

@@ -11,7 +11,7 @@ type RootStackParamList = {
 };
 
 interface HeaderLogoProps {
-  isHome?: boolean;
+  isHome: boolean;
 }
 
 export const HeaderLogo: React.FC<HeaderLogoProps> = ({ isHome = false }) => {

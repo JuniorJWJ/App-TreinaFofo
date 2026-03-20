@@ -19,10 +19,10 @@ interface WaterGoalModalProps {
   currentGoal: number;
   onClose: () => void;
   onSave: (goal: number) => void;
-  weight?: number;
-  activityLevel?: 'sedentary' | 'light' | 'moderate' | 'intense' | 'active' | 'athlete' | undefined;
-  climate?: 'cold' | 'temperate' | 'hot' | 'very_hot' | undefined;
-  onProfileSave?: (profile: {
+  weight: number;
+  activityLevel: 'sedentary' | 'light' | 'moderate' | 'intense' | 'active' | 'athlete' | undefined;
+  climate: 'cold' | 'temperate' | 'hot' | 'very_hot' | undefined;
+  onProfileSave: (profile: {
     weight: number;
     activityLevel: string;
     climate: string;
@@ -66,7 +66,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
     
     if (goalNum < 1000) {
       modal.showConfirmation(
-        'Uma meta abaixo de 1000ml pode não ser suficiente para manter uma boa hidratação. Tem certeza?',
+        'Uma meta abaixo de 1000ml pode não ser suficiente para manter uma boa hidratação. Tem certeza',
         'Meta Baixa',
         () => handleSave(goalNum),
         'Confirmar',
@@ -74,7 +74,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
       );
     } else if (goalNum > 5000) {
       modal.showConfirmation(
-        'Uma meta acima de 5000ml pode ser excessiva para a maioria das pessoas. Consulte um médico se necessário. Deseja continuar?',
+        'Uma meta acima de 5000ml pode ser excessiva para a maioria das pessoas. Consulte um médico se necessário. Deseja continuar',
         'Meta Alta',
         () => handleSave(goalNum),
         'Confirmar',
@@ -115,7 +115,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
         onRequestClose={handleClose}
       >
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios'  'padding' : 'height'}
           style={styles.modalOverlay}
         >
           <View style={styles.modalContainer}>
@@ -143,7 +143,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
                   maxLength={5}
                 />
 
-                {inputError ? (
+                {inputError  (
                   <Text variant="caption" style={styles.errorText}>
                     {inputError}
                   </Text>
@@ -227,11 +227,11 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig?.onConfirm?.();
+            modal.modalConfig.onConfirm.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig?.onCancel?.();
+            modal.modalConfig.onCancel.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}

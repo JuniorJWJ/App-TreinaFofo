@@ -1,6 +1,6 @@
 import { ExerciseFormData } from '../../types';
 
-export const tricepsMockExercises: ExerciseFormData[
+export const tricepsMockExercises: ExerciseFormData[] = [
   {
     name: 'Tríceps Pulley',
     muscleGroupId: 'Tríceps',
@@ -31,10 +31,10 @@ export const tricepsMockExercises: ExerciseFormData[
     notes: 'Para aumentar dificuldade, coloque peso no colo',
   },
   {
-    name: 'Tríceps Testa com Barra EZ',
+    name: 'Tríceps Testa com Barra W',
     muscleGroupId: 'Tríceps',
     description: 'Isolamento para a cabeça longa do tríceps.',
-    equipment: 'Barra EZ + Banco Plano',
+    equipment: 'Barra W + Banco Plano',
     difficulty: 'intermediate',
     defaultSets: 3,
     defaultReps: 12,

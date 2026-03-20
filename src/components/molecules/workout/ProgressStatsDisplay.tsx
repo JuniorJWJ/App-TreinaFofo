@@ -23,7 +23,7 @@ export const ProgressStatsDisplay: React.FC<ProgressStatsDisplayProps> = ({
       <ProgressCircle
         style={styles.progressCircle}
         progress={progress}
-        progressColor={progress >= 1 ? "#4CAF50" : "#4A90E2"}
+        progressColor={progress >= 1  "#4CAF50" : "#4A90E2"}
         backgroundColor="#E0E0E0"
         strokeWidth={20}
       />
@@ -39,7 +39,7 @@ export const ProgressStatsDisplay: React.FC<ProgressStatsDisplayProps> = ({
             progress >= 1 && { color: '#4CAF50', fontWeight: 'bold' }
           ]}>
           {remaining > 0 
-            ? `${remaining}ml restantes` 
+             `${remaining}ml restantes` 
             : 'Meta alcançada! 🎉'
           }
         </Text>

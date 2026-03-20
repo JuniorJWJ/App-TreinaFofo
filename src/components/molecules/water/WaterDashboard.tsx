@@ -11,8 +11,8 @@ interface WaterDashboardProps {
   dailyGoal: number;
   currentIntake: number;
   onAddWater: (amount: number) => void;
-  onReset?: () => void;
-  onAdjustGoal?: () => void;
+  onReset: () => void;
+  onAdjustGoal: () => void;
 }
 
 export const WaterDashboard: React.FC<WaterDashboardProps> = ({

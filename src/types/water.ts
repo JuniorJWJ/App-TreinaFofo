@@ -5,7 +5,7 @@ export interface WaterConfig {
   climate: 'temperate' | 'hot' | 'very_hot';
   wakeUpTime: Date;
   sleepTime: Date;
-  customGoal?: number; // em ml (se o usuário quiser definir manualmente)
+  customGoal: number; // em ml (se o usuário quiser definir manualmente)
 }
 
 export interface WaterReminder {

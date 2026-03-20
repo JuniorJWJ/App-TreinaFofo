@@ -4,15 +4,15 @@ export interface WorkoutExercise extends Exercise {
   sets: number;
   reps: number;
   restTime: number;
-  weight?: number;
-  notes?: string;
+  weight: number;
+  notes: string;
   completed: boolean;
 }
 
 export interface Workout {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   
   // Relacionamentos
   muscleGroupIds: string[];
@@ -26,8 +26,8 @@ export interface Workout {
   
   // Estatísticas
   timesCompleted: number;
-  lastCompleted?: Date;
-  averageCompletionTime?: number;
+  lastCompleted: Date;
+  averageCompletionTime: number;
   
   createdAt: Date;
   updatedAt: Date;
@@ -41,8 +41,8 @@ export interface WorkoutSession {
   id: string;
   workoutId: string;
   startTime: Date;
-  endTime?: Date;
+  endTime: Date;
   exercises: WorkoutExercise[];
-  notes?: string;
-  rating?: number; // 1-5 stars
+  notes: string;
+  rating: number; // 1-5 stars
 }

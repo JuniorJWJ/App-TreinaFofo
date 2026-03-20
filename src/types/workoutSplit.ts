@@ -3,7 +3,7 @@ import { Workout } from './workout';
 export interface WorkoutSplit {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   
   // Estrutura da divisão
   workoutIds: string[];
@@ -19,7 +19,7 @@ export interface WorkoutSplit {
   
   // Estatísticas
   timesCompleted: number;
-  currentCycle?: number;
+  currentCycle: number;
   
   createdAt: Date;
   updatedAt: Date;

@@ -22,9 +22,9 @@ interface WorkoutState {
 
   // Session Management
   startWorkoutSession: (workoutId: string) => string;
-  completeWorkoutSession: (sessionId: string, notes?: string, rating?: number) => void;
+  completeWorkoutSession: (sessionId: string, notes: string, rating: number) => void;
   updateWorkoutSession: (sessionId: string, updates: Partial<WorkoutSession>) => void;
-  getWorkoutSessions: (workoutId?: string) => WorkoutSession[];
+  getWorkoutSessions: (workoutId: string) => WorkoutSession[];
   getWorkoutHistory: (workoutId: string) => WorkoutSession[];
 }
 
@@ -48,7 +48,7 @@ export const useWorkoutStore = create<WorkoutState>()(
       // getActiveWorkout: () => {
       //   const { activeWorkoutId, workouts } = get();
       //   const activeWorkout = workouts.find(workout => workout.id === activeWorkoutId);
-      //   console.log('Treino ativo encontrado:', activeWorkout?.name);
+      //   console.log('Treino ativo encontrado:', activeWorkout.name);
       //   return activeWorkout;
       // },
 
@@ -98,7 +98,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         set((state) => ({
           workouts: state.workouts.map((workout) =>
             workout.id === id
-              ? { ...workout, ...updates, updatedAt: new Date() }
+               { ...workout, ...updates, updatedAt: new Date() }
               : workout
           ),
         }));
@@ -108,7 +108,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         // const { activeWorkoutId } = get();
         set((state) => ({
           workouts: state.workouts.filter((workout) => workout.id !== id),
-          // activeWorkoutId: activeWorkoutId === id ? null : activeWorkoutId,
+          // activeWorkoutId: activeWorkoutId === id  null : activeWorkoutId,
         }));
       },
 
@@ -156,7 +156,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         set((state) => ({
           sessions: state.sessions.map((session) =>
             session.id === sessionId
-              ? {
+               {
                   ...session,
                   endTime: new Date(),
                   notes,
@@ -174,7 +174,7 @@ export const useWorkoutStore = create<WorkoutState>()(
             set((state) => ({
               workouts: state.workouts.map((w) =>
                 w.id === workout.id
-                  ? {
+                   {
                       ...w,
                       timesCompleted: w.timesCompleted + 1,
                       lastCompleted: new Date(),
@@ -190,7 +190,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         set((state) => ({
           sessions: state.sessions.map((session) =>
             session.id === sessionId
-              ? { ...session, ...updates }
+               { ...session, ...updates }
               : session
           ),
         }));
@@ -215,7 +215,7 @@ export const useWorkoutStore = create<WorkoutState>()(
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
-          return value ? JSON.parse(value) : null;
+          return value  JSON.parse(value) : null;
         },
         setItem: async (name, value) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));

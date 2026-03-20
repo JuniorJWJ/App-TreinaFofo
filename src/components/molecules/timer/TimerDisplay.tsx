@@ -4,9 +4,9 @@ import { View, Text, StyleSheet } from 'react-native';
 
 interface TimerDisplayProps {
   milliseconds: number;
-  showHours?: boolean;
-  showMilliseconds?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  showHours: boolean;
+  showMilliseconds: boolean;
+  size: 'small' | 'medium' | 'large';
 }
 
 export const TimerDisplay: React.FC<TimerDisplayProps> = ({ 
@@ -64,7 +64,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({
         {formatTime()}
       </Text>
       {/* <Text style={[selectedSize.unitText, styles.unitText]}>
-        {showHours || hours > 0 ? 'HH:MM:SS' : 'MM:SS'}
+        {showHours || hours > 0  'HH:MM:SS' : 'MM:SS'}
       </Text> */}
     </View>
   );

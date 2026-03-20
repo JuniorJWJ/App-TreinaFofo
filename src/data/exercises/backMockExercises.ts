@@ -1,10 +1,10 @@
 import { ExerciseFormData } from '../../types';
 
-export const backMockExercises: ExerciseFormData[
+export const backMockExercises: ExerciseFormData[] = [
   {
     name: 'Puxada Frontal',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Exercício compound para dorsais, trapeézio e biceps.',
     equipment: 'Puxador de Alto',
     difficulty: 'beginner',
@@ -23,7 +23,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Barra Fixa',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description:
       'Exercício fundamental para costas e biceps usando peso corporal.',
     equipment: 'Barra Fixa',
@@ -38,7 +38,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Curva com Barra',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description:
       'Exercício compound para desenvolvimento das dorsais e trapeézio médio.',
     equipment: 'Barra Olga + Anilhas',
@@ -57,7 +57,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Unilateral com Haltere',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description:
       'Exercício de isolamento para costas com maior amplitude de movimento.',
     equipment: 'Banco + Haltere',
@@ -74,7 +74,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Puxada no Pulley Frontal',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Variante de puxada com cabo para maior tensão constante.',
     equipment: 'Pulley + Cabo',
     difficulty: 'intermediate',
@@ -90,7 +90,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Levantamento Terra',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Exercício composto massivo para toda a cadeia posterior.',
     equipment: 'Barra + Anilhas',
     difficulty: 'advanced',
@@ -111,7 +111,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Cavalinho',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description:
       'Variação de remada que permite grandes cargas para espessura das costas.',
     equipment: 'Barra T ou Canto de Parede',
@@ -143,7 +143,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Extensão de Lombar',
     muscleGroupId: 'Lombar',
-    secondaryMuscleGroups: ['Posterior de Coxa', 'Gl?teo'],
+    secondaryMuscleGroups: ['Posterior de Coxa', 'Glteo'],
     description: 'Fortalecimento dos eretores da espinha.',
     equipment: 'Banco Romano / Hiperestensão',
     difficulty: 'beginner',
@@ -157,7 +157,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Puxada Aberta',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Pegada aberta para maior ativação das dorsais.',
     equipment: 'Puxador',
     difficulty: 'beginner',
@@ -172,7 +172,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Puxada Supinada',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Pegada invertida com maior ativação de bíceps.',
     equipment: 'Puxador',
     difficulty: 'beginner',
@@ -186,7 +186,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Puxada Neutra',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Pegada neutra mais confortável para os ombros.',
     equipment: 'Puxador com pegada neutra',
     difficulty: 'beginner',
@@ -198,7 +198,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Barra Fixa Supinada (Chin-up)',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Maior foco em bíceps e dorsais inferiores.',
     equipment: 'Barra Fixa',
     difficulty: 'intermediate',
@@ -210,7 +210,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Barra Fixa Neutra',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Pegada neutra, menos estresse nas articulações.',
     equipment: 'Barra Paralela',
     difficulty: 'intermediate',
@@ -222,7 +222,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Barra Fixa com Peso',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Versão avançada com carga adicional.',
     equipment: 'Barra Fixa + Cinto',
     difficulty: 'advanced',
@@ -237,7 +237,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Baixa no Cabo',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Tensão constante durante todo o movimento.',
     equipment: 'Polia Baixa',
     difficulty: 'beginner',
@@ -252,7 +252,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Máquina',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Remada guiada com maior estabilidade.',
     equipment: 'Máquina',
     difficulty: 'beginner',
@@ -264,7 +264,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Alta no Cabo',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description:
       'Puxada em direção ao rosto, ativa trapézio e deltoide posterior.',
     equipment: 'Polia + Corda',
@@ -277,7 +277,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada com Halteres (Inclinado)',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Executado com peito apoiado no banco.',
     equipment: 'Banco Inclinado + Halteres',
     difficulty: 'intermediate',
@@ -288,7 +288,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Pendlay',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Remada explosiva com barra partindo do chão.',
     equipment: 'Barra',
     difficulty: 'advanced',
@@ -302,7 +302,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Remada Invertida',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Exercício com peso corporal em barra baixa.',
     equipment: 'Barra',
     difficulty: 'beginner',
@@ -314,7 +314,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Pullover no Cabo',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Isolamento das dorsais com braço estendido.',
     equipment: 'Polia',
     difficulty: 'intermediate',
@@ -325,7 +325,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Pullover com Barra',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Versão clássica para dorsais e peitoral.',
     equipment: 'Barra + Banco',
     difficulty: 'intermediate',
@@ -336,7 +336,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Straight Arm Pulldown',
     muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['B?ceps', 'Trap?zio'],
+    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Puxada com braços estendidos para dorsais.',
     equipment: 'Polia',
     difficulty: 'beginner',
@@ -347,7 +347,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Good Morning',
     muscleGroupId: 'Lombar',
-    secondaryMuscleGroups: ['Posterior de Coxa', 'Gl?teo'],
+    secondaryMuscleGroups: ['Posterior de Coxa', 'Glteo'],
     description: 'Fortalece lombar e posterior de coxa.',
     equipment: 'Barra',
     difficulty: 'intermediate',
@@ -360,7 +360,7 @@ export const backMockExercises: ExerciseFormData[
   {
     name: 'Superman',
     muscleGroupId: 'Lombar',
-    secondaryMuscleGroups: ['Posterior de Coxa', 'Gl?teo'],
+    secondaryMuscleGroups: ['Posterior de Coxa', 'Glteo'],
     description: 'Exercício isométrico para lombar.',
     equipment: 'Peso corporal',
     difficulty: 'beginner',

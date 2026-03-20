@@ -33,12 +33,12 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   const handleSubmit = useCallback(
     (workoutName: string, selectedExercises: string[]) => {
       if (!workoutName.trim()) {
-        modal.showWarning('Digite um nome para o treino', 'Atenção!');
+        modal.showWarning('Digite um nome para o treino', 'AtenÃ§Ã£o!');
         return;
       }
 
       if (selectedExercises.length === 0) {
-        modal.showWarning('Selecione pelo menos um exercício', 'Atenção!');
+        modal.showWarning('Selecione pelo menos um exercÃ­cio', 'AtenÃ§Ã£o!');
         return;
       }
 
@@ -47,7 +47,7 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         createQuickWorkout(workoutName, selectedExercises);
 
         modal.showConfirmation(
-          'Treino criado com sucesso! O que você gostaria de fazer agora?',
+          'Treino criado com sucesso! O que vocÃª gostaria de fazer agora',
           'Sucesso!',
           () => navigation.navigate('WorkoutList'),
           'Ver Treinos',
@@ -55,7 +55,7 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         );
       } catch {
         modal.showError(
-          'Não foi possível criar o treino. Tente novamente.',
+          'NÃ£o foi possÃ­vel criar o treino. Tente novamente.',
           'Erro!',
         );
       } finally {
@@ -87,11 +87,11 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         disabled={!isFormValid || isLoading}
         style={{
           marginRight: 16,
-          opacity: isFormValid && !isLoading ? 1 : 0.5,
+          opacity: isFormValid && !isLoading  1 : 0.5,
         }}
       >
         <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-          {isLoading ? 'Criando...' : 'Criar'}
+          {isLoading  'Criando...' : 'Criar'}
         </Text>
       </TouchableOpacity>
     );
@@ -143,29 +143,26 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         onSubmit={handleSubmit}
       />
 
-      {modal.modalConfig && (
-        <ConfirmationModal
-          visible={modal.isVisible}
-          type={modal.modalConfig.type}
-          title={modal.modalConfig.title}
-          message={modal.modalConfig.message}
-          confirmText={modal.modalConfig.confirmText}
-          cancelText={modal.modalConfig.cancelText}
-          onConfirm={modal.modalConfig.onConfirm ?? (() => {})}
-          onCancel={() => {
-            if (modal.modalConfig?.onCancel) {
-              modal.modalConfig.onCancel();
-            } else {
-              modal.hideModal();
-            }
-
-            navigation.replace('CreateWorkout');
-          }}
-          showCancelButton={modal.modalConfig.showCancelButton}
-          hideIcon={modal.modalConfig.hideIcon}
-          onClose={modal.hideModal}
-        />
-      )}
+      <ConfirmationModal
+        visible={modal.isVisible}
+        type={modal.modalConfig.type}
+        title={modal.modalConfig.title || ''}
+        message={modal.modalConfig.message || ''}
+        confirmText={modal.modalConfig.confirmText}
+        cancelText={modal.modalConfig.cancelText}
+        onConfirm={modal.modalConfig.onConfirm  modal.hideModal}
+        onCancel={() => {
+          if (modal.modalConfig.onCancel) {
+            modal.modalConfig.onCancel();
+          } else {
+            modal.hideModal();
+          }
+          navigation.replace('CreateWorkout');
+        }}
+        showCancelButton={modal.modalConfig.showCancelButton}
+        hideIcon={modal.modalConfig.hideIcon}
+        onClose={modal.hideModal}
+      />
     </View>
   );
 };

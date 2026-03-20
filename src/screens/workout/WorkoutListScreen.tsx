@@ -20,12 +20,12 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
 
   const getExerciseName = (exerciseId: string) => {
     const exercise = exercises.find(ex => ex.id === exerciseId);
-    return exercise ? exercise.name : 'Exercício não encontrado';
+    return exercise  exercise.name : 'Exercício não encontrado';
   };
 
   const handleDeleteWorkout = (workoutId: string, workoutName: string) => {
     modal.showConfirmation(
-      `Tem certeza que deseja excluir o treino "${workoutName}"?`,
+      `Tem certeza que deseja excluir o treino "${workoutName}"`,
       'Excluir Treino',
       () => {
         deleteWorkout(workoutId);
@@ -52,7 +52,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
       <View style={styles.workoutDetails}>
         <Text variant="caption">
           {item.exerciseIds.length} exercício
-          {item.exerciseIds.length !== 1 ? 's' : ''}
+          {item.exerciseIds.length !== 1  's' : ''}
         </Text>
         {/* <Text variant="caption">
           Criado em: {new Date(item.createdAt).toLocaleDateString('pt-BR')}
@@ -102,11 +102,11 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig?.onConfirm?.();
+            modal.modalConfig.onConfirm.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig?.onCancel?.();
+            modal.modalConfig.onCancel.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}
@@ -115,7 +115,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
         />
       )}
 
-      {workouts.length === 0 ? (
+      {workouts.length === 0  (
         <View style={styles.emptyState}>
           <Text variant="subtitle" align="center">
             Nenhum treino cadastrado

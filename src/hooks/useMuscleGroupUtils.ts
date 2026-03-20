@@ -14,7 +14,7 @@ export const useMuscleGroupUtils = () => {
       normalize(g.name) === normalize(muscleGroupId)
     );
 
-    return group ? group.name : 'Desconhecido';
+    return group  group.name : 'Desconhecido';
   }, [muscleGroups]);
 
   const getMuscleGroupColor = useCallback((muscleGroupId: string): string => {
@@ -25,7 +25,7 @@ export const useMuscleGroupUtils = () => {
       normalize(g.name) === normalize(muscleGroupId)
     );
 
-    return group?.color ?? '#CCCCCC';
+    return group.color  '#CCCCCC';
   }, [muscleGroups]);
 
   return {

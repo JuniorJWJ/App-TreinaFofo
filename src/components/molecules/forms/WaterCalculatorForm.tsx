@@ -12,11 +12,11 @@ import { Button } from '../../atoms/Button';
 import { calculateWaterGoal, WaterActivityLevel, WaterClimate } from '../../../utils/waterCalculator';
 
 interface WaterCalculatorFormProps {
-  initialWeight?: number;
-  initialActivityLevel?: WaterActivityLevel;
-  initialClimate?: WaterClimate;
-  onGoalCalculated?: (goal: number) => void;
-  onProfileSave?: (profile: {
+  initialWeight: number;
+  initialActivityLevel: WaterActivityLevel;
+  initialClimate: WaterClimate;
+  onGoalCalculated: (goal: number) => void;
+  onProfileSave: (profile: {
     weight: number;
     activityLevel: WaterActivityLevel;
     climate: WaterClimate;
@@ -30,7 +30,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
   onGoalCalculated,
   onProfileSave,
 }) => {
-  const [weight, setWeight] = useState(initialWeight?.toString() || '');
+  const [weight, setWeight] = useState(initialWeight.toString() || '');
   const [activityLevel, setActivityLevel] = useState<WaterActivityLevel>(initialActivityLevel);
   const [climate, setClimate] = useState<WaterClimate>(initialClimate);
   const [waterGoal, setWaterGoal] = useState<number | null>(null);
@@ -267,7 +267,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
                   Atividade:
                 </Text>
                 <Text variant="body" style={styles.detailValue}>
-                  {activityLevels.find(a => a.value === activityLevel)?.shortLabel}
+                  {activityLevels.find(a => a.value === activityLevel).shortLabel}
                 </Text>
               </View>
               <View style={styles.detailItem}>
@@ -275,7 +275,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
                   Clima:
                 </Text>
                 <Text variant="body" style={styles.detailValue}>
-                  {climates.find(c => c.value === climate)?.shortLabel}
+                  {climates.find(c => c.value === climate).shortLabel}
                 </Text>
               </View>
             </View>
@@ -304,7 +304,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
       {/* Informações sobre hidratação */}
       <View style={styles.infoContainer}>
         <Text variant="subtitle" style={styles.infoTitle}>
-          💡 Como funciona o cálculo?
+          💡 Como funciona o cálculo
         </Text>
         <Text variant="caption" style={styles.infoText}>
           • Base: 35ml por kg de peso corporal

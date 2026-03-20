@@ -3,8 +3,8 @@ import React from 'react';
 import { TextInput, TextInputProps, StyleSheet, ViewStyle } from 'react-native';
 
 interface InputProps extends TextInputProps {
-  style?: ViewStyle;
-  color?: string;
+  style: ViewStyle;
+  color: string;
 }
 
 export const Input: React.FC<InputProps> = ({ style, color, ...props }) => {

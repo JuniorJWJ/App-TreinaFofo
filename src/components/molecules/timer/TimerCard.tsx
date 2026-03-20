@@ -6,12 +6,12 @@ import { TimerControls } from './TimerControls';
 import { Text } from 'react-native-gesture-handler';
 
 interface TimerCardProps {
-  initialTime?: number; // em segundos
-  onTimeUpdate?: (time: number) => void; // em segundos para compatibilidade
-  autoStart?: boolean;
-  showHours?: boolean;
-  showLaps?: boolean;
-  maxLaps?: number;
+  initialTime: number; // em segundos
+  onTimeUpdate: (time: number) => void; // em segundos para compatibilidade
+  autoStart: boolean;
+  showHours: boolean;
+  showLaps: boolean;
+  maxLaps: number;
 }
 
 interface Lap {
@@ -44,7 +44,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
         const elapsed = Date.now() - startTimeRef.current;
         setTime(elapsed);
         accumulatedTimeRef.current = elapsed;
-        onTimeUpdate?.(Math.floor(elapsed / 1000));
+        onTimeUpdate.(Math.floor(elapsed / 1000));
       }, 10);
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -91,12 +91,12 @@ export const TimerCard: React.FC<TimerCardProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
   };
 
-  const formatDiffTime = (current: number, previous?: number) => {
+  const formatDiffTime = (current: number, previous: number) => {
     if (!previous) return '+0.00';
     
     const diff = current - previous;
     const absDiff = Math.abs(diff);
-    const sign = diff >= 0 ? '+' : '-';
+    const sign = diff >= 0  '+' : '-';
     
     const totalSeconds = Math.floor(absDiff / 1000);
     const secs = totalSeconds % 60;
@@ -134,7 +134,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
                 <View style={styles.lapHeader}>
                   <Text style={styles.lapNumber}>Volta {lap.number}</Text>
                   <Text style={styles.lapDiff}>
-                    {formatDiffTime(lap.time, laps[index + 1]?.time)}
+                    {formatDiffTime(lap.time, laps[index + 1].time)}
                   </Text>
                 </View>
                 <Text style={styles.lapTime}>{formatLapTime(lap.time)}</Text>

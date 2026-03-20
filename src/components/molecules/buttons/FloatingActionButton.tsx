@@ -13,34 +13,34 @@ export type FabPosition = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-le
 
 export interface FloatingActionButtonProps extends TouchableOpacityProps {
   /** Texto ou ícone do botão */
-  label?: string;
+  label: string;
   /** Ícone personalizado (sobrescreve o label) */
-  icon?: React.ReactNode;
+  icon: React.ReactNode;
   /** Posição do FAB na tela */
-  position?: FabPosition;
+  position: FabPosition;
   /** Offset personalizado para posicionamento */
-  offset?: {
-    top?: number;
-    bottom?: number;
-    left?: number;
-    right?: number;
+  offset: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
   };
   /** Cor de fundo */
-  backgroundColor?: string;
+  backgroundColor: string;
   /** Cor do texto/ícone */
-  color?: string;
+  color: string;
   /** Tamanho do FAB */
-  size?: 'small' | 'medium' | 'large';
+  size: 'small' | 'medium' | 'large';
   /** Elevação/shadow */
-  elevation?: number;
+  elevation: number;
   /** Callback de clique */
   onPress: () => void;
   /** Se o botão está visível */
-  visible?: boolean;
+  visible: boolean;
   /** Estilos adicionais */
-  containerStyle?: ViewStyle;
+  containerStyle: ViewStyle;
   /** Estilos adicionais para o texto */
-  labelStyle?: TextStyle;
+  labelStyle: TextStyle;
 }
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
@@ -69,35 +69,35 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   };
 
   const fabSize = sizeMap[size];
-  const fontSize = size === 'small' ? 24 : size === 'medium' ? 32 : 40;
+  const fontSize = size === 'small'  24 : size === 'medium'  32 : 40;
 
   // Posicionamento
   const positionStyles: ViewStyle = {};
   
   switch (position) {
     case 'bottom-right':
-      positionStyles.bottom = offset.bottom ?? 40;
-      positionStyles.right = offset.right ?? 20;
+      positionStyles.bottom = offset.bottom  40;
+      positionStyles.right = offset.right  20;
       break;
     case 'bottom-left':
-      positionStyles.bottom = offset.bottom ?? 40;
-      positionStyles.left = offset.left ?? 20;
+      positionStyles.bottom = offset.bottom  40;
+      positionStyles.left = offset.left  20;
       break;
     case 'top-right':
-      positionStyles.top = offset.top ?? 40;
-      positionStyles.right = offset.right ?? 20;
+      positionStyles.top = offset.top  40;
+      positionStyles.right = offset.right  20;
       break;
     case 'top-left':
-      positionStyles.top = offset.top ?? 40;
-      positionStyles.left = offset.left ?? 20;
+      positionStyles.top = offset.top  40;
+      positionStyles.left = offset.left  20;
       break;
     case 'bottom-center':
-      positionStyles.bottom = offset.bottom ?? 40;
+      positionStyles.bottom = offset.bottom  40;
       positionStyles.left = '50%';
       positionStyles.transform = [{ translateX: -fabSize / 2 }];
       break;
     case 'top-center':
-      positionStyles.top = offset.top ?? 40;
+      positionStyles.top = offset.top  40;
       positionStyles.left = '50%';
       positionStyles.transform = [{ translateX: -fabSize / 2 }];
       break;
@@ -126,7 +126,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
       activeOpacity={0.8}
       {...rest}
     >
-      {icon ? (
+      {icon  (
         icon
       ) : (
         <Text style={[styles.label, { color, fontSize }, labelStyle]}>

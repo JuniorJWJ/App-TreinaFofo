@@ -48,13 +48,13 @@ export const useExerciseStore = create<ExerciseState>()(
         set(state => ({
           exercises: state.exercises.map(exercise =>
             exercise.id === id
-              ? {
+               {
                   ...exercise,
                   ...updates,
                   updatedAt: new Date(),
                   warmupSets:
                     updates.warmupSets !== undefined
-                      ? updates.warmupSets
+                       updates.warmupSets
                       : exercise.warmupSets,
                 }
               : exercise
@@ -107,7 +107,7 @@ export const useExerciseStore = create<ExerciseState>()(
                 autoProgression: exercise.autoProgression || false,
                 incrementSize: exercise.incrementSize || 2.5,
                 notes: exercise.notes || undefined,
-                gifLocal: exercise.gifLocal ?? gifLocal,
+                gifLocal: exercise.gifLocal  gifLocal,
               };
             }
           );

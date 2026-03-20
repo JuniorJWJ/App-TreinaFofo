@@ -85,11 +85,11 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
         disabled={!isFormValid || isLoading}
         style={{
           marginRight: 16,
-          opacity: isFormValid && !isLoading ? 1 : 0.5,
+          opacity: isFormValid && !isLoading  1 : 0.5,
         }}
       >
         <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-          {isLoading ? 'Salvando...' : 'Salvar'}
+          {isLoading  'Salvando...' : 'Salvar'}
         </Text>
       </TouchableOpacity>
     );

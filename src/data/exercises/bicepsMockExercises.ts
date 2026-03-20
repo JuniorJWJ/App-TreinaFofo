@@ -2,7 +2,7 @@ import { ExerciseFormData } from '../../types';
 
 const roscaDiretaGif = require('../../assets/gifs/roscadireta.gif');
 
-export const bicepsMockExercises: ExerciseFormData[
+export const bicepsMockExercises: ExerciseFormData[] = [
   {
     name: 'Rosca Direta com Barra',
     muscleGroupId: 'Bíceps',
@@ -54,10 +54,10 @@ export const bicepsMockExercises: ExerciseFormData[
     notes: '7 partials baixo + 7 full + 7 partials alto',
   },
   {
-    name: 'Rosca Direta com Barra EZ',
+    name: 'Rosca Direta com Barra W',
     muscleGroupId: 'Bíceps',
     description: 'Versão mais confortável para os punhos.',
-    equipment: 'Barra EZ',
+    equipment: 'Barra W',
     difficulty: 'beginner',
     defaultSets: 4,
     defaultReps: 12,

@@ -8,9 +8,9 @@ export interface FabWithIconProps extends Omit<FloatingActionButtonProps, 'icon'
   /** Nome do ícone */
   iconName: string;
   /** Tamanho do ícone */
-  iconSize?: number;
+  iconSize: number;
   /** Cor do ícone */
-  iconColor?: string;
+  iconColor: string;
 }
 
 export const FloatingActionButtonWithIcon: React.FC<FabWithIconProps> = ({

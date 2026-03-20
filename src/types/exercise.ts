@@ -11,7 +11,7 @@ export interface Exercise {
   imageUrl?: string;
   gifLocal?: any;
 
-  // Configurações padrão
+  // Configura??es padr?o
   defaultSets: number;
   defaultReps: number;
   defaultRestTime: number; // em segundos
@@ -20,22 +20,22 @@ export interface Exercise {
   defaultWeight?: number;
   weightUnit?: 'kg' | 'lb';
 
-  // Séries de aquecimento
+  // S?ries de aquecimento
   warmupSets?: Array<{
     reps: number;
     percentage: number; // % do peso de trabalho
   }>;
 
-  // Sistema de progressão
+  // Sistema de progress?o
   progressionType?: 'fixed' | 'range' | 'linear';
   autoProgression?: boolean;
   incrementSize?: number; // Ex: 2.5kg
   targetOneRepMax?: number;
 
-  // Notas e observações
+  // Notas e observa??es
   notes?: string;
 
-  // Histórico
+  // Hist?rico
   personalRecord?: number;
   lastPerformed?: Date;
 
@@ -43,7 +43,7 @@ export interface Exercise {
   updatedAt: Date;
 }
 
-// Para séries individuais durante o treino
+// Para s?ries individuais durante o treino
 export interface ExerciseSet {
   setNumber: number;
   type: 'warmup' | 'working' | 'drop' | 'failure';
@@ -53,10 +53,10 @@ export interface ExerciseSet {
   actualWeight?: number;
   completed: boolean;
   notes?: string;
-  rpe?: number; // 1-10 escala de esforço
+  rpe?: number; // 1-10 escala de esfor?o
 }
 
-// Para criação/edicação
+// Para cria??o/edi??o
 export type ExerciseFormData = {
   name: string;
   muscleGroupId: string;
@@ -68,7 +68,7 @@ export type ExerciseFormData = {
   imageUrl?: string;
   gifLocal?: any;
 
-  // Configurações padrão
+  // Configura??es padr?o
   defaultSets: number;
   defaultReps: number;
   defaultRestTime: number;
@@ -77,13 +77,13 @@ export type ExerciseFormData = {
   defaultWeight?: number;
   weightUnit?: 'kg' | 'lb';
 
-  // Séries de aquecimento
+  // S?ries de aquecimento
   warmupSets?: Array<{
     reps: number;
     percentage: number;
   }>;
 
-  // Sistema de progressão
+  // Sistema de progress?o
   progressionType?: 'fixed' | 'range' | 'linear';
   autoProgression?: boolean;
   incrementSize?: number;

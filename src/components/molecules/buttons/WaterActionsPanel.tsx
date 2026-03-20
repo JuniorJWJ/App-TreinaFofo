@@ -5,8 +5,8 @@ import { ConfirmationModal } from '../modals/ConfirmationModal';
 import { useConfirmationModal } from '../../../hooks/useConfirmationModal';
 
 interface WaterActionsPanelProps {
-  onAdjustGoal?: () => void;
-  onReset?: () => void;
+  onAdjustGoal: () => void;
+  onReset: () => void;
 }
 
 export const WaterActionsPanel: React.FC<WaterActionsPanelProps> = ({
@@ -19,7 +19,7 @@ export const WaterActionsPanel: React.FC<WaterActionsPanelProps> = ({
     if (!onReset) return;
     
     modal.showConfirmation(
-      'Tem certeza que deseja zerar a ingestão de água do dia?',
+      'Tem certeza que deseja zerar a ingestão de água do dia',
       'Resetar Dia',
       () => {
         onReset();
@@ -58,11 +58,11 @@ export const WaterActionsPanel: React.FC<WaterActionsPanelProps> = ({
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig?.onConfirm?.();
+            modal.modalConfig.onConfirm.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig?.onCancel?.();
+            modal.modalConfig.onCancel.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}

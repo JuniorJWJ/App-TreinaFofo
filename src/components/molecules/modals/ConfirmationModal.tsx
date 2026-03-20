@@ -11,15 +11,15 @@ import { Button } from '../../atoms/Button';
 
 // Adicione a interface ModalConfig ou importe do seu hook
 export interface ModalConfig {
-  type?: 'success' | 'error' | 'warning' | 'info' | 'confirmation';
+  type: 'success' | 'error' | 'warning' | 'info' | 'confirmation';
   title: string;
   message: string;
-  confirmText?: string;
-  cancelText?: string;
-  onConfirm?: () => void;
-  onCancel?: () => void;
-  showCancelButton?: boolean;
-  hideIcon?: boolean;
+  confirmText: string;
+  cancelText: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  showCancelButton: boolean;
+  hideIcon: boolean;
 }
 
 interface ConfirmationModalProps extends ModalConfig {

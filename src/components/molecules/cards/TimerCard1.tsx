@@ -3,9 +3,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Vibration } from 'react-native';
 
 interface TimerCardProps {
-  initialTime?: number; // em segundos
-  onTimeUpdate?: (time: number) => void; // em segundos para compatibilidade
-  autoStart?: boolean;
+  initialTime: number; // em segundos
+  onTimeUpdate: (time: number) => void; // em segundos para compatibilidade
+  autoStart: boolean;
 }
 
 export const TimerCard: React.FC<TimerCardProps> = ({ 
@@ -29,7 +29,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
         const elapsed = Date.now() - startTimeRef.current;
         setTime(elapsed);
         accumulatedTimeRef.current = elapsed;
-        onTimeUpdate?.(Math.floor(elapsed / 1000)); // Em segundos para compatibilidade
+        onTimeUpdate.(Math.floor(elapsed / 1000)); // Em segundos para compatibilidade
       }, 10); // Atualizar a cada 10ms para milésimos
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -104,7 +104,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
           onPress={handleStartPause}
         >
           <Text style={styles.iconText}>
-            {isRunning ? '⏸️' : '▶️'}
+            {isRunning  '⏸️' : '▶️'}
           </Text>
         </TouchableOpacity>
 

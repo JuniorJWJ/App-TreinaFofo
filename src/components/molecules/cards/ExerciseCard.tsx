@@ -12,8 +12,8 @@ interface ExerciseCardProps {
   onLongPress: () => void;
   muscleGroupName: string;
   muscleGroupColor: string;
-  showGroupHeader?: boolean;
-  hasGif?: boolean;
+  showGroupHeader: boolean;
+  hasGif: boolean;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({

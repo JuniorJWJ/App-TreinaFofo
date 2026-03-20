@@ -1,6 +1,6 @@
 import { ExerciseFormData } from '../../types';
 
-export const forearmsMockExercises: ExerciseFormData[
+export const forearmsMockExercises: ExerciseFormData[] = [
   {
     name: 'Rosca Inversa',
     muscleGroupId: 'Antebraço',

@@ -5,8 +5,8 @@ import { Text } from '../../atoms/Text';
 
 interface TodayWorkoutCardProps {
   workoutName: string;
-  exerciseCount?: number;
-  estimatedDuration?: number;
+  exerciseCount: number;
+  estimatedDuration: number;
   isCompleted: boolean;
   onPress: () => void;
 }
@@ -38,10 +38,10 @@ export const TodayWorkoutCard: React.FC<TodayWorkoutCardProps> = ({
         )}
         <View style={[
           styles.statusIndicator,
-          isCompleted ? styles.completedIndicator : styles.pendingIndicator
+          isCompleted  styles.completedIndicator : styles.pendingIndicator
         ]}>
           <Text style={styles.statusIndicatorText}>
-            {isCompleted ? '✓ Concluído' : 'Toque para ver detalhes'}
+            {isCompleted  '✓ Concluído' : 'Toque para ver detalhes'}
           </Text>
         </View>
       </TouchableOpacity>

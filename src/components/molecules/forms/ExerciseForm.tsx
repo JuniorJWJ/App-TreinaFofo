@@ -16,8 +16,8 @@ import { ConfirmationModal } from '../../molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../../hooks/useConfirmationModal';
 
 interface ExerciseFormProps {
-  exercise?: Exercise;
-  isEditing?: boolean;
+  exercise: Exercise;
+  isEditing: boolean;
   // Removemos onSave e onCancel pois serão controlados externamente
 }
 
@@ -30,10 +30,10 @@ export interface ExerciseFormHandle {
 // Atualize a interface SaveResult
 export interface SaveResult {
   success: boolean;
-  action?: 'go_back' | 'add_another' | 'stay';
-  message?: string;
-  type?: 'update' | 'create';
-  data?: any;
+  action: 'go_back' | 'add_another' | 'stay';
+  message: string;
+  type: 'update' | 'create';
+  data: any;
 }
 
 export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
@@ -41,46 +41,46 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const { CreateExercise, updateExercise } = useExerciseStore();
     const { muscleGroups } = useMuscleGroupStore();
 
-    const [name, setName] = useState(exercise?.name || '');
+    const [name, setName] = useState(exercise.name || '');
     const [selectedMuscleGroupId, setSelectedMuscleGroupId] = useState(
-      exercise?.muscleGroupId || '',
+      exercise.muscleGroupId || '',
     );
     const [secondaryMuscleGroupIds, setSecondaryMuscleGroupIds] = useState<
       string[]
     >([]);
-    const [sets, setSets] = useState(exercise?.defaultSets.toString() || '3');
-    const [reps, setReps] = useState(exercise?.defaultReps.toString() || '12');
+    const [sets, setSets] = useState(exercise.defaultSets.toString() || '3');
+    const [reps, setReps] = useState(exercise.defaultReps.toString() || '12');
     const [restTime, setRestTime] = useState(
-      exercise?.defaultRestTime.toString() || '60',
+      exercise.defaultRestTime.toString() || '60',
     );
     const [defaultWeight, setDefaultWeight] = useState(
-      exercise?.defaultWeight?.toString() || '',
+      exercise.defaultWeight.toString() || '',
     );
     const [weightUnit, setWeightUnit] = useState<'kg' | 'lb'>(
-      exercise?.weightUnit || 'kg',
+      exercise.weightUnit || 'kg',
     );
-    const [notes, setNotes] = useState(exercise?.notes || '');
+    const [notes, setNotes] = useState(exercise.notes || '');
     const [progressionType, ] = useState<
       'fixed' | 'range' | 'linear'
-    >(exercise?.progressionType || 'fixed');
+    >(exercise.progressionType || 'fixed');
     const [useWarmupSets, setUseWarmupSets] = useState(
-      (exercise?.warmupSets && exercise.warmupSets.length > 0) || false,
+      (exercise.warmupSets && exercise.warmupSets.length > 0) || false,
     );
     const [warmupSets, setWarmupSets] = useState<
       Array<{ reps: string; percentage: string }>
     >(
-      exercise?.warmupSets
-        ? exercise.warmupSets.map(set => ({
+      exercise.warmupSets
+         exercise.warmupSets.map(set => ({
             reps: set.reps.toString(),
             percentage: set.percentage.toString(),
           }))
         : [{ reps: '10', percentage: '50' }],
     );
     const [autoProgression, setAutoProgression] = useState(
-      exercise?.autoProgression || false,
+      exercise.autoProgression || false,
     );
     const [incrementSize, setIncrementSize] = useState(
-      exercise?.incrementSize?.toString() || '2.5',
+      exercise.incrementSize.toString() || '2.5',
     );
 
     const [isLoading, setIsLoading] = useState(false);
@@ -88,7 +88,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const modal = useConfirmationModal();
 
     useEffect(() => {
-      if (!exercise?.secondaryMuscleGroups || muscleGroups.length === 0) return;
+      if (!exercise.secondaryMuscleGroups || muscleGroups.length === 0) return;
 
       const normalized = exercise.secondaryMuscleGroups
         .map((group) => {
@@ -97,19 +97,19 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           const byName = muscleGroups.find(
             m => m.name.toLowerCase() === group.toLowerCase(),
           );
-          return byName ? byName.id : group;
+          return byName  byName.id : group;
         })
         .filter(Boolean)
         .filter(id => id !== selectedMuscleGroupId);
 
       setSecondaryMuscleGroupIds(Array.from(new Set(normalized)));
-    }, [exercise?.secondaryMuscleGroups, muscleGroups, selectedMuscleGroupId]);
+    }, [exercise.secondaryMuscleGroups, muscleGroups, selectedMuscleGroupId]);
 
     const toggleSecondaryGroup = (groupId: string) => {
       if (groupId === selectedMuscleGroupId) return;
       setSecondaryMuscleGroupIds(prev =>
         prev.includes(groupId)
-          ? prev.filter(id => id !== groupId)
+           prev.filter(id => id !== groupId)
           : [...prev, groupId],
       );
     };
@@ -138,17 +138,17 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           muscleGroupId: selectedMuscleGroupId,
           secondaryMuscleGroups:
             secondaryMuscleGroupIds.length > 0
-              ? secondaryMuscleGroupIds
+               secondaryMuscleGroupIds
               : undefined,
           defaultSets: parseInt(sets) || 3,
           defaultReps: parseInt(reps) || 12,
           defaultRestTime: parseInt(restTime) || 60,
-          defaultWeight: defaultWeight ? parseFloat(defaultWeight) : undefined,
+          defaultWeight: defaultWeight  parseFloat(defaultWeight) : undefined,
           weightUnit,
           notes: notes.trim() || undefined,
           progressionType,
           warmupSets: useWarmupSets
-            ? warmupSets.map(set => ({
+             warmupSets.map(set => ({
                 reps: parseInt(set.reps) || 10,
                 percentage: parseInt(set.percentage) || 50,
               }))
@@ -275,7 +275,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
                 style={[
                   styles.muscleGroupButton,
                   selectedMuscleGroupId === group.id
-                    ? styles.selectedMuscleGroup
+                     styles.selectedMuscleGroup
                     : styles.unselectedMuscleGroup,
                 ]}
               />
@@ -296,7 +296,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
                   style={[
                     styles.secondaryGroupButton,
                     secondaryMuscleGroupIds.includes(group.id)
-                      ? styles.secondaryGroupSelected
+                       styles.secondaryGroupSelected
                       : styles.secondaryGroupUnselected,
                   ]}
                 />
@@ -512,16 +512,16 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
 
         <ConfirmationModal
           visible={modal.isVisible}
-          title={modal.modalConfig?.title || ''}
-          message={modal.modalConfig?.message || ''}
-          confirmText={modal.modalConfig?.confirmText || 'OK'}
-          cancelText={modal.modalConfig?.cancelText}
+          title={modal.modalConfig.title || ''}
+          message={modal.modalConfig.message || ''}
+          confirmText={modal.modalConfig.confirmText || 'OK'}
+          cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig?.onConfirm?.();
+            modal.modalConfig.onConfirm.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig?.onCancel?.();
+            modal.modalConfig.onCancel.();
             modal.hideModal();
           }}
           onClose={() => {

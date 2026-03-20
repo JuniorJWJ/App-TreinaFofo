@@ -8,12 +8,12 @@ import { WaterActivityLevel, WaterClimate } from '../../../utils/waterCalculator
 
 interface WaterCalculatorModalProps {
   visible: boolean;
-  initialWeight?: number;
-  initialActivityLevel?: WaterActivityLevel;
-  initialClimate?: WaterClimate;
+  initialWeight: number;
+  initialActivityLevel: WaterActivityLevel;
+  initialClimate: WaterClimate;
   onClose: () => void;
   onSave: (goal: number) => void;
-  onProfileSave?: (profile: {
+  onProfileSave: (profile: {
     weight: number;
     activityLevel: string;
     climate: string;

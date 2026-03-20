@@ -16,8 +16,8 @@ export interface WorkoutFormHandle {
 
 interface WorkoutFormProps {
   mode: 'create' | 'edit';
-  initialWorkoutName?: string;
-  initialSelectedExercises?: string[];
+  initialWorkoutName: string;
+  initialSelectedExercises: string[];
   exercises: Array<{
     id: string;
     name: string;
@@ -27,14 +27,14 @@ interface WorkoutFormProps {
     defaultRestTime: number;
   }>;
   onSubmit: (workoutName: string, selectedExercises: string[]) => void;
-  onCancel?: () => void;
-  isLoading?: boolean;
-  workoutInfo?: {
-    createdAt?: Date;
-    updatedAt?: Date;
+  onCancel: () => void;
+  isLoading: boolean;
+  workoutInfo: {
+    createdAt: Date;
+    updatedAt: Date;
   };
-  submitButtonText?: string;
-  cancelButtonText?: string;
+  submitButtonText: string;
+  cancelButtonText: string;
 }
 
 export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(({
@@ -216,16 +216,16 @@ export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(({
 
         {/* Lista de exercícios filtrados */}
         <View style={styles.exercisesContainer}>
-          {filteredExercises.length === 0 ? (
+          {filteredExercises.length === 0  (
             <View style={styles.emptyExercises}>
               <Text style={styles.emptyText}>
                 {search || selectedGroup 
-                  ? 'Nenhum exercício encontrado' 
+                   'Nenhum exercício encontrado' 
                   : 'Nenhum exercício cadastrado'}
               </Text>
               <Text style={styles.emptySubtext}>
                 {search || selectedGroup
-                  ? 'Tente ajustar sua busca ou filtro'
+                   'Tente ajustar sua busca ou filtro'
                   : 'Crie exercícios primeiro para poder adicioná-los ao treino'}
               </Text>
               {(search || selectedGroup) && (

@@ -34,9 +34,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [showHowToStart, setShowHowToStart] = useState(false);
 
   const activePlan = getActivePlan();
-  const todaysWorkout = activePlan ? getTodaysWorkout(activePlan.id) : null;
-  const todaysWorkoutDetails = todaysWorkout?.workoutId
-    ? getWorkout(todaysWorkout.workoutId)
+  const todaysWorkout = activePlan  getTodaysWorkout(activePlan.id) : null;
+  const todaysWorkoutDetails = todaysWorkout.workoutId
+     getWorkout(todaysWorkout.workoutId)
     : null;
 
   const [showTimer, setShowTimer] = useState(false);
@@ -95,7 +95,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             style={styles.timerToggleButton}
           >
             <Text style={styles.timerToggleText}>
-              {showTimer ? '👆 Esconder Cronômetro' : '👇 Mostrar Cronômetro'}
+              {showTimer  '👆 Esconder Cronômetro' : '👇 Mostrar Cronômetro'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -111,7 +111,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         )}
 
         <View style={styles.section}>
-          {!activePlan || !todaysWorkout ? (
+          {!activePlan || !todaysWorkout  (
             <>
               <HowToStartCard onPress={() => setShowHowToStart(true)} />
               <HowToStartFlow
@@ -122,10 +122,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           ) : (
             <TodayWorkoutCard
               workoutName={
-                todaysWorkoutDetails ? todaysWorkoutDetails.name : 'Descanso'
+                todaysWorkoutDetails  todaysWorkoutDetails.name : 'Descanso'
               }
-              exerciseCount={todaysWorkoutDetails?.exerciseIds.length}
-              estimatedDuration={todaysWorkoutDetails?.estimatedDuration}
+              exerciseCount={todaysWorkoutDetails.exerciseIds.length}
+              estimatedDuration={todaysWorkoutDetails.estimatedDuration}
               isCompleted={todaysWorkout.isCompleted}
               onPress={handleWorkoutCardPress}
             />
@@ -148,7 +148,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         onClose={handleCloseModal}
         workout={todaysWorkout}
         workoutDetails={todaysWorkoutDetails}
-        isCompleted={todaysWorkout?.isCompleted || false}
+        isCompleted={todaysWorkout.isCompleted || false}
         onToggleCompletion={handleToggleWorkoutCompletion}
       />
     </View>

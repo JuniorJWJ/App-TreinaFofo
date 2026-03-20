@@ -8,7 +8,7 @@ export * from './weeklyPlan';
 // Tipos utilitários
 export type ApiResponse<T> = {
   data: T;
-  message?: string;
+  message: string;
   success: boolean;
 };
 
@@ -22,18 +22,18 @@ export type PaginatedResponse<T> = ApiResponse<{
 
 // Filtros e busca
 export interface SearchFilters {
-  query?: string;
-  muscleGroupIds?: string[];
-  difficulty?: string[];
-  equipment?: string[];
-  tags?: string[];
+  query: string;
+  muscleGroupIds: string[];
+  difficulty: string[];
+  equipment: string[];
+  tags: string[];
 }
 
 export interface PaginationParams {
   page: number;
   pageSize: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
 }
 
 // Estados de UI

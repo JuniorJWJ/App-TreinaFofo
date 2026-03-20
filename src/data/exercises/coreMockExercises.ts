@@ -1,6 +1,6 @@
 import { ExerciseFormData } from '../../types';
 
-export const coreMockExercises: ExerciseFormData[
+export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Abdominal Tradicional',
     muscleGroupId: 'Abdominal',

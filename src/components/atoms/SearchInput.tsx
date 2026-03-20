@@ -3,7 +3,7 @@ import React from 'react';
 import { TextInput, TextInputProps, StyleSheet, View } from 'react-native';
 
 interface SearchInputProps extends TextInputProps {
-  containerStyle?: any;
+  containerStyle: any;
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({ 

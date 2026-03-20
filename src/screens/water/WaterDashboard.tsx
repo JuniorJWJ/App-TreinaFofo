@@ -12,8 +12,8 @@ interface WaterDashboardProps {
   dailyGoal: number;
   currentIntake: number;
   onAddWater: (amount: number) => void;
-  onReset?: () => void;
-  onAdjustGoal?: () => void;
+  onReset: () => void;
+  onAdjustGoal: () => void;
 }
 
 export const WaterDashboard: React.FC<WaterDashboardProps> = ({
@@ -44,7 +44,7 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
     if (!onReset) return;
     
     modal.showConfirmation(
-      'Tem certeza que deseja zerar a ingestão de água do dia?',
+      'Tem certeza que deseja zerar a ingestão de água do dia',
       'Resetar Dia',
       () => {
         onReset();
@@ -94,7 +94,7 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
         <ProgressCircle
           style={styles.progressCircle}
           progress={progress}
-          progressColor={progress >= 1 ? "#4CAF50" : "#4A90E2"}
+          progressColor={progress >= 1  "#4CAF50" : "#4A90E2"}
           backgroundColor="#E0E0E0"
           strokeWidth={20}
         />
@@ -108,7 +108,7 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
             progress >= 1 && { color: '#4CAF50', fontWeight: 'bold' }
           ]}>
             {remaining > 0 
-              ? `${remaining}ml restantes` 
+               `${remaining}ml restantes` 
               : 'Meta alcançada! 🎉'
             }
           </Text>
@@ -194,11 +194,11 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig?.onConfirm?.();
+            modal.modalConfig.onConfirm.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig?.onCancel?.();
+            modal.modalConfig.onCancel.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}

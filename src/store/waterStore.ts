@@ -8,7 +8,7 @@ export interface WaterEntry {
   id: string;
   amount: number; // ml
   timestamp: Date;
-  note?: string;
+  note: string;
 }
 
 export interface WaterDailyStats {
@@ -50,7 +50,7 @@ interface WaterStoreState {
 
 interface WaterStoreActions {
   // Ações básicas
-  addWater: (amount: number, note?: string) => Promise<void>;
+  addWater: (amount: number, note: string) => Promise<void>;
   removeEntry: (entryId: string) => Promise<void>;
   updateGoal: (newGoal: number) => Promise<void>;
   resetDay: () => Promise<void>;
@@ -122,7 +122,7 @@ export const useWaterStore = create<WaterStore>()(
       },
 
       // Adicionar água
-      addWater: async (amount: number, note?: string) => {
+      addWater: async (amount: number, note: string) => {
         const { currentIntake, todayEntries } = get();
         const newEntry: WaterEntry = {
           id: Date.now().toString(),
@@ -320,7 +320,7 @@ export const useWaterStats = () => {
     monthlyStats,
   } = useWaterStore();
 
-  const progress = dailyGoal > 0 ? Math.min(currentIntake / dailyGoal, 1) : 0;
+  const progress = dailyGoal > 0  Math.min(currentIntake / dailyGoal, 1) : 0;
   const remaining = Math.max(0, dailyGoal - currentIntake);
   const percentage = Math.round(progress * 100);
   
@@ -333,9 +333,9 @@ export const useWaterStats = () => {
   
   // Estatísticas da semana
   const weeklyTotal = weeklyStats.reduce((sum, day) => sum + day.intake, 0);
-  const weeklyAverage = weeklyStats.length > 0 ? weeklyTotal / weeklyStats.length : 0;
+  const weeklyAverage = weeklyStats.length > 0  weeklyTotal / weeklyStats.length : 0;
   const weeklyCompletionRate = weeklyStats.length > 0 
-    ? (weeklyStats.filter(day => day.completed).length / weeklyStats.length) * 100 
+     (weeklyStats.filter(day => day.completed).length / weeklyStats.length) * 100 
     : 0;
   
   return {

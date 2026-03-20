@@ -63,7 +63,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
         set((state) => ({
           weeklyPlans: state.weeklyPlans.map((plan) =>
             plan.id === id
-              ? { ...plan, ...updates, updatedAt: new Date() }
+               { ...plan, ...updates, updatedAt: new Date() }
               : plan
           ),
         }));
@@ -72,7 +72,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
       deleteWeeklyPlan: (id) => {
         set((state) => ({
           weeklyPlans: state.weeklyPlans.filter((plan) => plan.id !== id),
-          activePlanId: get().activePlanId === id ? null : get().activePlanId,
+          activePlanId: get().activePlanId === id  null : get().activePlanId,
         }));
       },
 
@@ -83,7 +83,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
       getActivePlan: () => {
         const { activePlanId, weeklyPlans } = get();
         const activePlan = weeklyPlans.find((plan) => plan.id === activePlanId);
-        console.log('Plano ativo encontrado:', activePlan?.name);
+        console.log('Plano ativo encontrado:', activePlan.name);
         return activePlan;
       },
 
@@ -96,7 +96,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
           weeklyPlans: state.weeklyPlans.map((plan) => {
             if (plan.id === planId) {
               const updatedDays = plan.days.map((d) =>
-                d.day === day ? { ...d, isCompleted: true, completedAt: new Date() } : d
+                d.day === day  { ...d, isCompleted: true, completedAt: new Date() } : d
               );
               const completedDays = updatedDays.filter((d) => d.isCompleted).length;
               const completionRate = (completedDays / plan.days.length) * 100;
@@ -119,7 +119,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
           weeklyPlans: state.weeklyPlans.map((plan) => {
             if (plan.id === planId) {
               const updatedDays = plan.days.map((d) =>
-                d.day === day ? { ...d, isCompleted: false, completedAt: undefined } : d
+                d.day === day  { ...d, isCompleted: false, completedAt: undefined } : d
               );
               const completedDays = updatedDays.filter((d) => d.isCompleted).length;
               const completionRate = (completedDays / plan.days.length) * 100;
@@ -142,7 +142,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
           weeklyPlans: state.weeklyPlans.map((plan) => {
             if (plan.id === planId) {
               const updatedDays = plan.days.map((d) =>
-                d.day === day ? { ...d, notes } : d
+                d.day === day  { ...d, notes } : d
               );
               return {
                 ...plan,
@@ -161,7 +161,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
           weeklyPlans: state.weeklyPlans.map((plan) => {
             if (plan.id === planId) {
               const updatedDays = plan.days.map((d) =>
-                d.day === day ? { ...d, workoutId } : d
+                d.day === day  { ...d, workoutId } : d
               );
               return {
                 ...plan,
@@ -225,7 +225,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
-          return value ? JSON.parse(value) : null;
+          return value  JSON.parse(value) : null;
         },
         setItem: async (name, value) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));

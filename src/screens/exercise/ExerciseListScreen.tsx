@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Modal } from 'react-native';
-import { Image } from 'expo-image';
+import React from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { ExerciseSearchBar } from '../../components/molecules/search-filters/ExerciseSearchBar';
 import { MuscleGroupFilterChips } from '../../components/molecules/search-filters/MuscleGroupFilterChips';
 import { ExerciseCard } from '../../components/molecules/cards/ExerciseCard';
@@ -9,8 +8,6 @@ import { useExerciseList } from '../../hooks/useExerciseList';
 import { FloatingActionButton } from '../../components/molecules/buttons/FloatingActionButton';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
-import { Text } from '../../components/atoms/Text';
-import { Button } from '../../components/atoms/Button';
 
 interface ExerciseListScreenProps {
   navigation: any;
@@ -20,9 +17,6 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
   navigation,
 }) => {
   const modal = useConfirmationModal();
-  const [gifModalVisible, setGifModalVisible] = useState(false);
-  const [gifExercise, setGifExercise] = useState<any | null>(null);
-
   const {
     exercises,
     uniqueGroups,
@@ -37,7 +31,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
 
   const handleDeleteExercise = (exerciseId: string, exerciseName: string) => {
     modal.showConfirmation(
-      `Tem certeza que deseja excluir "${exerciseName}"?`,
+      `Tem certeza que deseja excluir "${exerciseName}"`,
       'Excluir Exercício',
       () => {
         deleteExercise(exerciseId);
@@ -52,24 +46,14 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
     navigation.navigate('EditExercise', { exerciseId });
   };
 
-  const handleOpenGif = (exercise: any) => {
-    if (!exercise.gifLocal) {
-      handleEditExercise(exercise.id);
-      return;
-    }
-    setGifExercise(exercise);
-    setGifModalVisible(true);
-  };
-
-  const handleCloseGif = () => {
-    setGifModalVisible(false);
-    setGifExercise(null);
+  const handleOpenDetails = (exerciseId: string) => {
+    navigation.navigate('ExerciseDetail', { exerciseId });
   };
 
   const renderItem = ({ item, index }: { item: any; index: number }) => {
     const currentGroup = getMuscleGroupName(item.muscleGroupId);
     const prevGroup =
-      index > 0 ? getMuscleGroupName(exercises[index - 1].muscleGroupId) : null;
+      index > 0  getMuscleGroupName(exercises[index - 1].muscleGroupId) : null;
 
     const showGroupHeader = currentGroup !== prevGroup && !selectedGroup;
 
@@ -78,7 +62,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
         exercise={item}
         onEdit={() => handleEditExercise(item.id)}
         onDelete={() => handleDeleteExercise(item.id, item.name)}
-        onPress={() => handleOpenGif(item)}
+        onPress={() => handleOpenDetails(item.id)}
         onLongPress={() => handleDeleteExercise(item.id, item.name)}
         muscleGroupName={currentGroup}
         muscleGroupColor={getMuscleGroupColor(item.muscleGroupId)}
@@ -108,34 +92,6 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
         />
       )}
 
-      <Modal
-        visible={gifModalVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={handleCloseGif}
-      >
-        <View style={styles.gifModalOverlay}>
-          <View style={styles.gifModalContent}>
-            <Text variant="subtitle" style={styles.gifTitle}>
-              {gifExercise?.name}
-            </Text>
-            {gifExercise?.gifLocal && (
-              <Image
-                source={gifExercise.gifLocal}
-                style={styles.gifImage}
-                contentFit="contain"
-                transition={200}
-              />
-            )}
-            <Button
-              title="Fechar"
-              onPress={handleCloseGif}
-              style={styles.gifCloseButton}
-            />
-          </View>
-        </View>
-      </Modal>
-
       <View style={styles.searchAndFilterContainer}>
         <ExerciseSearchBar search={search} onSearchChange={setSearch} />
 
@@ -146,7 +102,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
         />
       </View>
 
-      {!hasExercises ? (
+      {!hasExercises  (
         <EmptyExerciseList
           hasSearchOrFilter={hasSearchOrFilter}
           onClearFilters={() => {
@@ -192,32 +148,6 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 16,
     paddingBottom: 80,
-  },
-  gifModalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  gifModalContent: {
-    width: '90%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-  },
-  gifTitle: {
-    marginBottom: 12,
-    color: '#1b1613ff',
-  },
-  gifImage: {
-    width: '100%',
-    height: 260,
-    backgroundColor: '#f2f2f2',
-    borderRadius: 10,
-    marginBottom: 12,
-  },
-  gifCloseButton: {
-    backgroundColor: '#483148',
   },
   fabContainer: {
     position: 'absolute',

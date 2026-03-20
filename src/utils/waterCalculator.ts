@@ -9,8 +9,8 @@ export type WaterClimate = 'temperate' | 'hot' | 'very_hot';
 
 export interface WaterConfig {
   weight: number; // em kg
-  activityLevel?: WaterActivityLevel; // padrão: 'sedentary'
-  climate?: WaterClimate; // padrão: 'temperate'
+  activityLevel: WaterActivityLevel; // padrão: 'sedentary'
+  climate: WaterClimate; // padrão: 'temperate'
 }
 
 export const calculateWaterGoal = (config: WaterConfig): number => {

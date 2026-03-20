@@ -46,7 +46,7 @@ export const MuscleGroupFilterChips: React.FC<MuscleGroupFilterChipsProps> = ({
               selectedGroup === group && styles.filterChipActive
             ]}
             onPress={() => onSelectGroup(
-              selectedGroup === group ? null : group
+              selectedGroup === group  null : group
             )}
           >
             <Text style={[

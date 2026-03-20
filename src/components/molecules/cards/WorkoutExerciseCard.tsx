@@ -29,7 +29,7 @@ export const WorkoutExerciseCard: React.FC<WorkoutExerciseCardProps> = ({
     <TouchableOpacity
       style={[
         styles.exerciseCard,
-        isSelected ? styles.exerciseCardSelected : styles.exerciseCardUnselected
+        isSelected  styles.exerciseCardSelected : styles.exerciseCardUnselected
       ]}
       onPress={onPress}
       activeOpacity={0.7}

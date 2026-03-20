@@ -1,10 +1,10 @@
 import { ExerciseFormData } from '../../types';
 
-export const shouldersMockExercises: ExerciseFormData[
+export const shouldersMockExercises: ExerciseFormData[] = [
   {
     name: 'Desenvolvimento Militar com Barra',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Exercício compound para deltoides anteriores e trapeézio.',
     equipment: 'Barra + Rack',
     difficulty: 'intermediate',
@@ -22,7 +22,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Arnold Press',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description:
       'Desenvolvimento com rotação que atinge todas as cabeças do deltoide.',
     equipment: 'Halteres',
@@ -39,7 +39,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Lateral com Halteres',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description:
       'Exercício de isolamento para deltoides laterais (ombro largo).',
     equipment: 'Halteres',
@@ -57,7 +57,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Frontal com Barra',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Isolamento para deltoides anteriores.',
     equipment: 'Barra Olga',
     difficulty: 'beginner',
@@ -72,7 +72,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Face Pull com Cabo',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Exercício para deltoides posteriores e rotadores externos.',
     equipment: 'Pulley + Corda',
     difficulty: 'intermediate',
@@ -89,7 +89,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Desenvolvimento com Halteres',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Versão com maior liberdade de movimento.',
     equipment: 'Halteres',
     difficulty: 'beginner',
@@ -104,7 +104,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Desenvolvimento no Smith',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Versão guiada para maior estabilidade.',
     equipment: 'Máquina Smith',
     difficulty: 'beginner',
@@ -115,7 +115,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Push Press',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Movimento explosivo usando impulso das pernas.',
     equipment: 'Barra',
     difficulty: 'advanced',
@@ -128,7 +128,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Lateral no Cabo',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Tensão constante durante todo o movimento.',
     equipment: 'Polia',
     difficulty: 'intermediate',
@@ -139,7 +139,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Lateral Unilateral',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Maior foco e controle em um lado.',
     equipment: 'Halter',
     difficulty: 'beginner',
@@ -150,7 +150,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Lateral Inclinado',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Executado inclinado para maior isolamento.',
     equipment: 'Banco + Halter',
     difficulty: 'intermediate',
@@ -161,7 +161,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Frontal com Halteres',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Trabalha a parte frontal do ombro.',
     equipment: 'Halteres',
     difficulty: 'beginner',
@@ -172,7 +172,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Frontal no Cabo',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Tensão constante no movimento.',
     equipment: 'Polia',
     difficulty: 'intermediate',
@@ -183,7 +183,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Front Raise com Anilha',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Execução simples segurando anilha.',
     equipment: 'Anilha',
     difficulty: 'beginner',
@@ -194,7 +194,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Crucifixo Inverso com Halteres',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Foco no deltoide posterior.',
     equipment: 'Halteres',
     difficulty: 'beginner',
@@ -205,7 +205,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Crucifixo Inverso na Máquina',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Versão guiada para maior controle.',
     equipment: 'Máquina',
     difficulty: 'beginner',
@@ -216,7 +216,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Reverse Fly no Cabo',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Tensão constante no deltoide posterior.',
     equipment: 'Polia',
     difficulty: 'intermediate',
@@ -257,7 +257,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Rotação Externa com Halter',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Fortalece manguito rotador.',
     equipment: 'Halter',
     difficulty: 'beginner',
@@ -268,7 +268,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Rotação Externa no Cabo',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Execução com tensão constante.',
     equipment: 'Polia',
     difficulty: 'beginner',
@@ -279,7 +279,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Y Raise',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Movimento em Y para estabilidade.',
     equipment: 'Halteres',
     difficulty: 'beginner',
@@ -290,7 +290,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Wall Slide',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Mobilidade e controle escapular.',
     equipment: 'Parede',
     difficulty: 'beginner',
@@ -301,7 +301,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Handstand Push Up',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Flexão em parada de mão.',
     equipment: 'Peso corporal',
     difficulty: 'advanced',
@@ -312,7 +312,7 @@ export const shouldersMockExercises: ExerciseFormData[
   {
     name: 'Elevação Lateral com Drop Set',
     muscleGroupId: 'Ombro',
-    secondaryMuscleGroups: ['Trap?zio', 'Tr?ceps'],
+    secondaryMuscleGroups: ['Trapzio', 'Trceps'],
     description: 'Redução de carga para intensidade.',
     equipment: 'Halteres',
     difficulty: 'advanced',

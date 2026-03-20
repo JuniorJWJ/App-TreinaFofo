@@ -46,7 +46,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
         set((state) => ({
           workoutSplits: state.workoutSplits.map((split) =>
             split.id === id
-              ? { ...split, ...updates, updatedAt: new Date() }
+               { ...split, ...updates, updatedAt: new Date() }
               : split
           ),
         }));
@@ -55,7 +55,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
       deleteWorkoutSplit: (id) => {
         set((state) => ({
           workoutSplits: state.workoutSplits.filter((split) => split.id !== id),
-          activeSplitId: get().activeSplitId === id ? null : get().activeSplitId,
+          activeSplitId: get().activeSplitId === id  null : get().activeSplitId,
         }));
       },
 
@@ -95,7 +95,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
           set((state) => ({
             workoutSplits: state.workoutSplits.map((s) =>
               s.id === id
-                ? {
+                 {
                     ...s,
                     timesCompleted: s.timesCompleted + 1,
                     updatedAt: new Date(),
@@ -111,7 +111,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
-          return value ? JSON.parse(value) : null;
+          return value  JSON.parse(value) : null;
         },
         setItem: async (name, value) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));

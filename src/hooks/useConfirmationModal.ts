@@ -2,15 +2,15 @@
 import { useState, useCallback } from 'react';
 
 export interface ModalConfig {
-  type?: 'success' | 'error' | 'warning' | 'info' | 'confirmation';
+  type: 'success' | 'error' | 'warning' | 'info' | 'confirmation';
   title: string;
   message: string;
-  confirmText?: string;
-  cancelText?: string;
-  onConfirm?: () => void;
-  onCancel?: () => void;
-  showCancelButton?: boolean;
-  hideIcon?: boolean;
+  confirmText: string;
+  cancelText: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  showCancelButton: boolean;
+  hideIcon: boolean;
 }
 
 export const useConfirmationModal = () => {
@@ -31,12 +31,12 @@ export const useConfirmationModal = () => {
   const showSuccess = (
     title: string,
     message: string,
-    onConfirm?: () => void
+    onConfirm: () => void
   ) => {
     showAlert(title, message, onConfirm);
   };
 
-  const showError = useCallback((message: string, title = 'Erro!', onConfirm?: () => void) => {
+  const showError = useCallback((message: string, title = 'Erro!', onConfirm: () => void) => {
     showModal({
       type: 'error',
       title,
@@ -47,7 +47,7 @@ export const useConfirmationModal = () => {
     });
   }, [showModal, hideModal]);
 
-  const showWarning = useCallback((message: string, title = 'Atenção!', onConfirm?: () => void) => {
+  const showWarning = useCallback((message: string, title = 'Atenção!', onConfirm: () => void) => {
     showModal({
       type: 'warning',
       title,
@@ -58,7 +58,7 @@ export const useConfirmationModal = () => {
     });
   }, [showModal, hideModal]);
 
-  const showInfo = useCallback((message: string, title = 'Informação', onConfirm?: () => void) => {
+  const showInfo = useCallback((message: string, title = 'Informação', onConfirm: () => void) => {
     showModal({
       type: 'info',
       title,
@@ -94,14 +94,14 @@ export const useConfirmationModal = () => {
   const showAlert = (
     title: string,
     message: string,
-    onConfirm?: () => void
+    onConfirm: () => void
   ) => {
     setModalConfig({
       title,
       message,
       confirmText: 'OK',
       onConfirm: () => {
-        onConfirm?.();
+        onConfirm.();
         hideModal();
       },
     });

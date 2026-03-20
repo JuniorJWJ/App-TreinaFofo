@@ -35,7 +35,7 @@ export const WeeklyPlanCard: React.FC<WeeklyPlanCardProps> = ({
         )}
       </View>
       
-      {plan.description ? (
+      {plan.description  (
         <Text variant="caption" style={styles.planDescription}>
           {plan.description}
         </Text>

@@ -19,7 +19,7 @@ export const FormActions: React.FC<FormActionsProps> = ({
   return (
     <View style={styles.buttonsContainer}>
       <Button
-        title={isEditing ? 'Atualizar Plano' : 'Criar Plano'}
+        title={isEditing  'Atualizar Plano' : 'Criar Plano'}
         onPress={onSave}
         style={[styles.button, styles.saveButton]}
         disabled={isSaveDisabled}

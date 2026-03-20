@@ -1,7 +1,7 @@
 export interface MuscleGroup {
   id: string;
   name: string;
-  color?: string; // Para identificação visual
+  color: string; // Para identificação visual
   icon?: string; // Para ícones futuros
   createdAt: Date;
   updatedAt: Date;

@@ -15,8 +15,8 @@ const parseDate = (value: Date | string | null): Date | null => {
     return null;
   }
 
-  const parsed = value instanceof Date ? value : new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
+  const parsed = value instanceof Date  value : new Date(value);
+  return Number.isNaN(parsed.getTime())  null : parsed;
 };
 
 const minutesToHourMinute = (totalMinutes: number) => {
@@ -47,7 +47,7 @@ export const setupWaterNotifications = async (): Promise<boolean> => {
     const granted =
       permissions.granted ||
       permissions.status === 'granted' ||
-      permissions.ios?.status === 2;
+      permissions.ios.status === 2;
 
     if (!granted) {
       console.warn('Permissao para notificacoes nao concedida');
@@ -120,7 +120,7 @@ export const scheduleWaterReminders = async (
     const sleepMinutes = sleep.getHours() * 60 + sleep.getMinutes();
     const awakeWindowMinutes =
       sleepMinutes > wakeMinutes
-        ? sleepMinutes - wakeMinutes
+         sleepMinutes - wakeMinutes
         : DAY_MINUTES - wakeMinutes + sleepMinutes;
     const safeAwakeWindow = Math.max(awakeWindowMinutes, 60);
     const notificationsCount = Math.min(
@@ -194,7 +194,7 @@ export const checkNotificationPermissions = async (): Promise<{
 
     return {
       granted: settings.granted || settings.status === 'granted',
-      canAskAgain: settings.canAskAgain ?? true,
+      canAskAgain: settings.canAskAgain  true,
       status: settings.status || 'unknown',
     };
   } catch (error) {

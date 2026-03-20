@@ -40,7 +40,7 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
       );
     } else if (!result.success) {
       // Modal de erro/warning
-      modal.showWarning(result.message ?? 'Ocorreu um erro desconhecido.', 'Atenção!');
+      modal.showWarning(result.message  'Ocorreu um erro desconhecido.', 'Atenção!');
     }
   }, [modal, navigation]);
 
@@ -51,11 +51,11 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
         disabled={isLoading}
         style={{
           marginRight: 16,
-          opacity: !isLoading ? 1 : 0.5,
+          opacity: !isLoading  1 : 0.5,
         }}
       >
         <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-          {isLoading ? 'Salvando...' : 'Atualizar'}
+          {isLoading  'Salvando...' : 'Atualizar'}
         </Text>
       </TouchableOpacity>
     );
