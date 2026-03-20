@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  StyleSheet, 
-  Modal, 
-  ScrollView, 
-  TouchableOpacity, 
-  TouchableWithoutFeedback 
+import {
+  View,
+  StyleSheet,
+  Modal,
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Text } from '../../atoms/Text';
 import { Button } from '../../atoms/Button';
 import { useExerciseStore } from '../../../store';
@@ -33,19 +34,20 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
 }) => {
   const { exercises } = useExerciseStore();
   const { getMuscleGroupName } = useMuscleGroupUtils();
-  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(null);
+  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(
+    null,
+  );
 
   const toggleExerciseExpand = (exerciseId: string) => {
     setExpandedExerciseId(expandedExerciseId === exerciseId ? null : exerciseId);
   };
 
-  // Calcular o total de séries
-  const totalSets = workoutDetails?.exerciseIds?.reduce((total: number, exerciseId: string) => {
-    const exercise = exercises.find(ex => ex.id === exerciseId);
-    return total + (exercise?.defaultSets || 0);
-  }, 0) || 0;
+  const totalSets =
+    workoutDetails?.exerciseIds?.reduce((total: number, exerciseId: string) => {
+      const exercise = exercises.find(ex => ex.id === exerciseId);
+      return total + (exercise?.defaultSets || 0);
+    }, 0) || 0;
 
-  // Renderizar conteúdo comum (com botão de fechar)
   const renderModalContent = (content: React.ReactNode) => (
     <Modal
       visible={visible}
@@ -53,14 +55,11 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
       transparent={true}
       onRequestClose={onClose}
     >
-      {/* Overlay que cobre toda a tela e fecha o modal ao clicar */}
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
-          {/* Conteúdo do modal que NÃO fecha quando clicado */}
           <TouchableWithoutFeedback>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
-                {/* Botão de fechar no canto superior direito */}
                 <TouchableOpacity
                   style={styles.closeIconButton}
                   onPress={onClose}
@@ -70,7 +69,7 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
                     <Text style={styles.closeIconText}>✕</Text>
                   </View>
                 </TouchableOpacity>
-                
+
                 {content}
               </View>
             </View>
@@ -85,74 +84,86 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   }
 
   return renderModalContent(
-    <ScrollView 
+    <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollContent}
     >
-      {/* Header */}
       <View style={styles.modalHeader}>
-        <Text variant="title" align="center">{workoutDetails.name}</Text>
+        <Text variant="title" align="center">
+          {workoutDetails.name}
+        </Text>
         <Text variant="caption" align="center" style={styles.workoutInfo}>
-          {workoutDetails.exerciseIds.length} exercícios • {workoutDetails.estimatedDuration} min
+          {workoutDetails.exerciseIds.length} exercícios •{' '}
+          {workoutDetails.estimatedDuration} min
         </Text>
       </View>
 
-      {/* Status */}
-      <View style={[
-        styles.statusBadge,
-        isCompleted ? styles.completedStatus : styles.pendingStatus
-      ]}>
+      <View
+        style={[
+          styles.statusBadge,
+          isCompleted ? styles.completedStatus : styles.pendingStatus,
+        ]}
+      >
         <Text style={styles.statusText}>
           {isCompleted ? '✓ CONCLUÍDO' : '🔄 PENDENTE'}
         </Text>
       </View>
 
-      {/* Exercícios */}
       <View style={styles.exercisesSection}>
         <Text variant="subtitle" style={styles.sectionTitle}>
           Exercícios do Treino:
         </Text>
-        
+
         {workoutDetails.exerciseIds.map((exerciseId: string, index: number) => {
           const exercise = exercises.find(ex => ex.id === exerciseId);
           if (!exercise) return null;
 
           const isExpanded = expandedExerciseId === exerciseId;
-          const hasAdditionalDetails = 
-            exercise.defaultWeight || 
-            exercise.notes || 
+          const hasAdditionalDetails =
+            exercise.defaultWeight ||
+            exercise.notes ||
             (exercise.warmupSets && exercise.warmupSets.length > 0) ||
             exercise.progressionType !== 'fixed';
 
           return (
-            <ExerciseItem
-              key={exerciseId}
-              exercise={exercise}
-              index={index}
-              isExpanded={isExpanded}
-              hasAdditionalDetails={!!hasAdditionalDetails}
-              onToggleExpand={() => toggleExerciseExpand(exerciseId)}
-              getMuscleGroupName={getMuscleGroupName}
-            />
+            <View key={exerciseId} style={styles.exerciseBlock}>
+              <ExerciseItem
+                exercise={exercise}
+                index={index}
+                isExpanded={isExpanded}
+                hasAdditionalDetails={!!hasAdditionalDetails}
+                onToggleExpand={() => toggleExerciseExpand(exerciseId)}
+                getMuscleGroupName={getMuscleGroupName}
+              />
+
+              {isExpanded && exercise.gifLocal && (
+                <View style={styles.gifContainer}>
+                  <Image
+                    source={exercise.gifLocal}
+                    style={styles.gifImage}
+                    contentFit="contain"
+                    transition={200}
+                  />
+                </View>
+              )}
+            </View>
           );
         })}
       </View>
 
-      {/* Estatísticas Rápidas */}
       <WorkoutStats
         exerciseCount={workoutDetails.exerciseIds.length}
         totalSets={totalSets}
         estimatedDuration={workoutDetails.estimatedDuration}
       />
 
-      {/* Ações */}
       <View style={styles.actionsContainer}>
         <Button
-          title={isCompleted ? "✓ Treino Concluído" : "Marcar como Concluído"}
+          title={isCompleted ? '✓ Treino Concluído' : 'Marcar como Concluído'}
           onPress={onToggleCompletion}
           style={[
             styles.actionButton,
-            isCompleted ? styles.completedButton : styles.pendingButton
+            isCompleted ? styles.completedButton : styles.pendingButton,
           ]}
         />
         <Button
@@ -161,12 +172,11 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
           style={[styles.actionButton, styles.closeButton]}
         />
       </View>
-    </ScrollView>
+    </ScrollView>,
   );
 };
 
 const styles = StyleSheet.create({
-  // Overlay que cobre toda a tela
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -174,12 +184,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  // Container do modal
   modalContainer: {
     width: '100%',
     maxHeight: '90%',
   },
-  // Conteúdo do modal
   modalContent: {
     backgroundColor: '#FFF',
     borderRadius: 16,
@@ -192,7 +200,6 @@ const styles = StyleSheet.create({
     elevation: 10,
     position: 'relative',
   },
-  // Botão de fechar no canto superior direito
   closeIconButton: {
     position: 'absolute',
     top: 10,
@@ -214,7 +221,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  // Estilos do conteúdo com scroll
   scrollContent: {
     paddingTop: 10,
   },
@@ -255,6 +261,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 12,
     color: '#333',
+  },
+  exerciseBlock: {
+    marginBottom: 12,
+  },
+  gifContainer: {
+    marginTop: 8,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 10,
+    padding: 8,
+  },
+  gifImage: {
+    width: '100%',
+    height: 220,
   },
   actionsContainer: {
     gap: 12,
