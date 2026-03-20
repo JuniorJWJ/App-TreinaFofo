@@ -1,9 +1,10 @@
 import { ExerciseFormData } from '../../types';
 
-export const coreMockExercises: ExerciseFormData[] = [
+export const coreMockExercises: ExerciseFormData[
   {
     name: 'Abdominal Tradicional',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Exercício básico para reto abdominal.',
     equipment: 'Colchão ou Banco',
     difficulty: 'beginner',
@@ -17,6 +18,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Prancha Abdominal',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Exercício isométrico para toda a região central.',
     equipment: 'Nenhum (solo)',
     difficulty: 'beginner',
@@ -30,6 +32,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Mountain Climber',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description:
       'Exercício cardiovascular para abdômen com movimento alternado.',
     equipment: 'Nenhum (solo)',
@@ -44,6 +47,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Abdominal Infra Suspenso',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Elevação de pernas focada na porção inferior do abdômen.',
     equipment: 'Barra Fixa',
     difficulty: 'advanced',
@@ -54,12 +58,10 @@ export const coreMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     notes: 'Tentar não balançar o corpo, focar na contração do core',
   },
-  // =======================
-  // INFRA (parte inferior)
-  // =======================
   {
     name: 'Elevação de Pernas',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Foco na parte inferior do abdômen.',
     equipment: 'Colchão',
     difficulty: 'beginner',
@@ -71,6 +73,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Elevação de Pernas no Banco',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Versão com maior amplitude.',
     equipment: 'Banco',
     difficulty: 'beginner',
@@ -81,6 +84,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Elevação de Pernas com Quadril Elevado',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Adiciona contração do abdômen inferior.',
     equipment: 'Colchão',
     difficulty: 'intermediate',
@@ -88,13 +92,10 @@ export const coreMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // SUPRA (parte superior)
-  // =======================
   {
     name: 'Abdominal Crunch',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Versão mais controlada do abdominal tradicional.',
     equipment: 'Colchão',
     difficulty: 'beginner',
@@ -105,6 +106,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Abdominal com Peso',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Crunch segurando carga no peito.',
     equipment: 'Anilha',
     difficulty: 'intermediate',
@@ -117,6 +119,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Abdominal na Máquina',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Movimento guiado com carga.',
     equipment: 'Máquina',
     difficulty: 'beginner',
@@ -124,13 +127,10 @@ export const coreMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // OBLÍQUOS
-  // =======================
   {
     name: 'Abdominal Bicicleta',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Rotação para trabalhar oblíquos.',
     equipment: 'Peso corporal',
     difficulty: 'beginner',
@@ -141,6 +141,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Russian Twist',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Rotação de tronco com ou sem peso.',
     equipment: 'Peso corporal ou Anilha',
     difficulty: 'beginner',
@@ -151,6 +152,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Russian Twist com Peso',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Versão com carga para maior intensidade.',
     equipment: 'Anilha',
     difficulty: 'intermediate',
@@ -163,6 +165,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Prancha Lateral',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Isometria focada nos oblíquos.',
     equipment: 'Peso corporal',
     difficulty: 'beginner',
@@ -174,6 +177,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Flexão Lateral com Halter',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Inclinação lateral para oblíquos.',
     equipment: 'Halter',
     difficulty: 'beginner',
@@ -181,13 +185,10 @@ export const coreMockExercises: ExerciseFormData[] = [
     defaultReps: 15,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // CORE / ESTABILIDADE
-  // =======================
   {
     name: 'Dead Bug',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Excelente para coordenação e core profundo.',
     equipment: 'Peso corporal',
     difficulty: 'beginner',
@@ -198,6 +199,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Bird Dog',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Trabalha estabilidade e equilíbrio.',
     equipment: 'Peso corporal',
     difficulty: 'beginner',
@@ -208,6 +210,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Hollow Body Hold',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Isometria avançada para core.',
     equipment: 'Peso corporal',
     difficulty: 'advanced',
@@ -219,6 +222,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Prancha com Toque no Ombro',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Estabilidade com movimento alternado.',
     equipment: 'Peso corporal',
     difficulty: 'intermediate',
@@ -226,13 +230,10 @@ export const coreMockExercises: ExerciseFormData[] = [
     defaultReps: 20,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // CABO / CARGA
-  // =======================
   {
     name: 'Abdominal na Polia (Cable Crunch)',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Crunch com carga usando polia.',
     equipment: 'Polia',
     difficulty: 'intermediate',
@@ -245,6 +246,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Woodchopper no Cabo',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Movimento rotacional funcional.',
     equipment: 'Polia',
     difficulty: 'intermediate',
@@ -252,13 +254,10 @@ export const coreMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // AVANÇADOS / FUNCIONAIS
-  // =======================
   {
     name: 'Dragon Flag',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Exercício avançado para força total do core.',
     equipment: 'Banco',
     difficulty: 'advanced',
@@ -269,6 +268,7 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'V-Up (Canivete)',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Movimento simultâneo de tronco e pernas.',
     equipment: 'Peso corporal',
     difficulty: 'intermediate',
@@ -279,11 +279,12 @@ export const coreMockExercises: ExerciseFormData[] = [
   {
     name: 'Toe Touch',
     muscleGroupId: 'Abdominal',
+    secondaryMuscleGroups: ['Lombar'],
     description: 'Alcance dos pés com pernas elevadas.',
     equipment: 'Peso corporal',
     difficulty: 'beginner',
     defaultSets: 3,
     defaultReps: 20,
     defaultRestTime: 60,
-  },
+  }
 ];

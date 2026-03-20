@@ -1,6 +1,6 @@
 import { ExerciseFormData } from '../../types';
 
-export const legsMockExercises: ExerciseFormData[] = [
+export const legsMockExercises: ExerciseFormData[
   {
     name: 'Agachamento com Barra',
     muscleGroupId: 'Quadríceps',
@@ -59,6 +59,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Stiff com Barra',
     muscleGroupId: 'Posterior de Coxa',
+    secondaryMuscleGroups: ['Gl?teo', 'Lombar'],
     description:
       'Exercício para isquiotibiais e gluteos com ênfase no alongamento.',
     equipment: 'Barra Olga',
@@ -77,6 +78,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Elevação de Panturrilha em Pé',
     muscleGroupId: 'Panturrilha',
+    secondaryMuscleGroups: ['Quadr?ceps'],
     description: 'Isolamento para gastrocnêmio.',
     equipment: 'Máquina ou Banco',
     difficulty: 'beginner',
@@ -109,6 +111,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Mesa Flexora',
     muscleGroupId: 'Posterior de Coxa',
+    secondaryMuscleGroups: ['Gl?teo', 'Lombar'],
     description: 'Isolamento para flexão de joelho.',
     equipment: 'Máquina Flexora Deitada',
     difficulty: 'beginner',
@@ -217,6 +220,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Stiff com Halteres',
     muscleGroupId: 'Posterior de Coxa',
+    secondaryMuscleGroups: ['Gl?teo', 'Lombar'],
     description: 'Versão com maior amplitude e controle.',
     equipment: 'Halteres',
     difficulty: 'intermediate',
@@ -227,6 +231,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Levantamento Terra Romeno',
     muscleGroupId: 'Posterior de Coxa',
+    secondaryMuscleGroups: ['Gl?teo', 'Lombar'],
     description: 'Foco em posterior e glúteos.',
     equipment: 'Barra',
     difficulty: 'intermediate',
@@ -237,6 +242,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Mesa Flexora Sentada',
     muscleGroupId: 'Posterior de Coxa',
+    secondaryMuscleGroups: ['Gl?teo', 'Lombar'],
     description: 'Versão sentada para isolamento.',
     equipment: 'Máquina',
     difficulty: 'beginner',
@@ -307,6 +313,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Panturrilha Sentado',
     muscleGroupId: 'Panturrilha',
+    secondaryMuscleGroups: ['Quadr?ceps'],
     description: 'Foco no sóleo.',
     equipment: 'Máquina',
     difficulty: 'beginner',
@@ -317,6 +324,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Panturrilha no Leg Press',
     muscleGroupId: 'Panturrilha',
+    secondaryMuscleGroups: ['Quadr?ceps'],
     description: 'Execução no leg press.',
     equipment: 'Leg Press',
     difficulty: 'beginner',
@@ -327,6 +335,7 @@ export const legsMockExercises: ExerciseFormData[] = [
   {
     name: 'Panturrilha Unilateral',
     muscleGroupId: 'Panturrilha',
+    secondaryMuscleGroups: ['Quadr?ceps'],
     description: 'Trabalho com uma perna.',
     equipment: 'Peso corporal',
     difficulty: 'intermediate',

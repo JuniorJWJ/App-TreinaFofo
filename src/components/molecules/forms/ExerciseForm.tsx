@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import {
   View,
   StyleSheet,
@@ -45,6 +45,9 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const [selectedMuscleGroupId, setSelectedMuscleGroupId] = useState(
       exercise?.muscleGroupId || '',
     );
+    const [secondaryMuscleGroupIds, setSecondaryMuscleGroupIds] = useState<
+      string[]
+    >([]);
     const [sets, setSets] = useState(exercise?.defaultSets.toString() || '3');
     const [reps, setReps] = useState(exercise?.defaultReps.toString() || '12');
     const [restTime, setRestTime] = useState(
@@ -84,6 +87,33 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
 
     const modal = useConfirmationModal();
 
+    useEffect(() => {
+      if (!exercise?.secondaryMuscleGroups || muscleGroups.length === 0) return;
+
+      const normalized = exercise.secondaryMuscleGroups
+        .map((group) => {
+          const byId = muscleGroups.find(m => m.id === group);
+          if (byId) return byId.id;
+          const byName = muscleGroups.find(
+            m => m.name.toLowerCase() === group.toLowerCase(),
+          );
+          return byName ? byName.id : group;
+        })
+        .filter(Boolean)
+        .filter(id => id !== selectedMuscleGroupId);
+
+      setSecondaryMuscleGroupIds(Array.from(new Set(normalized)));
+    }, [exercise?.secondaryMuscleGroups, muscleGroups, selectedMuscleGroupId]);
+
+    const toggleSecondaryGroup = (groupId: string) => {
+      if (groupId === selectedMuscleGroupId) return;
+      setSecondaryMuscleGroupIds(prev =>
+        prev.includes(groupId)
+          ? prev.filter(id => id !== groupId)
+          : [...prev, groupId],
+      );
+    };
+
     const save = async (): Promise<SaveResult> => {
       if (!name || !selectedMuscleGroupId) {
         return {
@@ -106,6 +136,10 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
         const exerciseData = {
           name: name.trim(),
           muscleGroupId: selectedMuscleGroupId,
+          secondaryMuscleGroups:
+            secondaryMuscleGroupIds.length > 0
+              ? secondaryMuscleGroupIds
+              : undefined,
           defaultSets: parseInt(sets) || 3,
           defaultReps: parseInt(reps) || 12,
           defaultRestTime: parseInt(restTime) || 60,
@@ -153,6 +187,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const getFormData = () => ({
       name,
       selectedMuscleGroupId,
+      secondaryMuscleGroupIds,
       sets,
       reps,
       restTime,
@@ -231,7 +266,12 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
               <Button
                 key={group.id}
                 title={group.name}
-                onPress={() => setSelectedMuscleGroupId(group.id)}
+                onPress={() => {
+                  setSelectedMuscleGroupId(group.id);
+                  setSecondaryMuscleGroupIds(prev =>
+                    prev.filter(id => id !== group.id),
+                  );
+                }}
                 style={[
                   styles.muscleGroupButton,
                   selectedMuscleGroupId === group.id
@@ -240,6 +280,27 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
                 ]}
               />
             ))}
+          </View>
+
+          <Text color="#FFF" variant="subtitle">
+            Músculos Secundários:
+          </Text>
+          <View style={styles.secondaryGroupsContainer}>
+            {muscleGroups
+              .filter(group => group.id !== selectedMuscleGroupId)
+              .map(group => (
+                <Button
+                  key={group.id}
+                  title={group.name}
+                  onPress={() => toggleSecondaryGroup(group.id)}
+                  style={[
+                    styles.secondaryGroupButton,
+                    secondaryMuscleGroupIds.includes(group.id)
+                      ? styles.secondaryGroupSelected
+                      : styles.secondaryGroupUnselected,
+                  ]}
+                />
+              ))}
           </View>
 
           <View style={styles.section}>
@@ -505,6 +566,25 @@ const styles = StyleSheet.create({
   },
   unselectedMuscleGroup: {
     backgroundColor: '#332B33',
+  },
+  secondaryGroupsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginVertical: 8,
+  },
+  secondaryGroupButton: {
+    margin: 4,
+    flex: 1,
+    minWidth: 100,
+    paddingVertical: 8,
+  },
+  secondaryGroupSelected: {
+    backgroundColor: '#35524A',
+    borderWidth: 2,
+    borderColor: '#4C6A5E',
+  },
+  secondaryGroupUnselected: {
+    backgroundColor: '#2A3B35',
   },
   section: {
     marginBottom: 24,

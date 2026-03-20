@@ -1,6 +1,6 @@
 import { ExerciseFormData } from '../../types';
 
-export const tricepsMockExercises: ExerciseFormData[] = [
+export const tricepsMockExercises: ExerciseFormData[
   {
     name: 'Tríceps Pulley',
     muscleGroupId: 'Tríceps',
@@ -46,9 +46,6 @@ export const tricepsMockExercises: ExerciseFormData[] = [
     incrementSize: 2,
     notes: 'Descer a barra em direção à testa ou levemente atrás da cabeça',
   },
-  // =======================
-  // POLIA / CABO
-  // =======================
   {
     name: 'Tríceps Pulley com Corda',
     muscleGroupId: 'Tríceps',
@@ -81,10 +78,6 @@ export const tricepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // OVERHEAD (CABEÇA LONGA)
-  // =======================
   {
     name: 'Tríceps Francês com Halter',
     muscleGroupId: 'Tríceps',
@@ -115,10 +108,6 @@ export const tricepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // COMPOSTOS
-  // =======================
   {
     name: 'Supino Fechado',
     muscleGroupId: 'Tríceps',
@@ -152,10 +141,6 @@ export const tricepsMockExercises: ExerciseFormData[] = [
     defaultReps: 8,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // HALTERES
-  // =======================
   {
     name: 'Coice de Tríceps',
     muscleGroupId: 'Tríceps',
@@ -176,10 +161,6 @@ export const tricepsMockExercises: ExerciseFormData[] = [
     defaultReps: 15,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // MÁQUINAS
-  // =======================
   {
     name: 'Tríceps na Máquina',
     muscleGroupId: 'Tríceps',
@@ -200,10 +181,6 @@ export const tricepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // VARIAÇÕES AVANÇADAS
-  // =======================
   {
     name: 'Tríceps Testa com Halteres',
     muscleGroupId: 'Tríceps',
@@ -234,5 +211,5 @@ export const tricepsMockExercises: ExerciseFormData[] = [
     defaultReps: 15,
     notes: 'Diminuir peso após falha',
     defaultRestTime: 60,
-  },
+  }
 ];

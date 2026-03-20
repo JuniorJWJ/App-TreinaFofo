@@ -3,6 +3,7 @@ export interface Exercise {
   id: string;
   name: string;
   muscleGroupId: string;
+  secondaryMuscleGroups?: string[];
   description?: string;
   equipment?: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
@@ -59,6 +60,7 @@ export interface ExerciseSet {
 export type ExerciseFormData = {
   name: string;
   muscleGroupId: string;
+  secondaryMuscleGroups?: string[];
   description?: string;
   equipment?: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced';

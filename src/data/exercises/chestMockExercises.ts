@@ -1,9 +1,10 @@
 import { ExerciseFormData } from '../../types';
 
-export const chestMockExercises: ExerciseFormData[] = [
+export const chestMockExercises: ExerciseFormData[
   {
     name: 'Supino Reto com Barra',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description:
       'Exercício fundamental para desenvolvimento do peitoral maior. Executado com barra no banco plano.',
     equipment: 'Banco + Barra + Anilhas',
@@ -27,6 +28,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Supino Inclinado com Halteres',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description:
       'Variante do supino que enfatiza a porção superior do peitoral maior.',
     equipment: 'Banco Inclinado + Halteres',
@@ -45,6 +47,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Crucifixo com Halteres',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description:
       'Exercício de isolamento para peitoral, excelente para-work o estiramento muscular.',
     equipment: 'Banco Plano + Halteres',
@@ -61,6 +64,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Peck Deck',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Máquina para isolamento do peitoral com movimento de adução.',
     equipment: 'Máquina Peck Deck',
     difficulty: 'beginner',
@@ -73,6 +77,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Crucifixo no Cabo (Crossover)',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description:
       'Isolamento com tensão constante em toda a amplitude de movimento.',
     equipment: 'Polia Dupla',
@@ -86,12 +91,10 @@ export const chestMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
   },
-  // =======================
-  // VARIAÇÕES DE SUPINO
-  // =======================
   {
     name: 'Supino Reto com Halteres',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Permite maior amplitude de movimento comparado à barra.',
     equipment: 'Banco Plano + Halteres',
     difficulty: 'beginner',
@@ -107,6 +110,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Supino Inclinado com Barra',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Foco na parte superior do peitoral com maior carga.',
     equipment: 'Banco Inclinado + Barra',
     difficulty: 'intermediate',
@@ -122,6 +126,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Supino Declinado com Barra',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Ênfase na porção inferior do peitoral.',
     equipment: 'Banco Declinado + Barra',
     difficulty: 'intermediate',
@@ -134,13 +139,10 @@ export const chestMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
   },
-
-  // =======================
-  // MÁQUINAS
-  // =======================
   {
     name: 'Chest Press Máquina',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Versão guiada do supino, ideal para iniciantes.',
     equipment: 'Máquina Chest Press',
     difficulty: 'beginner',
@@ -156,6 +158,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Supino Guiado (Smith)',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Maior estabilidade com trajetória fixa.',
     equipment: 'Máquina Smith',
     difficulty: 'beginner',
@@ -168,13 +171,10 @@ export const chestMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
   },
-
-  // =======================
-  // CABO / ISOLAMENTO
-  // =======================
   {
     name: 'Crossover Alto',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description:
       'Movimento de cima para baixo, foco na parte inferior do peito.',
     equipment: 'Polia Alta',
@@ -190,6 +190,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Crossover Baixo',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Movimento de baixo para cima, foco na parte superior.',
     equipment: 'Polia Baixa',
     difficulty: 'intermediate',
@@ -204,6 +205,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Crucifixo Inclinado com Halteres',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Isolamento da parte superior do peitoral.',
     equipment: 'Banco Inclinado + Halteres',
     difficulty: 'intermediate',
@@ -214,13 +216,10 @@ export const chestMockExercises: ExerciseFormData[] = [
     weightUnit: 'kg',
     progressionType: 'range',
   },
-
-  // =======================
-  // PESO CORPORAL
-  // =======================
   {
     name: 'Flexão de Braço',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Exercício básico utilizando peso corporal.',
     equipment: 'Peso Corporal',
     difficulty: 'beginner',
@@ -233,6 +232,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Flexão Inclinado',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Mãos elevadas, ideal para iniciantes.',
     equipment: 'Banco',
     difficulty: 'beginner',
@@ -244,6 +244,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Flexão Declinado',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Pés elevados, maior ativação do peitoral superior.',
     equipment: 'Banco',
     difficulty: 'intermediate',
@@ -255,6 +256,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Flexão com Peso',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Versão avançada com carga adicional.',
     equipment: 'Anilha ou Colete',
     difficulty: 'advanced',
@@ -266,13 +268,10 @@ export const chestMockExercises: ExerciseFormData[] = [
     progressionType: 'linear',
     autoProgression: true,
   },
-
-  // =======================
-  // AVANÇADOS / DIFERENTES
-  // =======================
   {
     name: 'Pullover com Halter',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Trabalha peitoral e dorsais com grande alongamento.',
     equipment: 'Banco + Halter',
     difficulty: 'intermediate',
@@ -286,6 +285,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Squeeze Press com Halteres',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Pressionando halteres juntos para maior ativação interna.',
     equipment: 'Banco + Halteres',
     difficulty: 'intermediate',
@@ -299,6 +299,7 @@ export const chestMockExercises: ExerciseFormData[] = [
   {
     name: 'Supino com Pegada Fechada',
     muscleGroupId: 'Peito',
+    secondaryMuscleGroups: ['Ombro', 'Tr?ceps'],
     description: 'Maior foco em tríceps, mas ainda ativa o peitoral.',
     equipment: 'Barra + Banco',
     difficulty: 'intermediate',
@@ -309,5 +310,5 @@ export const chestMockExercises: ExerciseFormData[] = [
     weightUnit: 'kg',
     progressionType: 'linear',
     autoProgression: true,
-  },
+  }
 ];

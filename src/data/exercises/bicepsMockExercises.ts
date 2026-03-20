@@ -2,7 +2,7 @@ import { ExerciseFormData } from '../../types';
 
 const roscaDiretaGif = require('../../assets/gifs/roscadireta.gif');
 
-export const bicepsMockExercises: ExerciseFormData[] = [
+export const bicepsMockExercises: ExerciseFormData[
   {
     name: 'Rosca Direta com Barra',
     muscleGroupId: 'Bíceps',
@@ -53,9 +53,6 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     autoProgression: false,
     notes: '7 partials baixo + 7 full + 7 partials alto',
   },
-  // =======================
-  // VARIAÇÕES COM BARRA
-  // =======================
   {
     name: 'Rosca Direta com Barra EZ',
     muscleGroupId: 'Bíceps',
@@ -93,10 +90,6 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     defaultRestTime: 60,
     progressionType: 'range',
   },
-
-  // =======================
-  // HALTERES
-  // =======================
   {
     name: 'Rosca Alternada com Halteres',
     muscleGroupId: 'Bíceps',
@@ -145,10 +138,6 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // MÁQUINAS
-  // =======================
   {
     name: 'Rosca Scott',
     muscleGroupId: 'Bíceps',
@@ -180,10 +169,6 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // CABOS
-  // =======================
   {
     name: 'Rosca no Cabo',
     muscleGroupId: 'Bíceps',
@@ -215,10 +200,6 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // ANTEBRAÇO / VARIAÇÕES
-  // =======================
   {
     name: 'Rosca Inversa com Barra',
     muscleGroupId: 'Bíceps',
@@ -239,10 +220,6 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
   },
-
-  // =======================
-  // AVANÇADOS / INTENSIDADE
-  // =======================
   {
     name: 'Rosca Drag',
     muscleGroupId: 'Bíceps',
@@ -274,5 +251,5 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 90,
     notes: 'Reduzir peso 2-3 vezes após falha',
-  },
+  }
 ];
