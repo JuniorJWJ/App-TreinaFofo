@@ -2,6 +2,10 @@
 
 import { Exercise, ExerciseFormData } from '../types';
 
+//gif list:
+const roscaDiretaGif = require('../assets/gifs/roscadireta.gif');
+
+
 // Exercícios mockados organizados por grupo muscular
 export const mockExercises: ExerciseFormData[] = [
   // PEITO
@@ -306,6 +310,7 @@ export const mockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
     notes: 'Manter os cotovelos fixos e não usar impulso',
+    gifLocal: roscaDiretaGif,
   },
   {
     name: 'Rosca Martelo com Halteres',

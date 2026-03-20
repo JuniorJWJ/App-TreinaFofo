@@ -2,11 +2,18 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Exercise, ExerciseFormData } from '../types';
+import { initializeMockExercises, mockExercises } from '../data/mockExercise';
+
+const mockGifByName = new Map(
+  mockExercises
+    .filter(ex => ex.gifLocal)
+    .map(ex => [ex.name, ex.gifLocal])
+);
 
 interface ExerciseState {
   exercises: Exercise[];
   isLoading: boolean;
-  
+
   // Actions
   CreateExercise: (exerciseData: ExerciseFormData) => void;
   updateExercise: (id: string, updates: Partial<Exercise>) => void;
@@ -20,7 +27,7 @@ interface ExerciseState {
 export const useExerciseStore = create<ExerciseState>()(
   persist(
     (set, get) => ({
-      exercises: [],
+      exercises: initializeMockExercises(),
       isLoading: false,
 
       CreateExercise: (exerciseData: ExerciseFormData) => {
@@ -32,21 +39,23 @@ export const useExerciseStore = create<ExerciseState>()(
           // Garantir valores padrão para arrays
           warmupSets: exerciseData.warmupSets || [],
         };
-        set((state) => ({
+        set(state => ({
           exercises: [...state.exercises, newExercise],
         }));
       },
 
       updateExercise: (id: string, updates: Partial<Exercise>) => {
-        set((state) => ({
-          exercises: state.exercises.map((exercise) =>
+        set(state => ({
+          exercises: state.exercises.map(exercise =>
             exercise.id === id
-              ? { 
-                  ...exercise, 
-                  ...updates, 
+              ? {
+                  ...exercise,
+                  ...updates,
                   updatedAt: new Date(),
-                  // Garantir que arrays não sejam sobrescritos como undefined
-                  warmupSets: updates.warmupSets !== undefined ? updates.warmupSets : exercise.warmupSets,
+                  warmupSets:
+                    updates.warmupSets !== undefined
+                      ? updates.warmupSets
+                      : exercise.warmupSets,
                 }
               : exercise
           ),
@@ -54,18 +63,18 @@ export const useExerciseStore = create<ExerciseState>()(
       },
 
       deleteExercise: (id: string) => {
-        set((state) => ({
-          exercises: state.exercises.filter((exercise) => exercise.id !== id),
+        set(state => ({
+          exercises: state.exercises.filter(exercise => exercise.id !== id),
         }));
       },
 
       getExercise: (id: string) => {
-        return get().exercises.find((exercise) => exercise.id === id);
+        return get().exercises.find(exercise => exercise.id === id);
       },
 
       getExercisesByMuscleGroup: (muscleGroupId: string) => {
         return get().exercises.filter(
-          (exercise) => exercise.muscleGroupId === muscleGroupId
+          exercise => exercise.muscleGroupId === muscleGroupId
         );
       },
 
@@ -75,32 +84,40 @@ export const useExerciseStore = create<ExerciseState>()(
 
       searchExercises: (query: string) => {
         const lowercaseQuery = query.toLowerCase();
-        return get().exercises.filter((exercise) =>
+        return get().exercises.filter(exercise =>
           exercise.name.toLowerCase().includes(lowercaseQuery)
         );
       },
     }),
     {
       name: 'exercise-store',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => AsyncStorage),
       migrate: (persistedState: any, version: number) => {
-        if (version === 1) {
-          // Migrar da versão 1 para 2
-          if (persistedState && persistedState.exercises) {
-            persistedState.exercises = persistedState.exercises.map((exercise: any) => ({
-              ...exercise,
-              defaultWeight: exercise.defaultWeight || undefined,
-              weightUnit: exercise.weightUnit || 'kg',
-              warmupSets: exercise.warmupSets || [],
-              progressionType: exercise.progressionType || 'fixed',
-              autoProgression: exercise.autoProgression || false,
-              incrementSize: exercise.incrementSize || 2.5,
-              notes: exercise.notes || undefined,
-            }));
-          }
+        if (persistedState && persistedState.exercises && version < 3) {
+          persistedState.exercises = persistedState.exercises.map(
+            (exercise: any) => {
+              const gifLocal = mockGifByName.get(exercise.name);
+              return {
+                ...exercise,
+                defaultWeight: exercise.defaultWeight || undefined,
+                weightUnit: exercise.weightUnit || 'kg',
+                warmupSets: exercise.warmupSets || [],
+                progressionType: exercise.progressionType || 'fixed',
+                autoProgression: exercise.autoProgression || false,
+                incrementSize: exercise.incrementSize || 2.5,
+                notes: exercise.notes || undefined,
+                gifLocal: exercise.gifLocal ?? gifLocal,
+              };
+            }
+          );
         }
         return persistedState;
+      },
+      onRehydrateStorage: () => (state) => {
+        if (state && state.exercises.length === 0) {
+          state.exercises = initializeMockExercises();
+        }
       },
     }
   )

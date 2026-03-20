@@ -13,6 +13,7 @@ interface ExerciseCardProps {
   muscleGroupName: string;
   muscleGroupColor: string;
   showGroupHeader?: boolean;
+  hasGif?: boolean;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -24,6 +25,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   muscleGroupName,
   muscleGroupColor,
   showGroupHeader = false,
+  hasGif = false,
 }) => {
   return (
     <View>
@@ -32,8 +34,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           <Text style={styles.groupHeaderText}>{muscleGroupName}</Text>
         </View>
       )}
-      
-      <TouchableOpacity 
+
+      <TouchableOpacity
         style={styles.exerciseCard}
         onPress={onPress}
         onLongPress={onLongPress}
@@ -42,26 +44,29 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
           <Text variant="subtitle" style={styles.exerciseName}>
             {exercise.name}
           </Text>
-          <View 
-            style={[
-              styles.muscleGroupBadge,
-              { backgroundColor: muscleGroupColor }
-            ]}
-          >
-            <Text style={styles.badgeText}>
-              {muscleGroupName}
-            </Text>
+          <View style={styles.badgesContainer}>
+            <View
+              style={[
+                styles.muscleGroupBadge,
+                { backgroundColor: muscleGroupColor },
+              ]}
+            >
+              <Text style={styles.badgeText}>{muscleGroupName}</Text>
+            </View>
+            {hasGif && (
+              <View style={styles.gifBadge}>
+                <Text style={styles.gifBadgeText}>GIF</Text>
+              </View>
+            )}
           </View>
         </View>
-        
+
         <View style={styles.exerciseDetails}>
           <View style={styles.detailRow}>
             <Text variant="caption">
               {exercise.defaultSets} séries × {exercise.defaultReps} reps
             </Text>
-            <Text variant="caption">
-              Descanso: {exercise.defaultRestTime}s
-            </Text>
+            <Text variant="caption">Descanso: {exercise.defaultRestTime}s</Text>
           </View>
           {exercise.defaultWeight && (
             <Text variant="caption">
@@ -71,16 +76,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
 
         <View style={styles.exerciseActions}>
-          <Button
-            title="Editar"
-            onPress={onEdit}
-            style={styles.editButton}
-          />
-          <Button
-            title="Excluir"
-            onPress={onDelete}
-            style={styles.deleteButton}
-          />
+          <Button title="Editar" onPress={onEdit} style={styles.editButton} />
+          <Button title="Excluir" onPress={onDelete} style={styles.deleteButton} />
         </View>
       </TouchableOpacity>
     </View>
@@ -123,6 +120,11 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
   },
+  badgesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   muscleGroupBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -132,6 +134,17 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 12,
     fontWeight: '600',
+  },
+  gifBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+    backgroundColor: '#483148',
+  },
+  gifBadgeText: {
+    color: '#FFF',
+    fontSize: 11,
+    fontWeight: '700',
   },
   exerciseDetails: {
     marginBottom: 12,

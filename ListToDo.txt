@@ -7,6 +7,12 @@
 *arrumar o grupo muscular quando clicar em treino pela home✅
 *Vídeo/Gif de execução
 *Lista de Exercícios/Treinos/Divisões Populares
-*Alerta para tomar água
+*Alerta para tomar água✅
 *Adcionar medidas do usuário
 *Exportar/importar exercício/treino/divisão semanal
+*marcar que fez o exercício de 1 por 1
+*enviar feedback para o personal
+*personal criar Treinos
+*personal acompanhar Treinos
+*criar campo de alterar carga na tela de treino diário
+*por peso de pr
