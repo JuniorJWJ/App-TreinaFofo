@@ -30,8 +30,8 @@ export const HowToStartModal = ({
           </Text>
 
           <Button
-            title={isLastStep  'Entendi' : 'Próximo'}
-            onPress={isLastStep  onClose : onNext}
+            title={isLastStep ? 'Entendi' : 'Próximo'}
+            onPress={isLastStep ? onClose : onNext}
           />
         </View>
       </View>

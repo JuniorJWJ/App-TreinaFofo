@@ -1,4 +1,5 @@
 // src/types/exercise.ts
+import { MuscleGroup } from './muscleGroups';
 export interface Exercise {
   id: string;
   name: string;
@@ -11,7 +12,7 @@ export interface Exercise {
   imageUrl?: string;
   gifLocal?: any;
 
-  // Configura??es padr?o
+  // Configurações padrão
   defaultSets: number;
   defaultReps: number;
   defaultRestTime: number; // em segundos
@@ -20,22 +21,22 @@ export interface Exercise {
   defaultWeight?: number;
   weightUnit?: 'kg' | 'lb';
 
-  // S?ries de aquecimento
+  // Séries de aquecimento
   warmupSets?: Array<{
     reps: number;
     percentage: number; // % do peso de trabalho
   }>;
 
-  // Sistema de progress?o
+  // Sistema de progressão
   progressionType?: 'fixed' | 'range' | 'linear';
   autoProgression?: boolean;
   incrementSize?: number; // Ex: 2.5kg
   targetOneRepMax?: number;
 
-  // Notas e observa??es
+  // Notas e observações
   notes?: string;
 
-  // Hist?rico
+  // Histórico
   personalRecord?: number;
   lastPerformed?: Date;
 
@@ -43,7 +44,7 @@ export interface Exercise {
   updatedAt: Date;
 }
 
-// Para s?ries individuais durante o treino
+// Para séries individuais durante o treino
 export interface ExerciseSet {
   setNumber: number;
   type: 'warmup' | 'working' | 'drop' | 'failure';
@@ -53,10 +54,10 @@ export interface ExerciseSet {
   actualWeight?: number;
   completed: boolean;
   notes?: string;
-  rpe?: number; // 1-10 escala de esfor?o
+  rpe?: number; // 1-10 escala de esforço
 }
 
-// Para cria??o/edi??o
+// Para criação/edição
 export type ExerciseFormData = {
   name: string;
   muscleGroupId: string;
@@ -68,7 +69,7 @@ export type ExerciseFormData = {
   imageUrl?: string;
   gifLocal?: any;
 
-  // Configura??es padr?o
+  // Configurações padrão
   defaultSets: number;
   defaultReps: number;
   defaultRestTime: number;
@@ -77,13 +78,13 @@ export type ExerciseFormData = {
   defaultWeight?: number;
   weightUnit?: 'kg' | 'lb';
 
-  // S?ries de aquecimento
+  // Séries de aquecimento
   warmupSets?: Array<{
     reps: number;
     percentage: number;
   }>;
 
-  // Sistema de progress?o
+  // Sistema de progressão
   progressionType?: 'fixed' | 'range' | 'linear';
   autoProgression?: boolean;
   incrementSize?: number;

@@ -4,7 +4,6 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from '../../atoms/Text';
 import { ProgressCircle } from 'react-native-svg-charts';
 
-
 interface ProgressStatsDisplayProps {
   currentIntake: number;
   dailyGoal: number;
@@ -23,7 +22,7 @@ export const ProgressStatsDisplay: React.FC<ProgressStatsDisplayProps> = ({
       <ProgressCircle
         style={styles.progressCircle}
         progress={progress}
-        progressColor={progress >= 1  "#4CAF50" : "#4A90E2"}
+        progressColor={progress >= 1 ? "#4CAF50" : "#4A90E2"}
         backgroundColor="#E0E0E0"
         strokeWidth={20}
       />
@@ -32,16 +31,14 @@ export const ProgressStatsDisplay: React.FC<ProgressStatsDisplayProps> = ({
           {currentIntake}ml
         </Text>
         <Text variant="caption">de {dailyGoal}ml</Text>
-        <Text 
-          variant="caption" 
+        <Text
+          variant="caption"
           style={[
             styles.remainingText,
             progress >= 1 && { color: '#4CAF50', fontWeight: 'bold' }
-          ]}>
-          {remaining > 0 
-             `${remaining}ml restantes` 
-            : 'Meta alcançada! 🎉'
-          }
+          ]}
+        >
+          {remaining > 0 ? `${remaining}ml restantes` : 'Meta alcançada! 🎉'}
         </Text>
       </View>
     </View>

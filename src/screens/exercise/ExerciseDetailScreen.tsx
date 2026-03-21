@@ -126,10 +126,10 @@ export const ExerciseDetailScreen: React.FC<ExerciseDetailScreenProps> = ({
           </Text>
           <Text style={styles.detailText}>
             {exercise.progressionType === 'range'
-               'Faixa de repetições'
+              ? 'Faixa de repetições'
               : exercise.progressionType === 'linear'
-               'Progressão linear'
-              : 'Outro'}
+                ? 'Progressão linear'
+                : 'Outro'}
           </Text>
           {exercise.autoProgression && (
             <Text style={styles.detailText}>

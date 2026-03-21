@@ -31,7 +31,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
         onPress={onStartPause}
       >
         <Text style={styles.iconText}>
-          {isRunning  '⏸️' : '▶️'}
+          {isRunning ? '⏸️' : '▶️'}
         </Text>
       </TouchableOpacity>
 

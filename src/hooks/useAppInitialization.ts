@@ -24,7 +24,7 @@ export const useAppInitialization = () => {
 
       setIsInitialized(true);
     } catch (err) {
-      setError(err instanceof Error  err : new Error('Erro ao inicializar'));
+      setError(err instanceof Error ? err : new Error('Erro ao inicializar'));
       console.error('[useAppInitialization] Erro:', err);
     } finally {
       setIsLoading(false);
@@ -38,7 +38,7 @@ export const useAppInitialization = () => {
       setIsFirstLaunch(true);
       setIsInitialized(false);
     } catch (err) {
-      setError(err instanceof Error  err : new Error('Erro ao resetar'));
+      setError(err instanceof Error ? err : new Error('Erro ao resetar'));
     } finally {
       setIsLoading(false);
     }

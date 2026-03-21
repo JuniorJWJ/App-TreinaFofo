@@ -30,7 +30,7 @@ export const DayScheduleCard: React.FC<DayScheduleCardProps> = ({
         onPress={() => onPress(day)}
         style={[
           styles.workoutButton,
-          isRestDay  styles.restDay : styles.hasWorkout,
+          isRestDay ? styles.restDay : styles.hasWorkout,
         ]}
       />
     </View>

@@ -44,7 +44,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
         const elapsed = Date.now() - startTimeRef.current;
         setTime(elapsed);
         accumulatedTimeRef.current = elapsed;
-        onTimeUpdate.(Math.floor(elapsed / 1000));
+        onTimeUpdate(Math.floor(elapsed / 1000));
       }, 10);
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -96,7 +96,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
     
     const diff = current - previous;
     const absDiff = Math.abs(diff);
-    const sign = diff >= 0  '+' : '-';
+    const sign = diff >= 0 ? '+' : '-';
     
     const totalSeconds = Math.floor(absDiff / 1000);
     const secs = totalSeconds % 60;

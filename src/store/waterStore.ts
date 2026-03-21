@@ -320,7 +320,7 @@ export const useWaterStats = () => {
     monthlyStats,
   } = useWaterStore();
 
-  const progress = dailyGoal > 0  Math.min(currentIntake / dailyGoal, 1) : 0;
+  const progress = dailyGoal > 0 ? Math.min(currentIntake / dailyGoal, 1) : 0;
   const remaining = Math.max(0, dailyGoal - currentIntake);
   const percentage = Math.round(progress * 100);
   
@@ -333,10 +333,13 @@ export const useWaterStats = () => {
   
   // Estatísticas da semana
   const weeklyTotal = weeklyStats.reduce((sum, day) => sum + day.intake, 0);
-  const weeklyAverage = weeklyStats.length > 0  weeklyTotal / weeklyStats.length : 0;
-  const weeklyCompletionRate = weeklyStats.length > 0 
-     (weeklyStats.filter(day => day.completed).length / weeklyStats.length) * 100 
-    : 0;
+  const weeklyAverage =
+    weeklyStats.length > 0 ? weeklyTotal / weeklyStats.length : 0;
+  const weeklyCompletionRate =
+    weeklyStats.length > 0
+      ? (weeklyStats.filter(day => day.completed).length / weeklyStats.length) *
+        100
+      : 0;
   
   return {
     progress,

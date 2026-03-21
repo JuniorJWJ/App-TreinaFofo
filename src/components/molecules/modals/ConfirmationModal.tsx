@@ -11,15 +11,15 @@ import { Button } from '../../atoms/Button';
 
 // Adicione a interface ModalConfig ou importe do seu hook
 export interface ModalConfig {
-  type: 'success' | 'error' | 'warning' | 'info' | 'confirmation';
+  type?: 'success' | 'error' | 'warning' | 'info' | 'confirmation';
   title: string;
   message: string;
-  confirmText: string;
-  cancelText: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-  showCancelButton: boolean;
-  hideIcon: boolean;
+  confirmText?: string;
+  cancelText?: string;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  showCancelButton?: boolean;
+  hideIcon?: boolean;
 }
 
 interface ConfirmationModalProps extends ModalConfig {
@@ -29,7 +29,7 @@ interface ConfirmationModalProps extends ModalConfig {
 
 export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   visible,
-  type = 'info',
+  type: _type = 'info',
   title,
   message,
   confirmText = 'Confirmar',
@@ -37,7 +37,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   onConfirm,
   onCancel,
   showCancelButton = false,
-  hideIcon = false,
+  hideIcon: _hideIcon = false,
   onClose,
 }) => {
   return (

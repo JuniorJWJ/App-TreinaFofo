@@ -29,7 +29,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
         const elapsed = Date.now() - startTimeRef.current;
         setTime(elapsed);
         accumulatedTimeRef.current = elapsed;
-        onTimeUpdate.(Math.floor(elapsed / 1000)); // Em segundos para compatibilidade
+        onTimeUpdate(Math.floor(elapsed / 1000)); // Em segundos para compatibilidade
       }, 10); // Atualizar a cada 10ms para milésimos
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -104,7 +104,7 @@ export const TimerCard: React.FC<TimerCardProps> = ({
           onPress={handleStartPause}
         >
           <Text style={styles.iconText}>
-            {isRunning  '⏸️' : '▶️'}
+            {isRunning ? '⏸️' : '▶️'}
           </Text>
         </TouchableOpacity>
 

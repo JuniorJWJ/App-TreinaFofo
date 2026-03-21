@@ -21,7 +21,7 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
 
   return (
     <View style={styles.container}>
-      {weeklyPlans.length === 0  (
+      {weeklyPlans.length === 0 ? (
         <EmptyWeeklyPlans onCreatePlan={() => navigation.navigate('CreateWeeklyPlan')} />
       ) : (
         <WeeklyPlanList
@@ -56,11 +56,11 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm.();
+            modal.modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel.();
+            modal.modalConfig.onCancel?.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}

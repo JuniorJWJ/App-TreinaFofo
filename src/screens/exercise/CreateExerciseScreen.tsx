@@ -30,18 +30,25 @@ export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
 
   const handleSubmit = useCallback((result: SaveResult) => {
     if (!result.success) {
-      modal.showWarning(result.message  'Ocorreu um erro desconhecido.', 'Atenção!');
+      modal.showWarning(
+        result.message || 'Ocorreu um erro desconhecido.',
+        'Atenção!'
+      );
       return;
     }
 
     if (result.type === 'update') {
-      modal.showSuccess('Sucesso!', result.message  'Operação realizada com sucesso.', () => navigation.goBack());
+      modal.showSuccess(
+        'Sucesso!',
+        result.message || 'Operação realizada com sucesso.',
+        () => navigation.goBack()
+      );
       return;
     }
 
     // Para criação, mostrar modal com duas opções
     modal.showConfirmation(
-      result.message  'Exercício criado com sucesso!',
+      result.message || 'Exercício criado com sucesso!',
       'Exercício criado!',
       () => navigation.navigate('ExerciseList'),
       'Ver Exercícios',
@@ -66,11 +73,11 @@ export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
         disabled={!isFormValid || isLoading}
         style={{
           marginRight: 16,
-          opacity: isFormValid && !isLoading  1 : 0.5,
+          opacity: isFormValid && !isLoading ? 1 : 0.5,
         }}
       >
         <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-          {isLoading  'Criando...' : 'Criar'}
+          {isLoading ? 'Criando...' : 'Criar'}
         </Text>
       </TouchableOpacity>
     );
@@ -116,7 +123,7 @@ export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
           message={modal.modalConfig.message}
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
-          onConfirm={modal.modalConfig.onConfirm  (() => {})}
+          onConfirm={modal.modalConfig.onConfirm || (() => {})}
           onCancel={() => {
             if (modal.modalConfig.onCancel) {
               modal.modalConfig.onCancel();

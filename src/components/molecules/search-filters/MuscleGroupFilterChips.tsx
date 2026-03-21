@@ -18,41 +18,45 @@ export const MuscleGroupFilterChips: React.FC<MuscleGroupFilterChipsProps> = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView 
-        horizontal 
+      <ScrollView
+        horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.filterScroll}
       >
         <TouchableOpacity
           style={[
             styles.filterChip,
-            !selectedGroup && styles.filterChipActive
+            !selectedGroup && styles.filterChipActive,
           ]}
           onPress={() => onSelectGroup(null)}
         >
-          <Text style={[
-            styles.filterChipText,
-            !selectedGroup && styles.filterChipTextActive
-          ]}>
+          <Text
+            style={[
+              styles.filterChipText,
+              !selectedGroup && styles.filterChipTextActive,
+            ]}
+          >
             Todos
           </Text>
         </TouchableOpacity>
-        
-        {groups.map(group => (
+
+        {groups.map((group) => (
           <TouchableOpacity
             key={group}
             style={[
               styles.filterChip,
-              selectedGroup === group && styles.filterChipActive
+              selectedGroup === group && styles.filterChipActive,
             ]}
-            onPress={() => onSelectGroup(
-              selectedGroup === group  null : group
-            )}
+            onPress={() =>
+              onSelectGroup(selectedGroup === group ? null : group)
+            }
           >
-            <Text style={[
-              styles.filterChipText,
-              selectedGroup === group && styles.filterChipTextActive
-            ]}>
+            <Text
+              style={[
+                styles.filterChipText,
+                selectedGroup === group && styles.filterChipTextActive,
+              ]}
+            >
               {group}
             </Text>
           </TouchableOpacity>

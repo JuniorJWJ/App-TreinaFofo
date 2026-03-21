@@ -1,4 +1,4 @@
-// components/molecules/ExerciseItem.tsx
+// components/molecules/workout/ExerciseItem.tsx
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from '../../atoms/Text';
@@ -28,11 +28,14 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
     <View style={[styles.container, isCompleted && styles.completedContainer]}>
       <TouchableOpacity
         style={styles.header}
-        onPress={hasAdditionalDetails  onToggleExpand : undefined}
-        activeOpacity={hasAdditionalDetails  0.7 : 1}
+        onPress={hasAdditionalDetails ? onToggleExpand : undefined}
+        activeOpacity={hasAdditionalDetails ? 0.7 : 1}
       >
         <View style={styles.info}>
-          <Text variant="body" style={[styles.name, isCompleted && styles.completedText]}>
+          <Text
+            variant="body"
+            style={[styles.name, isCompleted && styles.completedText]}
+          >
             {index + 1}. {exercise.name}
           </Text>
           <View style={styles.muscleGroupTag}>
@@ -59,7 +62,7 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
                   isCompleted && styles.checkTextCompleted,
                 ]}
               >
-                {isCompleted  '✓' : ''}
+                {isCompleted ? '✓' : ''}
               </Text>
             </View>
           </TouchableOpacity>
@@ -89,7 +92,7 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
             activeOpacity={0.7}
           >
             <Text style={styles.bottomToggleText}>
-              {isExpanded  '▴' : '▾'}
+              {isExpanded ? '▴' : '▾'}
             </Text>
           </TouchableOpacity>
         )}
@@ -98,13 +101,13 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
           <View style={styles.additionalDetails}>
             {exercise.defaultWeight !== undefined &&
               exercise.defaultWeight !== null && (
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Peso padrão</Text>
-                <Text style={styles.detailValue}>
-                  {exercise.defaultWeight} {exercise.weightUnit || 'kg'}
-                </Text>
-              </View>
-            )}
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Peso padrão</Text>
+                  <Text style={styles.detailValue}>
+                    {exercise.defaultWeight} {exercise.weightUnit || 'kg'}
+                  </Text>
+                </View>
+              )}
 
             {exercise.warmupSets && exercise.warmupSets.length > 0 && (
               <View style={styles.detailRow}>
@@ -115,7 +118,7 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
                       (set: any) =>
                         `${set.reps} reps${
                           set.weight
-                             ` @ ${set.weight}${exercise.weightUnit || 'kg'}`
+                            ? ` @ ${set.weight}${exercise.weightUnit || 'kg'}`
                             : ''
                         }`,
                     )
@@ -130,9 +133,9 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
                   <Text style={styles.detailLabel}>Progressão</Text>
                   <Text style={styles.detailValue}>
                     {exercise.progressionType === 'range'
-                       'Faixa de repetições'
+                      ? 'Faixa de repetições'
                       : exercise.progressionType === 'linear'
-                       'Progressão linear'
+                      ? 'Progressão linear'
                       : 'Outro'}
                   </Text>
                 </View>

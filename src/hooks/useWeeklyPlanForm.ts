@@ -69,7 +69,7 @@ export const useWeeklyPlanForm = (existingPlan: any) => {
 
   const updateDayWorkout = useCallback((day: DayOfWeek, workoutId: string | null) => {
     setDays(prevDays =>
-      prevDays.map(d => (d.day === day  { ...d, workoutId } : d)),
+      prevDays.map(d => (d.day === day ? { ...d, workoutId } : d)),
     );
   }, []);
 

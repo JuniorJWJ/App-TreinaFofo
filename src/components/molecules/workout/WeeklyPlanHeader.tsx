@@ -21,11 +21,11 @@ export const WeeklyPlanHeader: React.FC<WeeklyPlanHeaderProps> = ({
       disabled={disabled}
       style={{
         marginRight: 16,
-        opacity: disabled  0.5 : 1,
+        opacity: disabled ? 0.5 : 1,
       }}
     >
       <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-        {isLoading  'Salvando...' : isEditing  'Atualizar' : 'Criar'}
+        {isLoading ? 'Salvando...' : isEditing ? 'Atualizar' : 'Criar'}
       </Text>
     </TouchableOpacity>
   );

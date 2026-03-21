@@ -13,6 +13,8 @@ import { CreateWeeklyPlanScreen } from '../screens/plan/CreateWeeklyPlanScreen';
 import { WeeklyPlanListScreen } from '../screens/plan/WeeklyPlanListScreen';
 import { WaterDashboardScreen } from '../screens/water/WaterDashboardScreen';
 import { EditWorkoutScreen } from '../screens/workout/EditWorkoutScreen';
+import { PopularWeeklySplitsScreen } from '../screens/plan/PopularWeeklySplitsScreen';
+import { PopularWorkoutsScreen } from '../screens/workout/PopularWorkoutsScreen';
 import { HeaderLogo } from '../components/atoms/HeaderLogo';
 
 export type RootStackParamList = {
@@ -25,6 +27,8 @@ export type RootStackParamList = {
   WorkoutList: undefined;
   CreateWeeklyPlan: { planId: string };
   WeeklyPlanList: undefined;
+  PopularWorkouts: undefined;
+  PopularWeeklySplits: undefined;
   WaterDashboardScreen: undefined;
   EditWorkout: { workoutId: string };
 };
@@ -32,7 +36,7 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 // Componente de Logo direto para reutilização
-const LogoHeader = ({ isHome = false }: { isHome: boolean }) => {
+const LogoHeader = ({ isHome = false }: { isHome?: boolean }) => {
   return <HeaderLogo isHome={isHome} />;
 };
 
@@ -88,7 +92,7 @@ export const AppNavigator = () => {
           component={ExerciseDetailScreen}
           options={{
             headerTitle: () => <LogoHeader />,
-            title: 'Detalhes do Exerccio',
+            title: 'Detalhes do Exercício',
           }}
         />
         <Stack.Screen
@@ -108,6 +112,14 @@ export const AppNavigator = () => {
           }}
         />
         <Stack.Screen
+          name="PopularWorkouts"
+          component={PopularWorkoutsScreen}
+          options={{
+            headerTitle: () => <LogoHeader />,
+            title: 'Treinos Populares',
+          }}
+        />
+        <Stack.Screen
           name="WorkoutList"
           component={WorkoutListScreen}
           options={{
@@ -121,6 +133,14 @@ export const AppNavigator = () => {
           options={{
             headerTitle: () => <LogoHeader />,
             title: 'Criar Divisão Semanal',
+          }}
+        />
+        <Stack.Screen
+          name="PopularWeeklySplits"
+          component={PopularWeeklySplitsScreen}
+          options={{
+            headerTitle: () => <LogoHeader />,
+            title: 'Divisões Populares',
           }}
         />
         <Stack.Screen

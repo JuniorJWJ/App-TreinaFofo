@@ -58,11 +58,11 @@ export const WaterActionsPanel: React.FC<WaterActionsPanelProps> = ({
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm.();
+            modal.modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel.();
+            modal.modalConfig.onCancel?.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}

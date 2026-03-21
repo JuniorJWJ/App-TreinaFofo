@@ -7,6 +7,8 @@ interface QuickActionsProps {
   onNavigateExercises: () => void;
   onNavigateWorkouts: () => void;
   onNavigateWeeklyPlans: () => void;
+  onNavigatePopularWorkouts: () => void;
+  onNavigatePopularSplits: () => void;
   onNavigateWater: () => void;
 }
 
@@ -14,6 +16,8 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
   onNavigateExercises,
   onNavigateWorkouts,
   onNavigateWeeklyPlans,
+  onNavigatePopularWorkouts,
+  onNavigatePopularSplits,
   onNavigateWater,
 }) => {
   return (
@@ -43,6 +47,19 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
           style={styles.halfButton}
         />
       </View>
+      <View style={styles.actionRow}>
+        <Button
+          title="Populares"
+          onPress={onNavigatePopularWorkouts}
+          style={styles.halfButton}
+        />
+        <Button
+          title="Divisões Populares"
+          onPress={onNavigatePopularSplits}
+          style={styles.halfButton}
+        />
+      </View>
+
     </View>
   );
 };

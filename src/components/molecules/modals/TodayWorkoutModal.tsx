@@ -48,25 +48,19 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   }, [visible]);
 
   const toggleExerciseExpand = (exerciseId: string) => {
-    setExpandedExerciseId(expandedExerciseId === exerciseId  null : exerciseId);
-  };
-
-  const toggleExerciseCompletion = (exerciseId: string) => {
-    setCompletedExerciseIds(prev =>
-      prev.includes(exerciseId)
-         prev.filter(id => id !== exerciseId)
-        : [...prev, exerciseId],
+    setExpandedExerciseId(
+      expandedExerciseId === exerciseId ? null : exerciseId
     );
   };
 
-  const totalSets =
-    workoutDetails.exerciseIds.reduce((total: number, exerciseId: string) => {
-      const exercise = exercises.find(ex => ex.id === exerciseId);
-      return total + (exercise.defaultSets || 0);
-    }, 0) || 0;
-
-  const totalExercises = workoutDetails.exerciseIds.length || 0;
-  const completedCount = completedExerciseIds.length;
+  // ✅ Fixed ternary operator – added missing '?' and removed extra comma
+  const toggleExerciseCompletion = (exerciseId: string) => {
+    setCompletedExerciseIds(prev =>
+      prev.includes(exerciseId)
+        ? prev.filter(id => id !== exerciseId)
+        : [...prev, exerciseId]
+    );
+  };
 
   const renderModalContent = (content: React.ReactNode) => (
     <Modal
@@ -103,6 +97,15 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
     return renderModalContent(<RestDayContent />);
   }
 
+  const totalSets =
+    workoutDetails.exerciseIds.reduce((total: number, exerciseId: string) => {
+      const exercise = exercises.find(ex => ex.id === exerciseId);
+      return total + (exercise?.defaultSets || 0);
+    }, 0) || 0;
+
+  const totalExercises = workoutDetails.exerciseIds.length || 0;
+  const completedCount = completedExerciseIds.length;
+
   return renderModalContent(
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -121,11 +124,11 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
       <View
         style={[
           styles.statusBadge,
-          isCompleted  styles.completedStatus : styles.pendingStatus,
+          isCompleted ? styles.completedStatus : styles.pendingStatus,
         ]}
       >
         <Text style={styles.statusText}>
-          {isCompleted  '✓ CONCLUÍDO' : '🔄 PENDENTE'}
+          {isCompleted ? '✓ CONCLUÍDO' : '🔄 PENDENTE'}
         </Text>
       </View>
 
@@ -194,11 +197,11 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
 
       <View style={styles.actionsContainer}>
         <Button
-          title={isCompleted  '✓ Treino Concluído' : 'Marcar como Concluído'}
+          title={isCompleted ? '✓ Treino Concluído' : 'Marcar como Concluído'}
           onPress={onToggleCompletion}
           style={[
             styles.actionButton,
-            isCompleted  styles.completedButton : styles.pendingButton,
+            isCompleted ? styles.completedButton : styles.pendingButton,
           ]}
         />
         <Button

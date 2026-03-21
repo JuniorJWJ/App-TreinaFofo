@@ -94,7 +94,7 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
         <ProgressCircle
           style={styles.progressCircle}
           progress={progress}
-          progressColor={progress >= 1  "#4CAF50" : "#4A90E2"}
+          progressColor={progress >= 1 ? "#4CAF50" : "#4A90E2"}
           backgroundColor="#E0E0E0"
           strokeWidth={20}
         />
@@ -194,11 +194,11 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm.();
+            modal.modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel.();
+            modal.modalConfig.onCancel?.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}

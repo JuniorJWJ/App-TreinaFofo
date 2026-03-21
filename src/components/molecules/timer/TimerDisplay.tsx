@@ -64,7 +64,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({
         {formatTime()}
       </Text>
       {/* <Text style={[selectedSize.unitText, styles.unitText]}>
-        {showHours || hours > 0  'HH:MM:SS' : 'MM:SS'}
+        {showHours || hours > 0 ? 'HH:MM:SS' : 'MM:SS'}
       </Text> */}
     </View>
   );

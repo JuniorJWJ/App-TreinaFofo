@@ -26,8 +26,8 @@ export const WaterProgressMiniChart: React.FC<WaterProgressMiniChartProps> = ({
     return "#F44336";
   };
 
-  const chartSize = compact  80 : 100;
-  const fontSize = compact  11 : 13;
+  const chartSize = compact ? 80 : 100;
+  const fontSize = compact ? 11 : 13;
 
   // eslint-disable-next-line react/no-unstable-nested-components
   const ChartContent = () => (

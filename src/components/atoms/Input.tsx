@@ -3,7 +3,7 @@ import React from 'react';
 import { TextInput, TextInputProps, StyleSheet, ViewStyle } from 'react-native';
 
 interface InputProps extends TextInputProps {
-  style: ViewStyle;
+  style?: ViewStyle;
   color: string;
 }
 

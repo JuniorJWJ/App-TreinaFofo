@@ -24,9 +24,9 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     useWeeklyPlanStore();
   const { workouts } = useWorkoutStore();
 
-  const isEditing = route.params.planId;
+  const isEditing = !!route.params?.planId;
   const existingPlan = isEditing
-     weeklyPlans.find(p => p.id === route.params.planId)
+    ? weeklyPlans.find(p => p.id === route.params.planId)
     : null;
 
   const {
@@ -48,7 +48,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
   const getWorkoutName = useCallback((workoutId: string | null) => {
     if (!workoutId) return 'Descanso';
     const workout = workouts.find(w => w.id === workoutId);
-    return workout  workout.name : 'Treino não encontrado';
+    return workout ? workout.name : 'Treino não encontrado';
   }, [workouts]);
 
   const handleDayPress = useCallback((day: DayOfWeek) => {
@@ -170,7 +170,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
   useFocusEffect(
     useCallback(() => {
       navigation.setOptions({
-        title: isEditing  'Editar Plano Semanal' : 'Novo Plano Semanal',
+        title: isEditing ? 'Editar Plano Semanal' : 'Novo Plano Semanal',
         headerRight: HeaderSaveButton,
       });
 
@@ -213,11 +213,11 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
           confirmText={modal.modalConfig.confirmText}
           cancelText={modal.modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm.();
+            modal.modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel.();
+            modal.modalConfig.onCancel?.();
             modal.hideModal();
           }}
           showCancelButton={modal.modalConfig.showCancelButton}

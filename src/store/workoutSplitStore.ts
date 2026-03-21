@@ -7,7 +7,7 @@ interface WorkoutSplitState {
   workoutSplits: WorkoutSplit[];
   activeSplitId: string | null;
   isLoading: boolean;
-  
+
   // Actions
   setActiveSplit: (id: string | null) => void;
   addWorkoutSplit: (splitData: WorkoutSplitFormData) => void;
@@ -34,6 +34,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
           ...splitData,
           id: `ws-${Date.now()}`,
           timesCompleted: 0,
+          currentCycle: 0,                 // ✅ added missing property
           createdAt: new Date(),
           updatedAt: new Date(),
         };
@@ -46,7 +47,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
         set((state) => ({
           workoutSplits: state.workoutSplits.map((split) =>
             split.id === id
-               { ...split, ...updates, updatedAt: new Date() }
+              ? { ...split, ...updates, updatedAt: new Date() }   // ✅ added `?`
               : split
           ),
         }));
@@ -55,7 +56,8 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
       deleteWorkoutSplit: (id) => {
         set((state) => ({
           workoutSplits: state.workoutSplits.filter((split) => split.id !== id),
-          activeSplitId: get().activeSplitId === id  null : get().activeSplitId,
+          activeSplitId:
+            get().activeSplitId === id ? null : get().activeSplitId, // ✅ fixed ternary
         }));
       },
 
@@ -80,6 +82,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
             id: `ws-${Date.now()}`,
             name: `${split.name} (Copy)`,
             timesCompleted: 0,
+            currentCycle: 0,          // ✅ reset currentCycle for copy
             createdAt: new Date(),
             updatedAt: new Date(),
           };
@@ -95,7 +98,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
           set((state) => ({
             workoutSplits: state.workoutSplits.map((s) =>
               s.id === id
-                 {
+                ? {
                     ...s,
                     timesCompleted: s.timesCompleted + 1,
                     updatedAt: new Date(),
@@ -111,7 +114,7 @@ export const useWorkoutSplitStore = create<WorkoutSplitState>()(
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
-          return value  JSON.parse(value) : null;
+          return value ? JSON.parse(value) : null;
         },
         setItem: async (name, value) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));

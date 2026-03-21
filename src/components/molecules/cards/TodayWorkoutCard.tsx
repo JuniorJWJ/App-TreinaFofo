@@ -38,10 +38,10 @@ export const TodayWorkoutCard: React.FC<TodayWorkoutCardProps> = ({
         )}
         <View style={[
           styles.statusIndicator,
-          isCompleted  styles.completedIndicator : styles.pendingIndicator
+          isCompleted ? styles.completedIndicator : styles.pendingIndicator
         ]}>
           <Text style={styles.statusIndicatorText}>
-            {isCompleted  '✓ Concluído' : 'Toque para ver detalhes'}
+            {isCompleted ? '✓ Concluído' : 'Toque para ver detalhes'}
           </Text>
         </View>
       </TouchableOpacity>

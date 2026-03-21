@@ -40,7 +40,7 @@ const parseReminderDate = (
     return createDefaultTime(fallbackHour, fallbackMinute);
   }
 
-  const parsed = value instanceof Date  value : new Date(value);
+  const parsed = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(parsed.getTime())) {
     return createDefaultTime(fallbackHour, fallbackMinute);
   }
@@ -121,8 +121,8 @@ export const WaterDashboardScreen = () => {
       return;
     }
 
-    const nextWakeUp = config.wakeUpTime  wakeUpTime : createDefaultTime(8, 0);
-    const nextSleep = config.sleepTime  sleepTime : createDefaultTime(22, 0);
+    const nextWakeUp = config.wakeUpTime ? wakeUpTime : createDefaultTime(8, 0);
+    const nextSleep = config.sleepTime ? sleepTime : createDefaultTime(22, 0);
 
     await updateConfig({
       notificationsEnabled: true,
@@ -180,7 +180,7 @@ export const WaterDashboardScreen = () => {
       <WaterDashboard
         dailyGoal={dailyGoal}
         currentIntake={currentIntake}
-        onAddWater={addWater}
+        onAddWater={(amount) => addWater(amount, '')}
         onReset={resetDay}
         onAdjustGoal={handleAdjustGoal}
       />
@@ -200,7 +200,7 @@ export const WaterDashboardScreen = () => {
             value={config.notificationsEnabled}
             onValueChange={handleToggleNotifications}
             trackColor={{ false: '#8A8A8A', true: '#8E6C8E' }}
-            thumbColor={config.notificationsEnabled  '#483148' : '#E0E0E0'}
+            thumbColor={config.notificationsEnabled ? '#483148' : '#E0E0E0'}
           />
         </View>
 
@@ -256,9 +256,9 @@ export const WaterDashboardScreen = () => {
             value={wakeUpTime}
             mode="time"
             is24Hour
-            display={Platform.OS === 'ios'  'spinner' : 'default'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
             onChange={(event, date) =>
-              handleTimeChange('wakeUpTime', event, date)
+              handleTimeChange('wakeUpTime', event, date ?? wakeUpTime)
             }
           />
         )}
@@ -268,9 +268,9 @@ export const WaterDashboardScreen = () => {
             value={sleepTime}
             mode="time"
             is24Hour
-            display={Platform.OS === 'ios'  'spinner' : 'default'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
             onChange={(event, date) =>
-              handleTimeChange('sleepTime', event, date)
+              handleTimeChange('sleepTime', event, date ?? sleepTime)
             }
           />
         )}
@@ -281,7 +281,7 @@ export const WaterDashboardScreen = () => {
         currentGoal={dailyGoal}
         onClose={() => setGoalModalVisible(false)}
         onSave={updateGoal}
-        weight={config.weight || undefined}
+        weight={config.weight ?? 0}
         activityLevel={config.activityLevel}
         climate={config.climate}
         onProfileSave={profile =>

@@ -39,7 +39,7 @@ export const CustomWaterInputModal: React.FC<CustomWaterInputModalProps> = ({
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios'  'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.modalOverlay}
       >
         <ScrollView style={styles.modalContainer}>
@@ -62,7 +62,7 @@ export const CustomWaterInputModal: React.FC<CustomWaterInputModalProps> = ({
               maxLength={5}
             />
 
-            {error  (
+            {error ? (
               <Text variant="caption" style={styles.errorText}>
                 {error}
               </Text>

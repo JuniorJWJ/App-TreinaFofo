@@ -53,7 +53,9 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
   const renderItem = ({ item, index }: { item: any; index: number }) => {
     const currentGroup = getMuscleGroupName(item.muscleGroupId);
     const prevGroup =
-      index > 0  getMuscleGroupName(exercises[index - 1].muscleGroupId) : null;
+      index > 0
+        ? getMuscleGroupName(exercises[index - 1].muscleGroupId)
+        : null;
 
     const showGroupHeader = currentGroup !== prevGroup && !selectedGroup;
 
@@ -102,7 +104,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
         />
       </View>
 
-      {!hasExercises  (
+      {!hasExercises ? (
         <EmptyExerciseList
           hasSearchOrFilter={hasSearchOrFilter}
           onClearFilters={() => {

@@ -67,6 +67,8 @@ export const useWorkoutStore = create<WorkoutState>()(
           difficulty: 'beginner',
           tags: ['rápido'],
           timesCompleted: 0,
+          lastCompleted: new Date(0),
+          averageCompletionTime: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         };
@@ -86,6 +88,8 @@ export const useWorkoutStore = create<WorkoutState>()(
           ...workoutData,
           id: `wr-${Date.now()}`,
           timesCompleted: 0,
+          lastCompleted: new Date(0),
+          averageCompletionTime: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
         };
@@ -98,7 +102,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         set((state) => ({
           workouts: state.workouts.map((workout) =>
             workout.id === id
-               { ...workout, ...updates, updatedAt: new Date() }
+              ? { ...workout, ...updates, updatedAt: new Date() }
               : workout
           ),
         }));
@@ -108,7 +112,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         // const { activeWorkoutId } = get();
         set((state) => ({
           workouts: state.workouts.filter((workout) => workout.id !== id),
-          // activeWorkoutId: activeWorkoutId === id  null : activeWorkoutId,
+          // activeWorkoutId: activeWorkoutId === id ? null : activeWorkoutId,
         }));
       },
 
@@ -128,6 +132,8 @@ export const useWorkoutStore = create<WorkoutState>()(
             id: `wr-${Date.now()}`,
             name: `${workout.name} (Cópia)`,
             timesCompleted: 0,
+            lastCompleted: new Date(0),
+            averageCompletionTime: 0,
             createdAt: new Date(),
             updatedAt: new Date(),
           };
@@ -144,7 +150,10 @@ export const useWorkoutStore = create<WorkoutState>()(
           id: sessionId,
           workoutId,
           startTime: new Date(),
+          endTime: new Date(0),
           exercises: [],
+          notes: '',
+          rating: 0,
         };
         set((state) => ({
           sessions: [...state.sessions, newSession],
@@ -156,7 +165,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         set((state) => ({
           sessions: state.sessions.map((session) =>
             session.id === sessionId
-               {
+              ? {
                   ...session,
                   endTime: new Date(),
                   notes,
@@ -174,7 +183,7 @@ export const useWorkoutStore = create<WorkoutState>()(
             set((state) => ({
               workouts: state.workouts.map((w) =>
                 w.id === workout.id
-                   {
+                  ? {
                       ...w,
                       timesCompleted: w.timesCompleted + 1,
                       lastCompleted: new Date(),
@@ -190,7 +199,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         set((state) => ({
           sessions: state.sessions.map((session) =>
             session.id === sessionId
-               { ...session, ...updates }
+              ? { ...session, ...updates }
               : session
           ),
         }));
@@ -215,7 +224,7 @@ export const useWorkoutStore = create<WorkoutState>()(
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
-          return value  JSON.parse(value) : null;
+          return value ? JSON.parse(value) : null;
         },
         setItem: async (name, value) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));

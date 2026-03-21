@@ -5,8 +5,8 @@ import { Text } from '../atoms/Text';
 import { Input } from '../atoms/Input';
 import { ExerciseSearchBar } from '../molecules/search-filters/ExerciseSearchBar';
 import { MuscleGroupFilterChips } from '../molecules/search-filters/MuscleGroupFilterChips';
-import { WorkoutExerciseCard } from '../molecules/cards/WorkoutExerciseCard'; 
-import { useExerciseList } from '../../hooks/useExerciseList'; 
+import { WorkoutExerciseCard } from '../molecules/cards/WorkoutExerciseCard';
+import { useExerciseList } from '../../hooks/useExerciseList';
 
 export interface WorkoutFormHandle {
   submitForm: () => void;
@@ -16,8 +16,8 @@ export interface WorkoutFormHandle {
 
 interface WorkoutFormProps {
   mode: 'create' | 'edit';
-  initialWorkoutName: string;
-  initialSelectedExercises: string[];
+  initialWorkoutName?: string;
+  initialSelectedExercises?: string[];
   exercises: Array<{
     id: string;
     name: string;
@@ -27,235 +27,246 @@ interface WorkoutFormProps {
     defaultRestTime: number;
   }>;
   onSubmit: (workoutName: string, selectedExercises: string[]) => void;
-  onCancel: () => void;
-  isLoading: boolean;
-  workoutInfo: {
+  onCancel?: () => void;
+  isLoading?: boolean;
+  workoutInfo?: {
     createdAt: Date;
     updatedAt: Date;
   };
-  submitButtonText: string;
-  cancelButtonText: string;
+  submitButtonText?: string;
+  cancelButtonText?: string;
 }
 
-export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(({
-  mode,
-  initialWorkoutName = '',
-  initialSelectedExercises = [],
-  exercises,
-  onSubmit,
-}, ref) => {
-  const [workoutName, setWorkoutName] = useState(initialWorkoutName);
-  const [selectedExercises, setSelectedExercises] = useState<string[]>(initialSelectedExercises);
-  
-  // Use refs para controlar atualizações iniciais
-  const isInitialMount = useRef(true);
-  const prevInitialWorkoutName = useRef(initialWorkoutName);
-  const prevInitialSelectedExercises = useRef(initialSelectedExercises);
+export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(
+  (
+    {
+      mode,
+      initialWorkoutName = '',
+      initialSelectedExercises = [],
+      exercises,
+      onSubmit,
+    },
+    ref
+  ) => {
+    const [workoutName, setWorkoutName] = useState(initialWorkoutName);
+    const [selectedExercises, setSelectedExercises] = useState<string[]>(
+      initialSelectedExercises
+    );
 
-  // Usa o hook useExerciseList com os exercícios customizados
-  const {
-    exercises: filteredExercises,
-    uniqueGroups,
-    search,
-    setSearch,
-    selectedGroup,
-    setSelectedGroup,
-    getMuscleGroupName,
-    getMuscleGroupColor,
-  } = useExerciseList({
-    customExercises: exercises
-  });
+    const isInitialMount = useRef(true);
+    const prevInitialWorkoutName = useRef(initialWorkoutName);
+    const prevInitialSelectedExercises = useRef(initialSelectedExercises);
 
-  // Atualiza os estados apenas quando os valores iniciais mudam DE VERDADE
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      // Só atualiza se os valores realmente mudaram
-      if (prevInitialWorkoutName.current !== initialWorkoutName) {
-        setWorkoutName(initialWorkoutName);
-        prevInitialWorkoutName.current = initialWorkoutName;
-      }
-      
-      if (JSON.stringify(prevInitialSelectedExercises.current) !== JSON.stringify(initialSelectedExercises)) {
-        setSelectedExercises(initialSelectedExercises);
-        prevInitialSelectedExercises.current = initialSelectedExercises;
-      }
-    }
-  }, [initialWorkoutName, initialSelectedExercises]);
-
-  const handleSubmit = () => {
-    onSubmit(workoutName.trim(), selectedExercises);
-  };
-
-  const toggleExerciseSelection = (exerciseId: string) => {
-    setSelectedExercises(prev => {
-      const isSelected = prev.includes(exerciseId);
-      if (isSelected) {
-        return prev.filter(id => id !== exerciseId);
-      } else {
-        return [...prev, exerciseId];
-      }
+    const {
+      exercises: filteredExercises,
+      uniqueGroups,
+      search,
+      setSearch,
+      selectedGroup,
+      setSelectedGroup,
+      getMuscleGroupName,
+      getMuscleGroupColor,
+    } = useExerciseList({
+      customExercises: exercises,
     });
-  };
 
-  const isExerciseSelected = (exerciseId: string) => {
-    return selectedExercises.includes(exerciseId);
-  };
+    useEffect(() => {
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+      } else {
+        if (prevInitialWorkoutName.current !== initialWorkoutName) {
+          setWorkoutName(initialWorkoutName);
+          prevInitialWorkoutName.current = initialWorkoutName;
+        }
 
-  const handleSelectAll = () => {
-    if (filteredExercises.length === 0) return;
-    const allExerciseIds = filteredExercises.map(ex => ex.id);
-    setSelectedExercises(prev => {
-      // Adiciona apenas os que ainda não estão selecionados
-      const newSelection = [...prev];
-      allExerciseIds.forEach(id => {
-        if (!newSelection.includes(id)) {
-          newSelection.push(id);
+        if (
+          JSON.stringify(prevInitialSelectedExercises.current) !==
+          JSON.stringify(initialSelectedExercises)
+        ) {
+          setSelectedExercises(initialSelectedExercises);
+          prevInitialSelectedExercises.current = initialSelectedExercises;
+        }
+      }
+    }, [initialWorkoutName, initialSelectedExercises]);
+
+    const handleSubmit = () => {
+      onSubmit(workoutName.trim(), selectedExercises);
+    };
+
+    const toggleExerciseSelection = (exerciseId: string) => {
+      setSelectedExercises(prev => {
+        const isSelected = prev.includes(exerciseId);
+        if (isSelected) {
+          return prev.filter(id => id !== exerciseId);
+        } else {
+          return [...prev, exerciseId];
         }
       });
-      return newSelection;
-    });
-  };
+    };
 
-  const handleClearAll = () => {
-    if (filteredExercises.length === 0) return;
-    // Remove apenas os exercícios que estão na lista filtrada
-    setSelectedExercises(prev => 
-      prev.filter(id => !filteredExercises.some(ex => ex.id === id))
-    );
-  };
+    const isExerciseSelected = (exerciseId: string) => {
+      return selectedExercises.includes(exerciseId);
+    };
 
-  const handleClearFilters = () => {
-    setSearch('');
-    setSelectedGroup(null);
-  };
+    const handleSelectAll = () => {
+      if (filteredExercises.length === 0) return;
+      const allExerciseIds = filteredExercises.map(ex => ex.id);
+      setSelectedExercises(prev => {
+        const newSelection = [...prev];
+        allExerciseIds.forEach(id => {
+          if (!newSelection.includes(id)) {
+            newSelection.push(id);
+          }
+        });
+        return newSelection;
+      });
+    };
 
-  const isFormValid = !!workoutName.trim() && selectedExercises.length > 0;
+    const handleClearAll = () => {
+      if (filteredExercises.length === 0) return;
+      setSelectedExercises(prev =>
+        prev.filter(id => !filteredExercises.some(ex => ex.id === id))
+      );
+    };
 
-  // Expoe métodos para o componente pai através da ref
-  useImperativeHandle(ref, () => ({
-    submitForm: handleSubmit,
-    isFormValid,
-    getFormData: () => ({
-      workoutName: workoutName.trim(),
-      selectedExercises
-    })
-  }));
+    const handleClearFilters = () => {
+      setSearch('');
+      setSelectedGroup(null);
+    };
 
-  return (
-    <View style={styles.container}>
-      <ScrollView 
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <Input
-          placeholder="Nome do treino"
-          value={workoutName}
-          onChangeText={setWorkoutName}
-          style={styles.input}
-          autoFocus={mode === 'create'}
-        />
+    const isFormValid = !!workoutName.trim() && selectedExercises.length > 0;
 
-        {/* Barra de busca */}
-        <ExerciseSearchBar
-          search={search}
-          onSearchChange={setSearch}
-          placeholder="Buscar exercícios..."
-        />
+    useImperativeHandle(ref, () => ({
+      submitForm: handleSubmit,
+      isFormValid,
+      getFormData: () => ({
+        workoutName: workoutName.trim(),
+        selectedExercises,
+      }),
+    }));
 
-        {/* Filtros de grupo muscular */}
-        <MuscleGroupFilterChips
-          groups={uniqueGroups}
-          selectedGroup={selectedGroup}
-          onSelectGroup={setSelectedGroup}
-        />
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* ✅ Fixed: added color prop */}
+          <Input
+            placeholder="Nome do treino"
+            value={workoutName}
+            onChangeText={setWorkoutName}
+            style={styles.input}
+            autoFocus={mode === 'create'}
+            color="#000" // or any color you want (e.g., "#000")
+          />
 
-        {/* Controles de seleção */}
-        <View style={styles.selectionHeader}>
-          <Text variant="subtitle" style={styles.sectionTitle}>
-            Exercícios: {selectedExercises.length}/{filteredExercises.length}
-          </Text>
-          <View style={styles.selectionButtons}>
-            <TouchableOpacity 
-              onPress={handleSelectAll} 
-              style={[
-                styles.selectionButton,
-                filteredExercises.length === 0 && styles.disabledButton
-              ]}
-              disabled={filteredExercises.length === 0}
-            >
-              <Text style={[
-                styles.selectionButtonText,
-                filteredExercises.length === 0 && styles.disabledText
-              ]}>
-                Selecionar Todos
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={handleClearAll} 
-              style={[
-                styles.selectionButton,
-                (filteredExercises.length === 0 || 
-                 !filteredExercises.some(ex => isExerciseSelected(ex.id))) && styles.disabledButton
-              ]}
-              disabled={filteredExercises.length === 0 || 
-                !filteredExercises.some(ex => isExerciseSelected(ex.id))}
-            >
-              <Text style={[
-                styles.selectionButtonText,
-                (filteredExercises.length === 0 || 
-                 !filteredExercises.some(ex => isExerciseSelected(ex.id))) && styles.disabledText
-              ]}>
-                Limpar Filtrados
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+          <ExerciseSearchBar
+            search={search}
+            onSearchChange={setSearch}
+            placeholder="Buscar exercícios..."
+          />
 
-        {/* Lista de exercícios filtrados */}
-        <View style={styles.exercisesContainer}>
-          {filteredExercises.length === 0  (
-            <View style={styles.emptyExercises}>
-              <Text style={styles.emptyText}>
-                {search || selectedGroup 
-                   'Nenhum exercício encontrado' 
-                  : 'Nenhum exercício cadastrado'}
-              </Text>
-              <Text style={styles.emptySubtext}>
-                {search || selectedGroup
-                   'Tente ajustar sua busca ou filtro'
-                  : 'Crie exercícios primeiro para poder adicioná-los ao treino'}
-              </Text>
-              {(search || selectedGroup) && (
-                <TouchableOpacity
-                  onPress={handleClearFilters}
-                  style={styles.clearFiltersButton}
+          <MuscleGroupFilterChips
+            groups={uniqueGroups}
+            selectedGroup={selectedGroup}
+            onSelectGroup={setSelectedGroup}
+          />
+
+          <View style={styles.selectionHeader}>
+            <Text variant="subtitle" style={styles.sectionTitle}>
+              Exercícios: {selectedExercises.length}/{filteredExercises.length}
+            </Text>
+            <View style={styles.selectionButtons}>
+              <TouchableOpacity
+                onPress={handleSelectAll}
+                style={[
+                  styles.selectionButton,
+                  filteredExercises.length === 0 && styles.disabledButton,
+                ]}
+                disabled={filteredExercises.length === 0}
+              >
+                <Text
+                  style={[
+                    styles.selectionButtonText,
+                    filteredExercises.length === 0 && styles.disabledText,
+                  ]}
                 >
-                  <Text style={styles.clearFiltersButtonText}>
-                    Limpar Filtros
-                  </Text>
-                </TouchableOpacity>
-              )}
+                  Selecionar Todos
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleClearAll}
+                style={[
+                  styles.selectionButton,
+                  (filteredExercises.length === 0 ||
+                    !filteredExercises.some(ex => isExerciseSelected(ex.id))) &&
+                    styles.disabledButton,
+                ]}
+                disabled={
+                  filteredExercises.length === 0 ||
+                  !filteredExercises.some(ex => isExerciseSelected(ex.id))
+                }
+              >
+                <Text
+                  style={[
+                    styles.selectionButtonText,
+                    (filteredExercises.length === 0 ||
+                      !filteredExercises.some(ex => isExerciseSelected(ex.id))) &&
+                      styles.disabledText,
+                  ]}
+                >
+                  Limpar Filtrados
+                </Text>
+              </TouchableOpacity>
             </View>
-          ) : (
-            filteredExercises.map(exercise => (
-              <WorkoutExerciseCard
-                key={exercise.id}
-                exercise={exercise}
-                isSelected={isExerciseSelected(exercise.id)}
-                muscleGroupName={getMuscleGroupName(exercise.muscleGroupId)}
-                muscleGroupColor={getMuscleGroupColor(exercise.muscleGroupId)}
-                onPress={() => toggleExerciseSelection(exercise.id)}
-              />
-            ))
-          )}
-        </View>
-      </ScrollView>
-    </View>
-  );
-});
+          </View>
+
+          <View style={styles.exercisesContainer}>
+            {filteredExercises.length === 0 ? (
+              <View style={styles.emptyExercises}>
+                <Text style={styles.emptyText}>
+                  {/* ✅ Fixed ternary: added missing '?' */}
+                  {search || selectedGroup
+                    ? 'Nenhum exercício encontrado'
+                    : 'Nenhum exercício cadastrado'}
+                </Text>
+                <Text style={styles.emptySubtext}>
+                  {/* ✅ Fixed ternary: added missing '?' */}
+                  {search || selectedGroup
+                    ? 'Tente ajustar sua busca ou filtro'
+                    : 'Crie exercícios primeiro para poder adicioná-los ao treino'}
+                </Text>
+                {(search || selectedGroup) && (
+                  <TouchableOpacity
+                    onPress={handleClearFilters}
+                    style={styles.clearFiltersButton}
+                  >
+                    <Text style={styles.clearFiltersButtonText}>
+                      Limpar Filtros
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ) : (
+              filteredExercises.map(exercise => (
+                <WorkoutExerciseCard
+                  key={exercise.id}
+                  exercise={exercise}
+                  isSelected={isExerciseSelected(exercise.id)}
+                  muscleGroupName={getMuscleGroupName(exercise.muscleGroupId)}
+                  muscleGroupColor={getMuscleGroupColor(exercise.muscleGroupId)}
+                  onPress={() => toggleExerciseSelection(exercise.id)}
+                />
+              ))
+            )}
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
