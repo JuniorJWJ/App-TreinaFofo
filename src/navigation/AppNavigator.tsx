@@ -13,6 +13,7 @@ import { CreateWeeklyPlanScreen } from '../screens/plan/CreateWeeklyPlanScreen';
 import { WeeklyPlanListScreen } from '../screens/plan/WeeklyPlanListScreen';
 import { WaterDashboardScreen } from '../screens/water/WaterDashboardScreen';
 import { EditWorkoutScreen } from '../screens/workout/EditWorkoutScreen';
+import { WorkoutDetailScreen } from '../screens/workout/WorkoutDetailScreen';
 import { PopularWeeklySplitsScreen } from '../screens/plan/PopularWeeklySplitsScreen';
 import { PopularWorkoutsScreen } from '../screens/workout/PopularWorkoutsScreen';
 import { HeaderLogo } from '../components/atoms/HeaderLogo';
@@ -25,6 +26,7 @@ export type RootStackParamList = {
   ExerciseDetail: { exerciseId: string };
   CreateWorkout: undefined;
   WorkoutList: undefined;
+  WorkoutDetail: { workoutId: string };
   CreateWeeklyPlan: { planId: string };
   WeeklyPlanList: undefined;
   PopularWorkouts: undefined;
@@ -125,6 +127,14 @@ export const AppNavigator = () => {
           options={{
             headerTitle: () => <LogoHeader />,
             title: 'Meus Treinos',
+          }}
+        />
+        <Stack.Screen
+          name="WorkoutDetail"
+          component={WorkoutDetailScreen}
+          options={{
+            headerTitle: () => <LogoHeader />,
+            title: 'Detalhes do Treino',
           }}
         />
         <Stack.Screen

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useWorkoutStore } from '../../store';
 import { useExerciseStore } from '../../store';
 import { Text } from '../../components/atoms/Text';
@@ -36,12 +36,18 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
     );
   };
 
+  const handleOpenDetails = (workoutId: string) => {
+    navigation.navigate('WorkoutDetail', { workoutId });
+  };
+
   const renderWorkoutItem = ({ item }: { item: any }) => (
-    <View
+    <TouchableOpacity
       style={[
         styles.workoutCard,
         // activeWorkoutId === item.id && styles.activeWorkoutCard
       ]}
+      onPress={() => handleOpenDetails(item.id)}
+      activeOpacity={0.8}
     >
       <View style={styles.workoutHeader}>
         <Text variant="subtitle" style={styles.workoutName}>
@@ -88,7 +94,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
           style={styles.deleteButton}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
