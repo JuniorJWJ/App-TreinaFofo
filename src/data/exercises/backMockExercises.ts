@@ -19,6 +19,7 @@ export const backMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
     notes: 'Trazer a barra até o peito, contraindo as dorsais',
+    gifLocal: '/gifs/costas_puxada_frontal_pronada_aberta-frontal.gif',
   },
   {
     name: 'Barra Fixa',
@@ -34,6 +35,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'range',
     autoProgression: true,
     notes: 'Se necessário, usar elástico ou assistência para progredir',
+    gifLocal: '/gifs/costas_barra_fixa_pronada_frontal.gif',
   },
   {
     name: 'Remada Curva com Barra',
@@ -53,6 +55,7 @@ export const backMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
     notes: 'Manter a coluna neutra e evitar arredondar as costas',
+    gifLocal: '/gifs/costas_remada_curvada.gif',
   },
   {
     name: 'Remada Unilateral com Haltere',
@@ -70,22 +73,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'range',
     autoProgression: true,
     incrementSize: 1,
-  },
-  {
-    name: 'Puxada no Pulley Frontal',
-    muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
-    description: 'Variante de puxada com cabo para maior tensão constante.',
-    equipment: 'Pulley + Cabo',
-    difficulty: 'intermediate',
-    defaultSets: 3,
-    defaultReps: 12,
-    defaultRestTime: 60,
-    defaultWeight: 30,
-    weightUnit: 'kg',
-    progressionType: 'range',
-    autoProgression: true,
-    incrementSize: 2.5,
+    gifLocal: '/gifs/costas_remada_serrote.gif',
   },
   {
     name: 'Levantamento Terra',
@@ -107,6 +95,7 @@ export const backMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 5,
     notes: 'Manter a barra próxima às canelas e coluna neutra',
+    gifLocal: '/gifs/gluteo_levantamento_terra.gif',
   },
   {
     name: 'Remada Cavalinho',
@@ -124,21 +113,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 5,
-  },
-  {
-    name: 'Encolhimento de Ombros no Banco',
-    muscleGroupId: 'Trapézio',
-    description: 'Foco no oblíquo inferior.',
-    equipment: 'Banco + Anilha',
-    difficulty: 'intermediate',
-    defaultSets: 3,
-    defaultReps: 20,
-    defaultRestTime: 45,
-    defaultWeight: 10,
-    weightUnit: 'kg',
-    progressionType: 'range',
-    autoProgression: true,
-    incrementSize: 2.5,
+    gifLocal: '/gifs/costas_remada_cavalinho.gif',
   },
   {
     name: 'Extensão de Lombar',
@@ -153,35 +128,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'fixed',
     autoProgression: false,
     notes: 'Movimento controlado, sem hiperextender demais o pescoço',
-  },
-  {
-    name: 'Puxada Aberta',
-    muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
-    description: 'Pegada aberta para maior ativação das dorsais.',
-    equipment: 'Puxador',
-    difficulty: 'beginner',
-    defaultSets: 4,
-    defaultReps: 10,
-    defaultRestTime: 90,
-    defaultWeight: 35,
-    weightUnit: 'kg',
-    progressionType: 'linear',
-    autoProgression: true,
-  },
-  {
-    name: 'Puxada Supinada',
-    muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
-    description: 'Pegada invertida com maior ativação de bíceps.',
-    equipment: 'Puxador',
-    difficulty: 'beginner',
-    defaultSets: 3,
-    defaultReps: 12,
-    defaultRestTime: 60,
-    defaultWeight: 30,
-    weightUnit: 'kg',
-    progressionType: 'range',
+    gifLocal: '/gifs/lombar_extensao_de_lombar.gif',
   },
   {
     name: 'Puxada Neutra',
@@ -194,6 +141,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
     progressionType: 'range',
+    gifLocal: '/gifs/puxada_frontal_triangulo.gif',
   },
   {
     name: 'Barra Fixa Supinada (Chin-up)',
@@ -248,6 +196,7 @@ export const backMockExercises: ExerciseFormData[] = [
     weightUnit: 'kg',
     progressionType: 'linear',
     autoProgression: true,
+    gifLocal: '/gifs/costas_remada_triangulo_sentado_polia.gif',
   },
   {
     name: 'Remada Máquina',
@@ -260,6 +209,8 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
     progressionType: 'range',
+    gifLocal: '/gifs/costas_remada_maquina_neutra.gif',
+    
   },
   {
     name: 'Remada Alta no Cabo',
@@ -273,6 +224,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 15,
     defaultRestTime: 60,
     progressionType: 'range',
+    gifLocal: '/gifs/ombro_remada_alta_polia.gif',
   },
   {
     name: 'Remada com Halteres (Inclinado)',
@@ -284,6 +236,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 12,
     defaultRestTime: 60,
+    gifLocal: '/gifs/costas_remada_curvada_halter.gif',
   },
   {
     name: 'Remada Pendlay',
@@ -298,6 +251,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultWeight: 40,
     weightUnit: 'kg',
     progressionType: 'linear',
+    gifLocal: '/gifs/costas_remanda_pendlay.gif',
   },
   {
     name: 'Remada Invertida',
@@ -310,6 +264,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
     progressionType: 'range',
+    gifLocal: '/gifs/costas_remada_invertida.gif',
   },
   {
     name: 'Pullover no Cabo',
@@ -321,9 +276,11 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 12,
     defaultRestTime: 60,
+    gifLocal: '/gifs/costas_pulldown_polia.gif',
+
   },
   {
-    name: 'Pullover com Barra',
+    name: 'Pullover deitado',
     muscleGroupId: 'Costas',
     secondaryMuscleGroups: ['Bceps', 'Trapzio'],
     description: 'Versão clássica para dorsais e peitoral.',
@@ -332,17 +289,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 12,
     defaultRestTime: 60,
-  },
-  {
-    name: 'Straight Arm Pulldown',
-    muscleGroupId: 'Costas',
-    secondaryMuscleGroups: ['Bceps', 'Trapzio'],
-    description: 'Puxada com braços estendidos para dorsais.',
-    equipment: 'Polia',
-    difficulty: 'beginner',
-    defaultSets: 3,
-    defaultReps: 15,
-    defaultRestTime: 60,
+    gifLocal: '/gifs/costas_pullover_banco.gif',
   },
   {
     name: 'Good Morning',
@@ -356,6 +303,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultRestTime: 90,
     defaultWeight: 30,
     weightUnit: 'kg',
+    gifLocal: '/gifs/perna_bom_dia.gif',
   },
   {
     name: 'Superman',
@@ -367,5 +315,6 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 15,
     defaultRestTime: 45,
+    gifLocal: '/gifs/abdominal_superman.gif',
   }
 ];
