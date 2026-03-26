@@ -62,6 +62,15 @@ export const ExerciseDetailScreen: React.FC<ExerciseDetailScreenProps> = ({
         </Text>
       </View>
 
+      {exercise.description && (
+        <View style={styles.section}>
+          <Text variant="subtitle" style={styles.sectionTitle}>
+            Descri??o
+          </Text>
+          <Text style={styles.detailText}>{exercise.description}</Text>
+        </View>
+      )}
+
       <View style={styles.section}>
         <Text variant="subtitle" style={styles.sectionTitle}>
           Grupo Principal

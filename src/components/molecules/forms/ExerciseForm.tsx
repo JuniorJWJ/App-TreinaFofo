@@ -42,6 +42,9 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const { muscleGroups } = useMuscleGroupStore();
 
     const [name, setName] = useState(exercise.name || '');
+    const [description, setDescription] = useState(
+      exercise.description || '',
+    );
     const [selectedMuscleGroupId, setSelectedMuscleGroupId] = useState(
       exercise.muscleGroupId || '',
     );
@@ -146,6 +149,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
 
         const exerciseData = {
           name: name.trim(),
+          description: description.trim() || undefined,
           muscleGroupId: selectedMuscleGroupId,
           secondaryMuscleGroups:
             secondaryMuscleGroupIds.length > 0
@@ -203,6 +207,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
 
     const getFormData = () => ({
       name,
+      description,
       selectedMuscleGroupId,
       secondaryMuscleGroupIds,
       sets,
@@ -272,6 +277,20 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
             value={name}
             onChangeText={setName}
             color="#FFF"
+            placeholderTextColor={'#dbd5d5ff'}
+          />
+
+          <Text color="#FFF" variant="subtitle">
+            Descrição:
+          </Text>
+          <Input
+            placeholder="Descrição do exercício"
+            value={description}
+            onChangeText={setDescription}
+            multiline
+            numberOfLines={3}
+            color="#FFF"
+            style={styles.notesInput}
             placeholderTextColor={'#dbd5d5ff'}
           />
 
@@ -527,24 +546,26 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           {/* REMOVIDOS OS BOTÕES */}
         </ScrollView>
 
-        <ConfirmationModal
-          visible={modal.isVisible}
-          title={modal.modalConfig.title || ''}
-          message={modal.modalConfig.message || ''}
-          confirmText={modal.modalConfig.confirmText || 'OK'}
-          cancelText={modal.modalConfig.cancelText}
-          onConfirm={() => {
-            modal.modalConfig.onConfirm?.();
-            modal.hideModal();
-          }}
-          onCancel={() => {
-            modal.modalConfig.onCancel?.();
-            modal.hideModal();
-          }}
-          onClose={() => {
-            modal.hideModal();
-          }}
-        />
+        {modal.modalConfig && (
+          <ConfirmationModal
+            visible={modal.isVisible}
+            title={modal.modalConfig.title || ''}
+            message={modal.modalConfig.message || ''}
+            confirmText={modal.modalConfig.confirmText || 'OK'}
+            cancelText={modal.modalConfig.cancelText}
+            onConfirm={() => {
+              modal.modalConfig.onConfirm?.();
+              modal.hideModal();
+            }}
+            onCancel={() => {
+              modal.modalConfig.onCancel?.();
+              modal.hideModal();
+            }}
+            onClose={() => {
+              modal.hideModal();
+            }}
+          />
+        )}
       </>
     );
   },

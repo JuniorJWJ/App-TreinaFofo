@@ -62,6 +62,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
 
         <View style={styles.exerciseDetails}>
+          {exercise.description && (
+            <Text
+              variant="caption"
+              style={styles.descriptionText}
+              numberOfLines={2}
+            >
+              {exercise.description}
+            </Text>
+          )}
           <View style={styles.detailRow}>
             <Text variant="caption">
               {exercise.defaultSets} séries × {exercise.defaultReps} reps
@@ -148,6 +157,10 @@ const styles = StyleSheet.create({
   },
   exerciseDetails: {
     marginBottom: 12,
+  },
+  descriptionText: {
+    color: '#4A4A4A',
+    marginBottom: 6,
   },
   detailRow: {
     flexDirection: 'row',

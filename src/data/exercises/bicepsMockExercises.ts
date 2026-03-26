@@ -1,6 +1,5 @@
 import { ExerciseFormData } from '../../types';
 
-const roscaDiretaGif = require('../../assets/gifs/roscadireta.gif');
 
 export const bicepsMockExercises: ExerciseFormData[] = [
   {
@@ -19,7 +18,6 @@ export const bicepsMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
     notes: 'Manter os cotovelos fixos e não usar impulso',
-    gifLocal: roscaDiretaGif,
   },
   {
     name: 'Rosca Martelo com Halteres',

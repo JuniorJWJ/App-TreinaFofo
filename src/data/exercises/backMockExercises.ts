@@ -19,7 +19,7 @@ export const backMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
     notes: 'Trazer a barra até o peito, contraindo as dorsais',
-    gifLocal: '/gifs/costas_puxada_frontal_pronada_aberta-frontal.gif',
+    gifLocal: require('../../assets/gifs/costas_puxada_frontal_pronada_aberta.gif'),
   },
   {
     name: 'Barra Fixa',
@@ -35,7 +35,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'range',
     autoProgression: true,
     notes: 'Se necessário, usar elástico ou assistência para progredir',
-    gifLocal: '/gifs/costas_barra_fixa_pronada_frontal.gif',
+    gifLocal: require('../../assets/gifs/costas_barra_fixa_pronado.gif'),
   },
   {
     name: 'Remada Curva com Barra',
@@ -55,7 +55,7 @@ export const backMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 2.5,
     notes: 'Manter a coluna neutra e evitar arredondar as costas',
-    gifLocal: '/gifs/costas_remada_curvada.gif',
+    gifLocal: require('../../assets/gifs/costas_remada_curvada.gif'),
   },
   {
     name: 'Remada Unilateral com Haltere',
@@ -73,7 +73,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'range',
     autoProgression: true,
     incrementSize: 1,
-    gifLocal: '/gifs/costas_remada_serrote.gif',
+    gifLocal: require('../../assets/gifs/costas_remada_serrote.gif'),
   },
   {
     name: 'Levantamento Terra',
@@ -95,7 +95,7 @@ export const backMockExercises: ExerciseFormData[] = [
     autoProgression: true,
     incrementSize: 5,
     notes: 'Manter a barra próxima às canelas e coluna neutra',
-    gifLocal: '/gifs/gluteo_levantamento_terra.gif',
+    gifLocal: require('../../assets/gifs/gluteo_levantamento_terra.gif'),
   },
   {
     name: 'Remada Cavalinho',
@@ -113,7 +113,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'linear',
     autoProgression: true,
     incrementSize: 5,
-    gifLocal: '/gifs/costas_remada_cavalinho.gif',
+    gifLocal: require('../../assets/gifs/costas_remada_cavalinho.gif'),
   },
   {
     name: 'Extensão de Lombar',
@@ -128,7 +128,7 @@ export const backMockExercises: ExerciseFormData[] = [
     progressionType: 'fixed',
     autoProgression: false,
     notes: 'Movimento controlado, sem hiperextender demais o pescoço',
-    gifLocal: '/gifs/lombar_extensao_de_lombar.gif',
+    gifLocal: require('../../assets/gifs/lombar_extensao_de_lombar.gif'),
   },
   {
     name: 'Puxada Neutra',
@@ -141,7 +141,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
     progressionType: 'range',
-    gifLocal: '/gifs/puxada_frontal_triangulo.gif',
+    gifLocal: require('../../assets/gifs/puxada_frontal_triangulo.gif'),
   },
   {
     name: 'Barra Fixa Supinada (Chin-up)',
@@ -196,7 +196,7 @@ export const backMockExercises: ExerciseFormData[] = [
     weightUnit: 'kg',
     progressionType: 'linear',
     autoProgression: true,
-    gifLocal: '/gifs/costas_remada_triangulo_sentado_polia.gif',
+    gifLocal: require('../../assets/gifs/costas_remada_triangulo_sentado_polia.gif'),
   },
   {
     name: 'Remada Máquina',
@@ -209,7 +209,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
     progressionType: 'range',
-    gifLocal: '/gifs/costas_remada_maquina_neutra.gif',
+    gifLocal: require('../../assets/gifs/costas_remada_maquina_neutra.gif'),
     
   },
   {
@@ -224,7 +224,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 15,
     defaultRestTime: 60,
     progressionType: 'range',
-    gifLocal: '/gifs/ombro_remada_alta_polia.gif',
+    gifLocal: require('../../assets/gifs/ombro_remada_alta_polia.gif'),
   },
   {
     name: 'Remada com Halteres (Inclinado)',
@@ -236,7 +236,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 12,
     defaultRestTime: 60,
-    gifLocal: '/gifs/costas_remada_curvada_halter.gif',
+    gifLocal: require('../../assets/gifs/costas_remada_curvada_halter.gif'),
   },
   {
     name: 'Remada Pendlay',
@@ -251,7 +251,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultWeight: 40,
     weightUnit: 'kg',
     progressionType: 'linear',
-    gifLocal: '/gifs/costas_remanda_pendlay.gif',
+    gifLocal: require('../../assets/gifs/costas_remanda_pendlay.gif'),
   },
   {
     name: 'Remada Invertida',
@@ -264,7 +264,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultReps: 12,
     defaultRestTime: 60,
     progressionType: 'range',
-    gifLocal: '/gifs/costas_remada_invertida.gif',
+    gifLocal: require('../../assets/gifs/costas_remada_invertida.gif'),
   },
   {
     name: 'Pullover no Cabo',
@@ -276,7 +276,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 12,
     defaultRestTime: 60,
-    gifLocal: '/gifs/costas_pulldown_polia.gif',
+    gifLocal: require('../../assets/gifs/costas_pulldown_polia.gif'),
 
   },
   {
@@ -289,7 +289,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 12,
     defaultRestTime: 60,
-    gifLocal: '/gifs/costas_pullover_banco.gif',
+    gifLocal: require('../../assets/gifs/costas_pullover_banco.gif'),
   },
   {
     name: 'Good Morning',
@@ -303,7 +303,7 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultRestTime: 90,
     defaultWeight: 30,
     weightUnit: 'kg',
-    gifLocal: '/gifs/perna_bom_dia.gif',
+    gifLocal: require('../../assets/gifs/perna_bom_dia.gif'),
   },
   {
     name: 'Superman',
@@ -315,6 +315,6 @@ export const backMockExercises: ExerciseFormData[] = [
     defaultSets: 3,
     defaultReps: 15,
     defaultRestTime: 45,
-    gifLocal: '/gifs/abdominal_superman.gif',
+    gifLocal: require('../../assets/gifs/abdominal_superman.gif'),
   }
 ];
