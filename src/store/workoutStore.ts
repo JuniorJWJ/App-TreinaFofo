@@ -19,6 +19,11 @@ interface WorkoutState {
   getWorkout: (id: string) => Workout | undefined;
   getWorkouts: () => Workout[];
   duplicateWorkout: (id: string) => void;
+  importWorkoutsFromData: (workouts: any[]) => {
+    added: number;
+    updated: number;
+    skipped: number;
+  };
 
   // Session Management
   startWorkoutSession: (workoutId: string) => string;
@@ -141,6 +146,79 @@ export const useWorkoutStore = create<WorkoutState>()(
             workouts: [...state.workouts, duplicatedWorkout],
           }));
         }
+      },
+
+      importWorkoutsFromData: (workouts) => {
+        const incoming = Array.isArray(workouts) ? workouts : [];
+        const parseDate = (value: any) => {
+          if (!value) return null;
+          const date = new Date(value);
+          return Number.isNaN(date.getTime()) ? null : date;
+        };
+
+        let added = 0;
+        let updated = 0;
+        let skipped = 0;
+
+        const existingById = new Map(get().workouts.map(w => [w.id, w]));
+        const nextWorkouts = [...get().workouts];
+
+        incoming.forEach(raw => {
+          if (!raw || !raw.id || !raw.name) {
+            skipped += 1;
+            return;
+          }
+
+          const incomingUpdatedAt = parseDate(raw.updatedAt) || new Date();
+          const existing = existingById.get(raw.id);
+
+          if (!existing) {
+            nextWorkouts.push({
+              ...raw,
+              exerciseIds: Array.isArray(raw.exerciseIds) ? raw.exerciseIds : [],
+              exercises: Array.isArray(raw.exercises) ? raw.exercises : [],
+              timesCompleted: 0,
+              lastCompleted: new Date(0),
+              averageCompletionTime: 0,
+              createdAt: parseDate(raw.createdAt) || new Date(),
+              updatedAt: incomingUpdatedAt,
+            });
+            added += 1;
+            return;
+          }
+
+          const existingUpdatedAt =
+            existing.updatedAt instanceof Date
+              ? existing.updatedAt
+              : parseDate(existing.updatedAt) || new Date(0);
+
+          if (incomingUpdatedAt > existingUpdatedAt) {
+            const merged = {
+              ...existing,
+              ...raw,
+              exerciseIds: Array.isArray(raw.exerciseIds)
+                ? raw.exerciseIds
+                : existing.exerciseIds,
+              exercises: Array.isArray(raw.exercises)
+                ? raw.exercises
+                : existing.exercises,
+              timesCompleted: existing.timesCompleted,
+              lastCompleted: existing.lastCompleted,
+              averageCompletionTime: existing.averageCompletionTime,
+              createdAt: existing.createdAt,
+              updatedAt: incomingUpdatedAt,
+            };
+
+            const idx = nextWorkouts.findIndex(w => w.id === existing.id);
+            if (idx >= 0) nextWorkouts[idx] = merged;
+            updated += 1;
+          } else {
+            skipped += 1;
+          }
+        });
+
+        set({ workouts: nextWorkouts });
+        return { added, updated, skipped };
       },
 
       // Session Management (mantido)

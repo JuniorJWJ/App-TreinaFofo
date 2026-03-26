@@ -17,6 +17,8 @@ export const WeeklyPlanList: React.FC<WeeklyPlanListProps> = ({
   onEditPlan,
   onDeletePlan,
 }) => {
+  const safePlans = (plans || []).filter(Boolean);
+
   const renderPlanItem = ({ item }: { item: any }) => (
     <WeeklyPlanCard
       plan={item}
@@ -29,8 +31,10 @@ export const WeeklyPlanList: React.FC<WeeklyPlanListProps> = ({
 
   return (
     <FlatList
-      data={plans}
-      keyExtractor={(item) => item.id}
+      data={safePlans}
+      keyExtractor={(item, index) =>
+        item?.id || item?.name || `plan-${index}`
+      }
       renderItem={renderPlanItem}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.listContent}

@@ -59,6 +59,7 @@ export interface ExerciseSet {
 
 // Para criação/edição
 export type ExerciseFormData = {
+  id?: string;
   name: string;
   muscleGroupId: string;
   secondaryMuscleGroups?: string[];
@@ -92,6 +93,10 @@ export type ExerciseFormData = {
 
   // Notas
   notes?: string;
+
+  // Para importação/seed
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 // Relacionamento para queries

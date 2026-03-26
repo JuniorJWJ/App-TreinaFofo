@@ -63,6 +63,9 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
       exercise.weightUnit || 'kg',
     );
     const [notes, setNotes] = useState(exercise.notes || '');
+    const [gifUrl, setGifUrl] = useState(
+      typeof exercise.gifLocal === 'string' ? exercise.gifLocal : '',
+    );
     // ✅ Fixed syntax: removed trailing comma and added setter (though not used)
     const [progressionType, setProgressionType] = useState<
       'fixed' | 'range' | 'linear'
@@ -161,6 +164,9 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           defaultWeight: defaultWeight ? parseFloat(defaultWeight) : undefined,
           weightUnit,
           notes: notes.trim() || undefined,
+          gifLocal:
+            gifUrl.trim() ||
+            (typeof exercise.gifLocal !== 'string' ? exercise.gifLocal : undefined),
           progressionType,
           warmupSets: useWarmupSets
             ? warmupSets.map(set => ({
@@ -216,6 +222,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
       defaultWeight,
       weightUnit,
       notes,
+      gifUrl,
       progressionType,
       useWarmupSets,
       warmupSets,
@@ -541,6 +548,22 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
               style={styles.notesInput}
               placeholderTextColor={'#dbd5d5ff'}
             />
+          </View>
+
+          <View style={styles.section}>
+            <Text color="#FFF" variant="subtitle">
+              GIF URL (opcional):
+            </Text>
+            <Input
+              placeholder="https://..."
+              value={gifUrl}
+              onChangeText={setGifUrl}
+              color="#FFF"
+              placeholderTextColor={'#dbd5d5ff'}
+            />
+            <Text color="#CCC" variant="caption">
+              Se preencher, o app vai carregar este GIF online.
+            </Text>
           </View>
 
           {/* REMOVIDOS OS BOTÕES */}

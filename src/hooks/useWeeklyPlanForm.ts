@@ -1,64 +1,69 @@
 import { useState, useCallback, useEffect } from 'react';
 import { DayOfWeek, DailyWorkout } from '../types';
 
-export const useWeeklyPlanForm = (existingPlan: any) => {
-  const [planName, setPlanName] = useState(existingPlan.name || '');
-  const [description, setDescription] = useState(existingPlan.description || '');
-  const [isFormValid, setIsFormValid] = useState(!!existingPlan.name);
+export const useWeeklyPlanForm = (existingPlan: any = null) => {
+  const safePlan = existingPlan || {};
+  const [planName, setPlanName] = useState(safePlan.name || '');
+  const [description, setDescription] = useState(safePlan.description || '');
+  const [isFormValid, setIsFormValid] = useState(!!safePlan.name);
   const [isLoading, setIsLoading] = useState(false);
-  
+
+  const defaultDays: DailyWorkout[] = [
+    {
+      day: 'monday',
+      workoutId: null,
+      isCompleted: false,
+      completedAt: undefined,
+      notes: '',
+    },
+    {
+      day: 'tuesday',
+      workoutId: null,
+      isCompleted: false,
+      completedAt: undefined,
+      notes: '',
+    },
+    {
+      day: 'wednesday',
+      workoutId: null,
+      isCompleted: false,
+      completedAt: undefined,
+      notes: '',
+    },
+    {
+      day: 'thursday',
+      workoutId: null,
+      isCompleted: false,
+      completedAt: undefined,
+      notes: '',
+    },
+    {
+      day: 'friday',
+      workoutId: null,
+      isCompleted: false,
+      completedAt: undefined,
+      notes: '',
+    },
+    {
+      day: 'saturday',
+      workoutId: null,
+      isCompleted: false,
+      completedAt: undefined,
+      notes: '',
+    },
+    {
+      day: 'sunday',
+      workoutId: null,
+      isCompleted: false,
+      completedAt: undefined,
+      notes: '',
+    },
+  ];
+
   const [days, setDays] = useState<DailyWorkout[]>(
-    existingPlan.days || [
-      {
-        day: 'monday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'tuesday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'wednesday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'thursday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'friday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'saturday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-      {
-        day: 'sunday',
-        workoutId: null,
-        isCompleted: false,
-        completedAt: undefined,
-        notes: '',
-      },
-    ],
+    Array.isArray(safePlan.days) && safePlan.days.length > 0
+      ? safePlan.days
+      : defaultDays,
   );
 
   // Validação do formulário

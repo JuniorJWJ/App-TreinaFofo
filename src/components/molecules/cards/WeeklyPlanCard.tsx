@@ -18,15 +18,20 @@ export const WeeklyPlanCard: React.FC<WeeklyPlanCardProps> = ({
   onEdit,
   onDelete,
 }) => {
+  if (!plan) {
+    return null;
+  }
+
   const getCompletedWorkouts = (plan: any) => {
-    return plan.days.filter((d: any) => d.isCompleted).length;
+    const days = Array.isArray(plan.days) ? plan.days : [];
+    return days.filter((d: any) => d.isCompleted).length;
   };
 
   return (
     <View style={[styles.planCard, isActive && styles.activePlanCard]}>
       <View style={styles.planHeader}>
         <Text variant="subtitle" style={styles.planName}>
-          {plan.name}
+          {plan.name || 'Plano sem nome'}
         </Text>
         {isActive && (
           <View style={styles.activeBadge}>
@@ -43,10 +48,11 @@ export const WeeklyPlanCard: React.FC<WeeklyPlanCardProps> = ({
 
       <View style={styles.planStats}>
         <Text variant="caption">
-          {getCompletedWorkouts(plan)}/{plan.days.length} treinos completados
+          {getCompletedWorkouts(plan)}/
+          {Array.isArray(plan.days) ? plan.days.length : 0} treinos completados
         </Text>
         <Text variant="caption">
-          Progresso: {plan.completionRate.toFixed(0)}%
+          Progresso: {(plan.completionRate ?? 0).toFixed(0)}%
         </Text>
       </View>
 
@@ -54,7 +60,7 @@ export const WeeklyPlanCard: React.FC<WeeklyPlanCardProps> = ({
         {!isActive && (
           <Button
             title="Definir como Ativo"
-            onPress={() => onSetActive(plan.id, plan.name)}
+            onPress={() => onSetActive(plan.id, plan.name || 'Plano')}
             style={styles.activeButton}
             disabled={isActive}
           />
@@ -66,7 +72,7 @@ export const WeeklyPlanCard: React.FC<WeeklyPlanCardProps> = ({
         />
         <Button
           title="Excluir"
-          onPress={() => onDelete(plan.id, plan.name)}
+          onPress={() => onDelete(plan.id, plan.name || 'Plano')}
           style={styles.deleteButton}
         />
       </View>

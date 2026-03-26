@@ -28,6 +28,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
   const existingPlan = isEditing
     ? weeklyPlans.find(p => p.id === route.params.planId)
     : null;
+  const safePlan = existingPlan || {};
 
   const {
     planName,
@@ -73,16 +74,16 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
       name: planName.trim(),
       description: description.trim(),
       days,
-      startDate: existingPlan.startDate || new Date(),
+      startDate: safePlan.startDate || new Date(),
       endDate:
-        existingPlan.endDate ||
+        safePlan.endDate ||
         new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      workoutSplitId: existingPlan.workoutSplitId,
-      isActive: existingPlan.isActive || false,
-      isTemplate: existingPlan.isTemplate || false,
-      currentWeek: existingPlan.currentWeek || 1,
-      completedDays: existingPlan.completedDays || 0,
-      completionRate: existingPlan.completionRate || 0,
+      workoutSplitId: safePlan.workoutSplitId,
+      isActive: safePlan.isActive || false,
+      isTemplate: safePlan.isTemplate || false,
+      currentWeek: safePlan.currentWeek || 1,
+      completedDays: safePlan.completedDays || 0,
+      completionRate: safePlan.completionRate || 0,
     };
 
     if (isEditing && existingPlan) {

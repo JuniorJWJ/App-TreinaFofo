@@ -19,14 +19,35 @@ export const mockExercises: ExerciseFormData[] = [
   ...coreMockExercises,
 ];
 
+const normalizeIdPart = (value: string) =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
 export const initializeMockExercises = (): Exercise[] => {
-  return mockExercises.map((exercise, index) => ({
-    ...exercise,
-    id: `mock-ex-${index}-${Date.now()}`,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    warmupSets: exercise.warmupSets || [],
-  }));
+  const usedIds = new Set<string>();
+
+  return mockExercises.map((exercise) => {
+    const baseId = `ex-${normalizeIdPart(exercise.muscleGroupId)}-${normalizeIdPart(exercise.name)}`;
+    let id = baseId;
+    let counter = 2;
+    while (usedIds.has(id)) {
+      id = `${baseId}-${counter}`;
+      counter += 1;
+    }
+    usedIds.add(id);
+
+    return {
+      ...exercise,
+      id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      warmupSets: exercise.warmupSets || [],
+    };
+  });
 };
 
 export const getMockExercisesByMuscleGroup = (
