@@ -1,13 +1,13 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { WaterProgressMiniChart } from '../water/WaterProgressMiniChart';
-import { Text } from '../../atoms/Text'; 
+import { Text } from '../../atoms/Text';
 
 interface WaterProgressCardProps {
   currentIntake: number;
   dailyGoal: number;
-  onPress: () => void;
-  onQuickAdd: (amount: number) => void;
+  onPress?: () => void;
+  onQuickAdd?: (amount: number) => void;
   showActions: boolean;
 }
 
@@ -18,12 +18,13 @@ export const WaterProgressCard: React.FC<WaterProgressCardProps> = ({
   onQuickAdd,
   showActions = false,
 }) => {
-  const progress = Math.min(currentIntake / dailyGoal, 1);
-  const remaining = dailyGoal - currentIntake;
+  const safeGoal = Math.max(dailyGoal, 1);
+  const progress = Math.min(currentIntake / safeGoal, 1);
+  const remaining = safeGoal - currentIntake;
   const quickAmounts = [100, 250, 500, 750, 1000];
 
   const getStatusText = () => {
-    if (progress >= 1) return 'Meta atingida! 🎉';
+    if (progress >= 1) return 'Meta atingida!';
     if (remaining > 0) return `${remaining}ml restantes`;
     return 'Continue hidratando-se!';
   };
@@ -33,7 +34,7 @@ export const WaterProgressCard: React.FC<WaterProgressCardProps> = ({
   };
 
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.container}
       onPress={onPress}
       activeOpacity={0.9}
@@ -41,25 +42,28 @@ export const WaterProgressCard: React.FC<WaterProgressCardProps> = ({
     >
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          <Text variant="subtitle" style={styles.title}>💧 Hidratação</Text>
+          <Text variant="subtitle" style={styles.title}>
+            Hidratacao
+          </Text>
           <Text variant="caption" style={styles.subtitle}>
             {getStatusText()}
           </Text>
         </View>
         <WaterProgressMiniChart
           currentIntake={currentIntake}
-          dailyGoal={dailyGoal}
+          dailyGoal={safeGoal}
           compact={true}
+          onPress={onPress}
         />
       </View>
 
       <View style={styles.progressBarContainer}>
         <View style={styles.progressBar}>
-          <View 
+          <View
             style={[
               styles.progressFill,
-              { width: `${Math.min(progress * 100, 100)}%` }
-            ]} 
+              { width: `${Math.min(progress * 100, 100)}%` },
+            ]}
           />
         </View>
         <Text variant="caption" style={styles.percentageText}>
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
   quickButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
+    width: '100%'
   },
   quickButton: {
     backgroundColor: '#723B73',

@@ -21,7 +21,6 @@ import type { Exercise, Workout } from '../../../types';
 interface TodayWorkoutModalProps {
   visible: boolean;
   onClose: () => void;
-  workout?: Workout | null;
   workoutDetails?: Workout | null;
   isCompleted: boolean;
   onToggleCompletion: () => void;

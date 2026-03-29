@@ -16,7 +16,7 @@ import { ConfirmationModal } from '../../molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../../hooks/useConfirmationModal';
 
 interface ExerciseFormProps {
-  exercise: Exercise;
+  exercise?: Exercise;
   isEditing: boolean;
   // Removemos onSave e onCancel pois serão controlados externamente
 }
@@ -55,59 +55,71 @@ export interface ExerciseFormDataSnapshot {
   incrementSize: string;
 }
 
+const createEmptyExercise = (): Exercise => ({
+  id: `ex-${Date.now()}`,
+  name: '',
+  muscleGroupId: '',
+  defaultSets: 3,
+  defaultReps: 12,
+  defaultRestTime: 60,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
+
 export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
   ({ exercise, isEditing = false }, ref) => {
+    const baseExercise = exercise ?? createEmptyExercise();
     const { CreateExercise, updateExercise } = useExerciseStore();
     const { muscleGroups } = useMuscleGroupStore();
 
-    const [name, setName] = useState(exercise.name || '');
+    const [name, setName] = useState(baseExercise.name || '');
     const [description, setDescription] = useState(
-      exercise.description || '',
+      baseExercise.description || '',
     );
     const [selectedMuscleGroupId, setSelectedMuscleGroupId] = useState(
-      exercise.muscleGroupId || '',
+      baseExercise.muscleGroupId || '',
     );
     const [secondaryMuscleGroupIds, setSecondaryMuscleGroupIds] = useState<
       string[]
     >([]);
-    const [sets, setSets] = useState(exercise.defaultSets.toString() || '3');
-    const [reps, setReps] = useState(exercise.defaultReps.toString() || '12');
+    const [sets, setSets] = useState(baseExercise.defaultSets.toString() || '3');
+    const [reps, setReps] = useState(baseExercise.defaultReps.toString() || '12');
     const [restTime, setRestTime] = useState(
-      exercise.defaultRestTime.toString() || '60',
+      baseExercise.defaultRestTime.toString() || '60',
     );
     const [defaultWeight, setDefaultWeight] = useState(
-      exercise.defaultWeight?.toString() || '',
+      baseExercise.defaultWeight?.toString() || '',
     );
     const [weightUnit, setWeightUnit] = useState<'kg' | 'lb'>(
-      exercise.weightUnit || 'kg',
+      baseExercise.weightUnit || 'kg',
     );
-    const [notes, setNotes] = useState(exercise.notes || '');
+    const [notes, setNotes] = useState(baseExercise.notes || '');
     const [gifUrl, setGifUrl] = useState(
-      typeof exercise.gifLocal === 'string' ? exercise.gifLocal : '',
+      typeof baseExercise.gifLocal === 'string' ? baseExercise.gifLocal : '',
     );
     // OK Fixed syntax: removed trailing comma and added setter (though not used)
     const [progressionType, _setProgressionType] = useState<
       'fixed' | 'range' | 'linear'
-    >(exercise.progressionType || 'fixed');
+    >(baseExercise.progressionType || 'fixed');
     const [useWarmupSets, setUseWarmupSets] = useState(
-      (exercise.warmupSets && exercise.warmupSets.length > 0) || false,
+      (baseExercise.warmupSets && baseExercise.warmupSets.length > 0) || false,
     );
     // OK Fixed ternary: added missing '?'
     const [warmupSets, setWarmupSets] = useState<
       Array<{ reps: string; percentage: string }>
     >(
-      exercise.warmupSets
-        ? exercise.warmupSets.map(set => ({
+      baseExercise.warmupSets
+        ? baseExercise.warmupSets.map(set => ({
             reps: set.reps.toString(),
             percentage: set.percentage.toString(),
           }))
         : [{ reps: '10', percentage: '50' }],
     );
     const [autoProgression, setAutoProgression] = useState(
-      exercise.autoProgression || false,
+      baseExercise.autoProgression || false,
     );
     const [incrementSize, setIncrementSize] = useState(
-      exercise.incrementSize?.toString() || '2.5',
+      baseExercise.incrementSize?.toString() || '2.5',
     );
 
     const [isLoading, setIsLoading] = useState(false);
@@ -115,9 +127,9 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const modal = useConfirmationModal();
 
     useEffect(() => {
-      if (!exercise.secondaryMuscleGroups || muscleGroups.length === 0) return;
+      if (!baseExercise.secondaryMuscleGroups || muscleGroups.length === 0) return;
 
-      const normalized = exercise.secondaryMuscleGroups
+      const normalized = baseExercise.secondaryMuscleGroups
         .map((group) => {
           const byId = muscleGroups.find(m => m.id === group);
           if (byId) return byId.id;
@@ -130,7 +142,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
         .filter(id => id !== selectedMuscleGroupId);
 
       setSecondaryMuscleGroupIds(Array.from(new Set(normalized)));
-    }, [exercise.secondaryMuscleGroups, muscleGroups, selectedMuscleGroupId]);
+    }, [baseExercise.secondaryMuscleGroups, muscleGroups, selectedMuscleGroupId]);
 
     const toggleSecondaryGroup = (groupId: string) => {
       if (groupId === selectedMuscleGroupId) return;
@@ -185,7 +197,9 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           notes: notes.trim() || undefined,
           gifLocal:
             gifUrl.trim() ||
-            (typeof exercise.gifLocal !== 'string' ? exercise.gifLocal : undefined),
+            (typeof baseExercise.gifLocal !== 'string'
+              ? baseExercise.gifLocal
+              : undefined),
           progressionType,
           warmupSets: useWarmupSets
             ? warmupSets.map(set => ({
@@ -279,6 +293,8 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const selectedGroup = muscleGroups.find(
       group => group.id === selectedMuscleGroupId,
     );
+
+    const modalConfig = modal.modalConfig;
 
     return (
       <>
@@ -588,19 +604,19 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           {/* REMOVIDOS OS BOTÕES */}
         </ScrollView>
 
-        {modal.modalConfig && (
+        {modalConfig && (
           <ConfirmationModal
             visible={modal.isVisible}
-            title={modal.modalConfig.title || ''}
-            message={modal.modalConfig.message || ''}
-            confirmText={modal.modalConfig.confirmText || 'OK'}
-            cancelText={modal.modalConfig.cancelText}
+            title={modalConfig.title || ''}
+            message={modalConfig.message || ''}
+            confirmText={modalConfig.confirmText || 'OK'}
+            cancelText={modalConfig.cancelText}
             onConfirm={() => {
-              modal.modalConfig.onConfirm?.();
+              modalConfig.onConfirm?.();
               modal.hideModal();
             }}
             onCancel={() => {
-              modal.modalConfig.onCancel?.();
+              modalConfig.onCancel?.();
               modal.hideModal();
             }}
             onClose={() => {

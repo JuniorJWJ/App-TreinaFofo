@@ -72,7 +72,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   const handleQuickWaterAdd = (amount: number) => {
-    addWater(amount);
+    addWater(amount, '');
   };
 
   return (
@@ -108,6 +108,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               initialTime={0}
               autoStart={false}
               onTimeUpdate={time => console.log('Tempo atual:', time)}
+              showHours={false}
+              showLaps={true}
+              maxLaps={5}
             />
           </View>
         )}
@@ -126,7 +129,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               workoutName={todaysWorkoutDetails ? todaysWorkoutDetails.name : 'Descanso'}
               exerciseCount={todaysWorkoutDetails?.exerciseIds.length || 0}
               estimatedDuration={todaysWorkoutDetails?.estimatedDuration || 0}
-              isCompleted={todaysWorkout.isCompleted}
+              isCompleted={todaysWorkout.isCompleted ?? false}
               onPress={handleWorkoutCardPress}
             />
           )}
@@ -148,7 +151,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       <TodayWorkoutModal
         visible={isWorkoutModalVisible}
         onClose={handleCloseModal}
-        workout={todaysWorkout}
         workoutDetails={todaysWorkoutDetails}
         isCompleted={todaysWorkout?.isCompleted || false}
         onToggleCompletion={handleToggleWorkoutCompletion}

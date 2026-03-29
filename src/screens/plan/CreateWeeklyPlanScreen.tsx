@@ -8,7 +8,7 @@ import { WeeklyPlanFormContainer } from '../../components/organisms/WeeklyPlanFo
 import { WeeklyPlanHeader } from '../../components/molecules/workout/WeeklyPlanHeader';
 import { WorkoutSelectorModal } from '../../components/molecules/modals/WorkoutSelectorModal';
 import { useWeeklyPlanForm } from '../../hooks/useWeeklyPlanForm';
-import { DayOfWeek } from '../../types';
+import { DayOfWeek, WeeklyPlan } from '../../types';
 
 interface CreateWeeklyPlanScreenProps {
   navigation: {
@@ -31,7 +31,10 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
   const existingPlan = isEditing
     ? weeklyPlans.find(p => p.id === route.params?.planId)
     : null;
-  const safePlan = useMemo(() => existingPlan || {}, [existingPlan]);
+  const safePlan: Partial<WeeklyPlan> = useMemo(
+    () => existingPlan || {},
+    [existingPlan],
+  );
 
   const {
     planName,
@@ -111,13 +114,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
       }
     } else {
       try {
-        const newPlanId = `wp-${Date.now()}`;
-        addWeeklyPlan({
-          ...planData,
-          id: newPlanId,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
+        const newPlanId = addWeeklyPlan(planData);
 
         // CORRECAO AQUI: usar showModal corretamente
         modal.showModal({
@@ -186,6 +183,8 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     }, [navigation, HeaderSaveButton, isEditing]),
   );
 
+  const modalConfig = modal.modalConfig;
+
   return (
     <>
       <ScrollView style={styles.container}>
@@ -210,24 +209,24 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
       />
 
       {/* Modal de confirmação */}
-      {modal.modalConfig && (
+      {modalConfig && (
         <ConfirmationModal
           visible={modal.isVisible}
-          type={modal.modalConfig.type}
-          title={modal.modalConfig.title}
-          message={modal.modalConfig.message}
-          confirmText={modal.modalConfig.confirmText}
-          cancelText={modal.modalConfig.cancelText}
+          type={modalConfig.type}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          confirmText={modalConfig.confirmText}
+          cancelText={modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm?.();
+            modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel?.();
+            modalConfig.onCancel?.();
             modal.hideModal();
           }}
-          showCancelButton={modal.modalConfig.showCancelButton}
-          hideIcon={modal.modalConfig.hideIcon}
+          showCancelButton={modalConfig.showCancelButton}
+          hideIcon={modalConfig.hideIcon}
           onClose={modal.hideModal}
         />
       )}

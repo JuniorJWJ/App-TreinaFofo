@@ -11,7 +11,7 @@ export const useWeeklyPlanActions = () => {
       'Excluir Plano',
       () => {
         deleteWeeklyPlan(planId);
-        modal.showSuccess('Plano excluÃ­do com sucesso!', 'Sucesso!');
+        modal.showSuccess('Plano excluído com sucesso!', 'Sucesso!', () => {});
       },
       'Excluir',
       'Cancelar'

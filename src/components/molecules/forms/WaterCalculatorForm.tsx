@@ -1,4 +1,4 @@
-// src/components/molecules/WaterCalculatorForm.tsx
+﻿// src/components/molecules/WaterCalculatorForm.tsx
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -36,7 +36,6 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
   const [waterGoal, setWaterGoal] = useState<number | null>(null);
   const [showRecommendation, setShowRecommendation] = useState(false);
 
-  // Atualiza quando os valores iniciais mudam
   useEffect(() => {
     if (initialWeight) {
       setWeight(initialWeight.toString());
@@ -45,7 +44,6 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
     setClimate(initialClimate);
   }, [initialWeight, initialActivityLevel, initialClimate]);
 
-  // Recalcula automaticamente quando os valores mudam
   useEffect(() => {
     const weightNum = parseFloat(weight);
     if (weight && weightNum > 0) {
@@ -55,7 +53,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
         climate,
       });
       setWaterGoal(goal);
-      
+
       if (onGoalCalculated) {
         onGoalCalculated(goal);
       }
@@ -64,7 +62,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
 
   const handleSaveProfile = () => {
     const weightNum = parseFloat(weight);
-    if (isNaN(weightNum) || weightNum <= 0) {
+    if (Number.isNaN(weightNum) || weightNum <= 0) {
       return;
     }
 
@@ -85,22 +83,22 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
     value: WaterActivityLevel;
   }[] = [
     {
-      label: 'Sedentário (pouco ou nenhum exercício)',
-      shortLabel: 'Sedentário',
+      label: 'Sedentario (pouco ou nenhum exercicio)',
+      shortLabel: 'Sedentario',
       value: 'sedentary',
     },
     {
-      label: 'Moderado (exercício leve 1-3 dias/semana)',
+      label: 'Moderado (exercicio leve 1-3 dias/semana)',
       shortLabel: 'Moderado',
       value: 'moderate',
     },
     {
-      label: 'Ativo (exercício moderado 3-5 dias/semana)',
+      label: 'Ativo (exercicio moderado 3-5 dias/semana)',
       shortLabel: 'Ativo',
       value: 'active',
     },
     {
-      label: 'Atleta (exercício intenso 6-7 dias/semana)',
+      label: 'Atleta (exercicio intenso 6-7 dias/semana)',
       shortLabel: 'Atleta',
       value: 'athlete',
     },
@@ -112,17 +110,17 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
     value: WaterClimate;
   }[] = [
     {
-      label: 'Temperado (15-25°C)',
+      label: 'Temperado (15-25C)',
       shortLabel: 'Temperado',
       value: 'temperate',
     },
     {
-      label: 'Quente (25-35°C)',
+      label: 'Quente (25-35C)',
       shortLabel: 'Quente',
       value: 'hot',
     },
     {
-      label: 'Muito Quente (>35°C ou seco)',
+      label: 'Muito Quente (>35C ou seco)',
       shortLabel: 'Muito quente',
       value: 'very_hot',
     },
@@ -130,30 +128,38 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
 
   const getActivityDescription = (level: WaterActivityLevel) => {
     switch (level) {
-      case 'sedentary': return 'Pouco ou nenhum exercício físico';
-      case 'moderate': return 'Exercício leve 1-3 vezes por semana';
-      case 'active': return 'Exercício moderado 3-5 vezes por semana';
-      case 'athlete': return 'Exercício intenso 6-7 vezes por semana';
-      default: return '';
+      case 'sedentary':
+        return 'Pouco ou nenhum exercicio fisico';
+      case 'moderate':
+        return 'Exercicio leve 1-3 vezes por semana';
+      case 'active':
+        return 'Exercicio moderado 3-5 vezes por semana';
+      case 'athlete':
+        return 'Exercicio intenso 6-7 vezes por semana';
+      default:
+        return '';
     }
   };
 
   const getClimateDescription = (climateValue: WaterClimate) => {
     switch (climateValue) {
-      case 'temperate': return 'Clima ameno (15-25°C)';
-      case 'hot': return 'Clima quente (25-35°C)';
-      case 'very_hot': return 'Clima muito quente ou seco (>35°C)';
-      default: return '';
+      case 'temperate':
+        return 'Clima ameno (15-25C)';
+      case 'hot':
+        return 'Clima quente (25-35C)';
+      case 'very_hot':
+        return 'Clima muito quente ou seco (>35C)';
+      default:
+        return '';
     }
   };
 
   return (
     <ScrollView style={styles.container}>
       <Text variant="body" style={styles.description}>
-        Calcule sua necessidade diária de água baseada no seu perfil
+        Calcule sua necessidade diaria de agua baseada no seu perfil
       </Text>
 
-      {/* Peso */}
       <View style={styles.section}>
         <Text variant="subtitle" style={styles.sectionTitle}>
           Peso (kg)
@@ -171,13 +177,12 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
         </Text>
       </View>
 
-      {/* Nível de Atividade */}
       <View style={styles.section}>
         <Text variant="subtitle" style={styles.sectionTitle}>
-          Nível de Atividade
+          Nivel de Atividade
         </Text>
         <View style={styles.optionsContainer}>
-          {activityLevels.map((option) => (
+          {activityLevels.map(option => (
             <TouchableOpacity
               key={option.value}
               style={[
@@ -205,13 +210,12 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
         </View>
       </View>
 
-      {/* Clima */}
       <View style={styles.section}>
         <Text variant="subtitle" style={styles.sectionTitle}>
           Clima Local
         </Text>
         <View style={styles.optionsContainer}>
-          {climates.map((option) => (
+          {climates.map(option => (
             <TouchableOpacity
               key={option.value}
               style={[
@@ -239,12 +243,11 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
         </View>
       </View>
 
-      {/* Resultado */}
       {waterGoal && (
         <View style={styles.resultSection}>
           <View style={styles.resultCard}>
             <Text variant="title" align="center" style={styles.resultTitle}>
-              Meta Diária Recomendada
+              Meta Diaria Recomendada
             </Text>
             <Text variant="title" align="center" style={styles.resultValue}>
               {waterGoal} ml
@@ -267,7 +270,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
                   Atividade:
                 </Text>
                 <Text variant="body" style={styles.detailValue}>
-                  {activityLevels.find(a => a.value === activityLevel).shortLabel}
+                  {activityLevels.find(a => a.value === activityLevel)?.shortLabel || ''}
                 </Text>
               </View>
               <View style={styles.detailItem}>
@@ -275,7 +278,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
                   Clima:
                 </Text>
                 <Text variant="body" style={styles.detailValue}>
-                  {climates.find(c => c.value === climate).shortLabel}
+                  {climates.find(c => c.value === climate)?.shortLabel || ''}
                 </Text>
               </View>
             </View>
@@ -283,7 +286,6 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
         </View>
       )}
 
-      {/* Ações */}
       <View style={styles.actionsContainer}>
         <Button
           title="Salvar Perfil e Meta"
@@ -296,15 +298,14 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
       {showRecommendation && waterGoal && (
         <View style={styles.recommendationBox}>
           <Text variant="body" style={styles.recommendationText}>
-            ✅ Perfil salvo! Sua meta diária de {waterGoal}ml foi calculada com base nas suas características.
+            OK Perfil salvo! Sua meta diaria de {waterGoal}ml foi calculada com base nas suas caracteristicas.
           </Text>
         </View>
       )}
 
-      {/* Informações sobre hidratação */}
       <View style={styles.infoContainer}>
         <Text variant="subtitle" style={styles.infoTitle}>
-          💡 Como funciona o cálculo
+          DICA Como funciona o calculo
         </Text>
         <Text variant="caption" style={styles.infoText}>
           • Base: 35ml por kg de peso corporal
@@ -316,7 +317,7 @@ export const WaterCalculatorForm: React.FC<WaterCalculatorFormProps> = ({
           • Multiplicador de clima: 1.0 a 1.4
         </Text>
         <Text variant="caption" style={styles.infoText}>
-          • Limites saudáveis: 1500ml mínimo, 6000ml máximo
+          • Limites saudaveis: 1500ml minimo, 6000ml maximo
         </Text>
       </View>
     </ScrollView>

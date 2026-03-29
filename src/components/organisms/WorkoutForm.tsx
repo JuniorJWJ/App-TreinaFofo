@@ -7,6 +7,7 @@ import { ExerciseSearchBar } from '../molecules/search-filters/ExerciseSearchBar
 import { MuscleGroupFilterChips } from '../molecules/search-filters/MuscleGroupFilterChips';
 import { WorkoutExerciseCard } from '../molecules/cards/WorkoutExerciseCard';
 import { useExerciseList } from '../../hooks/useExerciseList';
+import type { Exercise } from '../../types';
 
 export interface WorkoutFormHandle {
   submitForm: () => void;
@@ -18,14 +19,7 @@ interface WorkoutFormProps {
   mode: 'create' | 'edit';
   initialWorkoutName?: string;
   initialSelectedExercises?: string[];
-  exercises: Array<{
-    id: string;
-    name: string;
-    muscleGroupId: string;
-    defaultSets: number;
-    defaultReps: number;
-    defaultRestTime: number;
-  }>;
+  exercises: Exercise[];
   onSubmit: (workoutName: string, selectedExercises: string[]) => void;
   onCancel?: () => void;
   isLoading?: boolean;
@@ -152,20 +146,20 @@ export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* âœ… Fixed: added color prop */}
+          {/* Fixed: added color prop */}
           <Input
             placeholder="Nome do treino"
             value={workoutName}
             onChangeText={setWorkoutName}
             style={styles.input}
             autoFocus={mode === 'create'}
-            color="#000" // or any color you want (e.g., "#000")
+            color="#000"
           />
 
           <ExerciseSearchBar
             search={search}
             onSearchChange={setSearch}
-            placeholder="Buscar exercÃ­cios..."
+            placeholder="Buscar exercícios..."
           />
 
           <MuscleGroupFilterChips
@@ -176,7 +170,7 @@ export const WorkoutForm = forwardRef<WorkoutFormHandle, WorkoutFormProps>(
 
           <View style={styles.selectionHeader}>
             <Text variant="subtitle" style={styles.sectionTitle}>
-              ExercÃ­cios: {selectedExercises.length}/{filteredExercises.length}
+              Exercícios: {selectedExercises.length}/{filteredExercises.length}
             </Text>
             <View style={styles.selectionButtons}>
               <TouchableOpacity
@@ -349,3 +343,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+

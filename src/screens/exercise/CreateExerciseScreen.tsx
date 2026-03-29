@@ -120,22 +120,24 @@ export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
     return () => clearInterval(interval);
   }, [updateFormValidity]);
 
+  const modalConfig = modal.modalConfig;
+
   return (
     <View style={styles.container}>
       <ExerciseForm ref={exerciseFormRef} isEditing={false} />
 
-      {modal.modalConfig && (
+      {modalConfig && (
         <ConfirmationModal
           visible={modal.isVisible}
-          type={modal.modalConfig.type}
-          title={modal.modalConfig.title}
-          message={modal.modalConfig.message}
-          confirmText={modal.modalConfig.confirmText}
-          cancelText={modal.modalConfig.cancelText}
-          onConfirm={modal.modalConfig.onConfirm || (() => {})}
+          type={modalConfig.type}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          confirmText={modalConfig.confirmText}
+          cancelText={modalConfig.cancelText}
+          onConfirm={modalConfig.onConfirm || (() => {})}
           onCancel={() => {
-            if (modal.modalConfig.onCancel) {
-              modal.modalConfig.onCancel();
+            if (modalConfig.onCancel) {
+              modalConfig.onCancel();
             } else {
               modal.hideModal();
             }
@@ -144,8 +146,8 @@ export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
             // (isso limpará o formulário via replace)
             navigation.replace('CreateExercise');
           }}
-          showCancelButton={modal.modalConfig.showCancelButton}
-          hideIcon={modal.modalConfig.hideIcon}
+          showCancelButton={modalConfig.showCancelButton}
+          hideIcon={modalConfig.hideIcon}
           onClose={modal.hideModal}
         />
       )}

@@ -1,8 +1,15 @@
-import { useState, useCallback, useEffect } from 'react';
+﻿import { useState, useCallback, useEffect, useMemo } from 'react';
 import { DayOfWeek, DailyWorkout, WeeklyPlan } from '../types';
 
-export const useWeeklyPlanForm = (existingPlan: WeeklyPlan | null = null) => {
-  const safePlan = existingPlan || {};
+export const useWeeklyPlanForm = (
+  existingPlan: WeeklyPlan | null = null,
+  _isEditing = false,
+) => {
+  const safePlan: Partial<WeeklyPlan> = useMemo(
+    () => existingPlan || {},
+    [existingPlan],
+  );
+
   const [planName, setPlanName] = useState(safePlan.name || '');
   const [description, setDescription] = useState(safePlan.description || '');
   const [isFormValid, setIsFormValid] = useState(!!safePlan.name);
@@ -66,17 +73,20 @@ export const useWeeklyPlanForm = (existingPlan: WeeklyPlan | null = null) => {
       : defaultDays,
   );
 
-  // Validação do formulário
+  // Validacao do formulario
   useEffect(() => {
     const isValid = planName.trim() !== '';
     setIsFormValid(isValid);
   }, [planName]);
 
-  const updateDayWorkout = useCallback((day: DayOfWeek, workoutId: string | null) => {
-    setDays(prevDays =>
-      prevDays.map(d => (d.day === day ? { ...d, workoutId } : d)),
-    );
-  }, []);
+  const updateDayWorkout = useCallback(
+    (day: DayOfWeek, workoutId: string | null) => {
+      setDays(prevDays =>
+        prevDays.map(d => (d.day === day ? { ...d, workoutId } : d)),
+      );
+    },
+    [],
+  );
 
   return {
     planName,

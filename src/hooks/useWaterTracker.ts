@@ -1,4 +1,4 @@
-import { useWaterStore, useWaterStats } from '../store/waterStore';
+﻿import { useWaterStore, useWaterStats } from '../store/waterStore';
 
 export const useWaterTracker = () => {
   const {
@@ -14,33 +14,34 @@ export const useWaterTracker = () => {
     removeEntry,
     todayEntries,
   } = useWaterStore();
-  
+
   const stats = useWaterStats();
-  
+  const { todayEntries: statsTodayEntries, ...restStats } = stats;
+
   return {
     // Estado atual
     currentIntake,
     dailyGoal,
     isLoading,
-    
-    // Configurações
+
+    // Configuracoes
     config,
-    
+
     // Entradas do dia
     todayEntries,
-    
-    // Estatísticas
-    ...stats,
-    
-    // Ações
+
+    // Estatisticas
+    ...restStats,
+
+    // Acoes
     addWater,
     resetDay,
     updateGoal,
     updateConfig,
     calculateGoalFromConfig,
     removeEntry,
-    
-    // Métodos compatíveis com o hook antigo
+
+    // Metodos compativeis com o hook antigo
     loadWaterData: async () => {
       // Mantido para compatibilidade
     },

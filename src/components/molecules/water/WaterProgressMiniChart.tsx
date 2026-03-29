@@ -7,7 +7,7 @@ import { Text } from '../../atoms/Text';
 interface WaterProgressMiniChartProps {
   currentIntake: number;
   dailyGoal: number;
-  onPress: () => void;
+  onPress?: () => void;
   compact: boolean;
 }
 

@@ -8,6 +8,20 @@ const uniqueIds = (ids: string[]) => Array.from(new Set(ids.filter(Boolean)));
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
+const parseDate = (value: unknown): Date | null => {
+  if (value instanceof Date) return value;
+  if (typeof value === 'string' || typeof value === 'number') {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+  return null;
+};
+
+const isDifficulty = (
+  value: unknown,
+): value is 'beginner' | 'intermediate' | 'advanced' =>
+  value === 'beginner' || value === 'intermediate' || value === 'advanced';
+
 interface WorkoutState {
   workouts: Workout[];
   sessions: WorkoutSession[];
@@ -169,12 +183,6 @@ export const useWorkoutStore = create<WorkoutState>()(
 
       importWorkoutsFromData: (workouts) => {
         const incoming = Array.isArray(workouts) ? workouts : [];
-        const parseDate = (value: unknown) => {
-          if (!value) return null;
-          const date = new Date(value);
-          return Number.isNaN(date.getTime()) ? null : date;
-        };
-
         let added = 0;
         let updated = 0;
         let skipped = 0;
@@ -203,6 +211,19 @@ export const useWorkoutStore = create<WorkoutState>()(
           if (!existing) {
             nextWorkouts.push({
               ...raw,
+              id: rawId,
+              name: rawName,
+              description:
+                typeof raw.description === 'string' ? raw.description : '',
+              muscleGroupIds: Array.isArray(raw.muscleGroupIds)
+                ? raw.muscleGroupIds
+                : [],
+              estimatedDuration:
+                typeof raw.estimatedDuration === 'number' ? raw.estimatedDuration : 0,
+              difficulty: isDifficulty(raw.difficulty) ? raw.difficulty : 'beginner',
+              tags: Array.isArray(raw.tags)
+                ? raw.tags.filter(tag => typeof tag === 'string')
+                : [],
               exerciseIds: uniqueIds(Array.isArray(raw.exerciseIds) ? raw.exerciseIds : []),
               exercises: [],
               timesCompleted: 0,
@@ -224,6 +245,23 @@ export const useWorkoutStore = create<WorkoutState>()(
             const merged = {
               ...existing,
               ...raw,
+              description:
+                typeof raw.description === 'string'
+                  ? raw.description
+                  : existing.description || '',
+              muscleGroupIds: Array.isArray(raw.muscleGroupIds)
+                ? raw.muscleGroupIds
+                : existing.muscleGroupIds || [],
+              estimatedDuration:
+                typeof raw.estimatedDuration === 'number'
+                  ? raw.estimatedDuration
+                  : existing.estimatedDuration || 0,
+              difficulty: isDifficulty(raw.difficulty)
+                ? raw.difficulty
+                : existing.difficulty || 'beginner',
+              tags: Array.isArray(raw.tags)
+                ? raw.tags.filter(tag => typeof tag === 'string')
+                : existing.tags || [],
               exerciseIds: Array.isArray(raw.exerciseIds)
                 ? uniqueIds(raw.exerciseIds)
                 : existing.exerciseIds,

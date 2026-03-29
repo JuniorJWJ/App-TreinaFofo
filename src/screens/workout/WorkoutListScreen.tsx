@@ -101,26 +101,28 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
     </TouchableOpacity>
   );
 
+  const modalConfig = modal.modalConfig;
+
   return (
     <View style={styles.container}>
-      {modal.modalConfig && (
+      {modalConfig && (
         <ConfirmationModal
           visible={modal.isVisible}
-          type={modal.modalConfig.type}
-          title={modal.modalConfig.title}
-          message={modal.modalConfig.message}
-          confirmText={modal.modalConfig.confirmText}
-          cancelText={modal.modalConfig.cancelText}
+          type={modalConfig.type}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          confirmText={modalConfig.confirmText}
+          cancelText={modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm?.();
+            modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel?.();
+            modalConfig.onCancel?.();
             modal.hideModal();
           }}
-          showCancelButton={modal.modalConfig.showCancelButton}
-          hideIcon={modal.modalConfig.hideIcon}
+          showCancelButton={modalConfig.showCancelButton}
+          hideIcon={modalConfig.hideIcon}
           onClose={modal.hideModal}
         />
       )}

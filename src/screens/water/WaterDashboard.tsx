@@ -41,8 +41,6 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
   };
 
   const handleReset = () => {
-    if (!onReset) return;
-
     modal.showConfirmation(
       'Tem certeza que deseja zerar a ingestao de agua do dia',
       'Resetar Dia',
@@ -83,6 +81,8 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
     setCustomAmount(text.replace(/[^0-9]/g, ''));
     setInputError('');
   };
+
+  const modalConfig = modal.modalConfig;
 
   return (
     <View style={styles.container}>
@@ -158,20 +158,16 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
 
       {/* Acoes */}
       <View style={styles.actionsContainer}>
-        {onAdjustGoal && (
-          <Button
-            title="Ajustar Meta"
-            onPress={onAdjustGoal}
-            style={styles.actionButton}
-          />
-        )}
-        {onReset && (
-          <Button
-            title="Zerar Hoje"
-            onPress={handleReset}
-            style={[styles.actionButton, styles.resetButton]}
-          />
-        )}
+        <Button
+          title="Ajustar Meta"
+          onPress={onAdjustGoal}
+          style={styles.actionButton}
+        />
+        <Button
+          title="Zerar Hoje"
+          onPress={handleReset}
+          style={[styles.actionButton, styles.resetButton]}
+        />
       </View>
 
       {/* Modal para entrada personalizada */}
@@ -185,24 +181,24 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
       />
 
       {/* Modal de confirmacao */}
-      {modal.modalConfig && (
+      {modalConfig && (
         <ConfirmationModal
           visible={modal.isVisible}
-          type={modal.modalConfig.type}
-          title={modal.modalConfig.title}
-          message={modal.modalConfig.message}
-          confirmText={modal.modalConfig.confirmText}
-          cancelText={modal.modalConfig.cancelText}
+          type={modalConfig.type}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          confirmText={modalConfig.confirmText}
+          cancelText={modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm?.();
+            modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel?.();
+            modalConfig.onCancel?.();
             modal.hideModal();
           }}
-          showCancelButton={modal.modalConfig.showCancelButton}
-          hideIcon={modal.modalConfig.hideIcon}
+          showCancelButton={modalConfig.showCancelButton}
+          hideIcon={modalConfig.hideIcon}
           onClose={modal.hideModal}
         />
       )}

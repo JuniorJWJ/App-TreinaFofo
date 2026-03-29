@@ -47,7 +47,7 @@ export const setupWaterNotifications = async (): Promise<boolean> => {
     const granted =
       permissions.granted ||
       permissions.status === 'granted' ||
-      permissions.ios.status === 2;
+      permissions.ios?.status === 2;
 
     if (!granted) {
       console.warn('Permissao para notificacoes nao concedida');

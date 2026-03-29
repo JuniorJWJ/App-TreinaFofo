@@ -12,6 +12,28 @@ import { normalizeText } from '../utils/textNormalize';
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
+const dayOfWeekValues: DayOfWeek[] = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+];
+
+const isDayOfWeek = (value: unknown): value is DayOfWeek =>
+  typeof value === 'string' && dayOfWeekValues.includes(value as DayOfWeek);
+
+const parseDate = (value: unknown): Date | null => {
+  if (value instanceof Date) return value;
+  if (typeof value === 'string' || typeof value === 'number') {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+  return null;
+};
+
 const defaultDays: DailyWorkout[] = [
   {
     day: 'monday',
@@ -67,7 +89,7 @@ const defaultDays: DailyWorkout[] = [
 const normalizeDays = (days?: DailyWorkout[]) => {
   if (Array.isArray(days) && days.length > 0) {
     return days.map(d => ({
-      day: d.day,
+      day: isDayOfWeek(d.day) ? d.day : 'monday',
       workoutId: d.workoutId ?? null,
       isCompleted: d.isCompleted ?? false,
       completedAt: d.completedAt,
@@ -82,9 +104,12 @@ const normalizePlan = (plan: unknown): WeeklyPlan | null => {
     return null;
   }
   const raw = plan as Partial<WeeklyPlan> & Record<string, unknown>;
+  const rawId = typeof raw.id === 'string' ? raw.id : '';
+  const rawName = typeof raw.name === 'string' ? raw.name : '';
   return {
     ...raw,
-    name: normalizeText(raw.name) || raw.name,
+    id: rawId,
+    name: normalizeText(rawName) || rawName,
     description: normalizeText(raw.description),
     days: normalizeDays(raw.days as DailyWorkout[]).map(day => ({
       ...day,
@@ -95,8 +120,8 @@ const normalizePlan = (plan: unknown): WeeklyPlan | null => {
     completionRate: raw.completionRate ?? 0,
     isActive: raw.isActive ?? false,
     isTemplate: raw.isTemplate ?? false,
-    createdAt: raw.createdAt ? new Date(raw.createdAt) : new Date(),
-    updatedAt: raw.updatedAt ? new Date(raw.updatedAt) : new Date(),
+    createdAt: parseDate(raw.createdAt) || new Date(),
+    updatedAt: parseDate(raw.updatedAt) || new Date(),
   };
 };
 
@@ -205,12 +230,6 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
 
       importWeeklyPlansFromData: plans => {
         const incoming = Array.isArray(plans) ? plans : [];
-        const parseDate = (value: unknown) => {
-          if (!value) return null;
-          const date = new Date(value);
-          return Number.isNaN(date.getTime()) ? null : date;
-        };
-
         let added = 0;
         let updated = 0;
         let skipped = 0;
@@ -247,7 +266,7 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
             }
             const day = dayItem as Partial<DailyWorkout> & Record<string, unknown>;
             return {
-              day: day.day as DayOfWeek,
+              day: isDayOfWeek(day.day) ? day.day : 'monday',
               workoutId: typeof day.workoutId === 'string' ? day.workoutId : null,
               notes: typeof day.notes === 'string' ? day.notes : '',
             };
@@ -256,6 +275,8 @@ export const useWeeklyPlanStore = create<WeeklyPlanState>()(
           if (!existing) {
             nextPlans.push({
               ...raw,
+              id: rawId,
+              name: rawName,
               days: normalizedDays.map(day => ({
                 ...day,
                 isCompleted: false,

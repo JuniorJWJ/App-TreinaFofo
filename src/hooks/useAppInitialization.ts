@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeAppData, checkIsFirstLaunch, markAppAsLaunched } from '../utils/initializeData';
 
 export const useAppInitialization = () => {
@@ -12,7 +13,7 @@ export const useAppInitialization = () => {
       setIsLoading(true);
       setError(null);
 
-      // Verificar se Ã© a primeira vez
+      // Verificar se é a primeira vez
       const firstLaunch = await checkIsFirstLaunch();
       setIsFirstLaunch(firstLaunch);
 
@@ -72,3 +73,4 @@ export const useInitializeOnMount = (onComplete: () => void) => {
 };
 
 export default useAppInitialization;
+

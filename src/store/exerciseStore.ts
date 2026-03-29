@@ -14,6 +14,15 @@ const mockGifByName = new Map(
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
+const parseDate = (value: unknown): Date | null => {
+  if (value instanceof Date) return value;
+  if (typeof value === 'string' || typeof value === 'number') {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+  return null;
+};
+
 interface ExerciseState {
   exercises: Exercise[];
   isLoading: boolean;
@@ -106,12 +115,6 @@ export const useExerciseStore = create<ExerciseState>()(
             ? payload
             : [];
 
-        const parseDate = (value: unknown) => {
-          if (!value) return null;
-          const date = new Date(value);
-          return Number.isNaN(date.getTime()) ? null : date;
-        };
-
         let added = 0;
         let updated = 0;
         let skipped = 0;
@@ -142,6 +145,9 @@ export const useExerciseStore = create<ExerciseState>()(
           if (!existing) {
             nextExercises.push({
               ...raw,
+              id: rawId,
+              name: rawName,
+              muscleGroupId: rawGroup,
               createdAt: parseDate(raw.createdAt) || new Date(),
               updatedAt: incomingUpdatedAt,
               warmupSets: Array.isArray(raw.warmupSets) ? raw.warmupSets : [],
@@ -163,7 +169,7 @@ export const useExerciseStore = create<ExerciseState>()(
                 ? raw.gifLocal
                 : existing.gifLocal;
 
-            const merged = {
+          const merged = {
               ...existing,
               ...raw,
               gifLocal: mergedGif,
@@ -276,10 +282,12 @@ export const useExerciseStore = create<ExerciseState>()(
         normalized = normalized.map(exercise => {
           if (!isRecord(exercise)) return exercise as Exercise;
           const safeExercise = exercise as Exercise;
+          const normalizedGroup =
+            normalizeText(safeExercise.muscleGroupId) || safeExercise.muscleGroupId;
           return {
             ...safeExercise,
             name: normalizeText(safeExercise.name) || safeExercise.name,
-            muscleGroupId: normalizeText(safeExercise.muscleGroupId),
+            muscleGroupId: normalizedGroup,
             description: normalizeText(safeExercise.description),
             equipment: normalizeText(safeExercise.equipment),
             notes: normalizeText(safeExercise.notes),

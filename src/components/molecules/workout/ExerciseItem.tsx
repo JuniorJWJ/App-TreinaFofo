@@ -115,14 +115,7 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
                 <Text style={styles.detailLabel}>Aquecimento</Text>
                 <Text style={styles.detailValue}>
                   {exercise.warmupSets
-                    .map(
-                      set =>
-                        `${set.reps} reps${
-                          set.weight
-                            ? ` @ ${set.weight}${exercise.weightUnit || 'kg'}`
-                            : ''
-                        }`,
-                    )
+                    .map(set => `${set.reps} reps • ${set.percentage}%`)
                     .join(', ')}
                 </Text>
               </View>

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button } from '../../atoms/Button';
 import { ConfirmationModal } from '../modals/ConfirmationModal';
@@ -16,57 +16,53 @@ export const WaterActionsPanel: React.FC<WaterActionsPanelProps> = ({
   const modal = useConfirmationModal();
 
   const handleReset = () => {
-    if (!onReset) return;
-    
     modal.showConfirmation(
-      'Tem certeza que deseja zerar a ingestão de água do dia',
+      'Tem certeza que deseja zerar a ingestao de agua do dia',
       'Resetar Dia',
       () => {
         onReset();
       },
       'Zerar',
-      'Cancelar'
+      'Cancelar',
     );
   };
+
+  const modalConfig = modal.modalConfig;
 
   return (
     <>
       <View style={styles.container}>
-        {onAdjustGoal && (
-          <Button
-            title="Ajustar Meta"
-            onPress={onAdjustGoal}
-            style={styles.actionButton}
-          />
-        )}
-        {onReset && (
-          <Button
-            title="Zerar Hoje"
-            onPress={handleReset}
-            style={[styles.actionButton, styles.resetButton]}
-          />
-        )}
+        <Button
+          title="Ajustar Meta"
+          onPress={onAdjustGoal}
+          style={styles.actionButton}
+        />
+        <Button
+          title="Zerar Hoje"
+          onPress={handleReset}
+          style={[styles.actionButton, styles.resetButton]}
+        />
       </View>
 
-      {/* Modal de confirmação */}
-      {modal.modalConfig && (
+      {/* Modal de confirmacao */}
+      {modalConfig && (
         <ConfirmationModal
           visible={modal.isVisible}
-          type={modal.modalConfig.type}
-          title={modal.modalConfig.title}
-          message={modal.modalConfig.message}
-          confirmText={modal.modalConfig.confirmText}
-          cancelText={modal.modalConfig.cancelText}
+          type={modalConfig.type}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          confirmText={modalConfig.confirmText}
+          cancelText={modalConfig.cancelText}
           onConfirm={() => {
-            modal.modalConfig.onConfirm?.();
+            modalConfig.onConfirm?.();
             modal.hideModal();
           }}
           onCancel={() => {
-            modal.modalConfig.onCancel?.();
+            modalConfig.onCancel?.();
             modal.hideModal();
           }}
-          showCancelButton={modal.modalConfig.showCancelButton}
-          hideIcon={modal.modalConfig.hideIcon}
+          showCancelButton={modalConfig.showCancelButton}
+          hideIcon={modalConfig.hideIcon}
           onClose={modal.hideModal}
         />
       )}

@@ -283,8 +283,18 @@ const handleTimeChange = async (
         onClose={() => setGoalModalVisible(false)}
         onSave={updateGoal}
         weight={config.weight || 0}
-        activityLevel={config.activityLevel}
-        climate={config.climate}
+        activityLevel={
+          (config.activityLevel === 'light'
+            ? 'moderate'
+            : config.activityLevel === 'intense'
+              ? 'athlete'
+              : config.activityLevel) as WaterActivityLevel
+        }
+        climate={
+          (config.climate === 'cold'
+            ? 'temperate'
+            : config.climate) as WaterClimate
+        }
         onProfileSave={profile =>
           updateConfig({
             weight: profile.weight,

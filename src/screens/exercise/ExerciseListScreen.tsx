@@ -437,7 +437,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
   const handleDeleteExercise = useCallback(
     (exerciseId: string, exerciseName: string) => {
       modal.showConfirmation(
-        `Tem certeza que deseja excluir \"${exerciseName}\"`,
+        `Tem certeza que deseja excluir "${exerciseName}"`,
         'Excluir Exercício',
         () => {
           deleteExercise(exerciseId);
