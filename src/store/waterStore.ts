@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { calculateWaterGoal, WaterConfig as CalculatorConfig } from '../utils/waterCalculator';
+import { updateWaterWidget } from '../utils/waterWidget';
 
 // Tipos
 export interface WaterEntry {
@@ -119,6 +120,8 @@ export const useWaterStore = create<WaterStore>()(
         }
         
         set({ isLoading: false });
+        const { currentIntake, dailyGoal } = get();
+        updateWaterWidget(currentIntake, dailyGoal);
       },
 
       // Adicionar água
@@ -137,6 +140,7 @@ export const useWaterStore = create<WaterStore>()(
           currentIntake: newIntake,
           todayEntries: [...todayEntries, newEntry],
         });
+        updateWaterWidget(newIntake, get().dailyGoal);
       },
 
       // Remover entrada
@@ -153,6 +157,7 @@ export const useWaterStore = create<WaterStore>()(
           currentIntake: Math.max(0, newIntake),
           todayEntries: filteredEntries,
         });
+        updateWaterWidget(get().currentIntake, get().dailyGoal);
       },
 
       // Atualizar meta manualmente
@@ -164,6 +169,7 @@ export const useWaterStore = create<WaterStore>()(
             customGoal: newGoal,
           }
         });
+        updateWaterWidget(get().currentIntake, newGoal);
       },
 
       // Resetar dia
@@ -174,6 +180,7 @@ export const useWaterStore = create<WaterStore>()(
           todayEntries: [],
           lastResetDate: today 
         });
+        updateWaterWidget(0, get().dailyGoal);
       },
 
       // Atualizar configurações
@@ -239,6 +246,7 @@ export const useWaterStore = create<WaterStore>()(
           // Se não houver meta personalizada, usar a calculada
           dailyGoal: config.customGoal || calculatedGoal 
         });
+        updateWaterWidget(get().currentIntake, config.customGoal || calculatedGoal);
       },
 
       // Carregar dados históricos (simulado - na prática buscaria do AsyncStorage)
@@ -287,6 +295,7 @@ export const useWaterStore = create<WaterStore>()(
           todayEntries: [],
           currentIntake: 0 
         });
+        updateWaterWidget(0, get().dailyGoal);
       },
     }),
     {
