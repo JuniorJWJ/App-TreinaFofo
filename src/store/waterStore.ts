@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { calculateWaterGoal, WaterConfig as CalculatorConfig } from '../utils/waterCalculator';
-import { updateWaterWidget } from '../utils/waterWidget';
+import { updateWaterWidget, getWaterWidgetValues } from '../utils/waterWidget';
 
 // Tipos
 export interface WaterEntry {
@@ -118,7 +118,23 @@ export const useWaterStore = create<WaterStore>()(
         if (get().config.weight) {
           await get().calculateGoalFromConfig();
         }
-        
+
+        const widgetValues = await getWaterWidgetValues();
+        if (widgetValues) {
+          const { current, goal } = widgetValues;
+          const currentIntake = get().currentIntake;
+          const dailyGoal = get().dailyGoal;
+          if (current > currentIntake) {
+            set({ currentIntake: current });
+          }
+          if (goal > 0 && goal !== dailyGoal) {
+            set({
+              dailyGoal: goal,
+              config: { ...get().config, customGoal: goal },
+            });
+          }
+        }
+
         set({ isLoading: false });
         const { currentIntake, dailyGoal } = get();
         updateWaterWidget(currentIntake, dailyGoal);

@@ -1,10 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
-import { useWorkoutStore } from '../../store';
-import { useWeeklyPlanStore } from '../../store';
-import { useExerciseStore } from '../../store';
+import { useWorkoutStore, useWeeklyPlanStore, useExerciseStore } from '../../store';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 import { weeklySplitTemplates } from '../../data/weeklySplitTemplates';
@@ -12,7 +10,9 @@ import { popularWorkouts } from '../../data/popularWorkouts';
 import { DayOfWeek } from '../../types';
 
 interface PopularWeeklySplitsScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
 }
 
 const dayLabels: Record<DayOfWeek, string> = {
@@ -37,7 +37,7 @@ export const PopularWeeklySplitsScreen: React.FC<PopularWeeklySplitsScreenProps>
     const ids: string[] = [];
     const missing: string[] = [];
 
-    names.forEach((name) => {
+    names.forEach(name => {
       const ex = exercises.find(
         e => e.name.toLowerCase() === name.toLowerCase(),
       );
@@ -65,7 +65,11 @@ export const PopularWeeklySplitsScreen: React.FC<PopularWeeklySplitsScreenProps>
     }
 
     const muscleGroupIds = Array.from(
-      new Set(ids.map(id => exercises.find(e => e.id === id)?.muscleGroupId).filter(Boolean)),
+      new Set(
+        ids
+          .map(id => exercises.find(e => e.id === id)?.muscleGroupId)
+          .filter(Boolean),
+      ),
     ) as string[];
 
     addWorkout({
@@ -87,7 +91,7 @@ export const PopularWeeklySplitsScreen: React.FC<PopularWeeklySplitsScreenProps>
     const split = weeklySplitTemplates.find(s => s.id === splitId);
     if (!split) return;
 
-    const days = split.days.map((d) => {
+    const days = split.days.map(d => {
       if (!d.workoutTemplateId) {
         return {
           day: d.day,
@@ -139,7 +143,7 @@ export const PopularWeeklySplitsScreen: React.FC<PopularWeeklySplitsScreenProps>
           Divisões Semanais Populares
         </Text>
 
-        {weeklySplitTemplates.map((split) => (
+        {weeklySplitTemplates.map(split => (
           <View key={split.id} style={styles.card}>
             <Text variant="subtitle" style={styles.cardTitle}>
               {split.name}
@@ -151,9 +155,7 @@ export const PopularWeeklySplitsScreen: React.FC<PopularWeeklySplitsScreenProps>
             <View style={styles.dayRow}>
               {split.days.map(d => (
                 <View key={`${split.id}-${d.day}`} style={styles.dayChip}>
-                  <Text style={styles.dayText}>
-                    {dayLabels[d.day]}
-                  </Text>
+                  <Text style={styles.dayText}>{dayLabels[d.day]}</Text>
                   <Text style={styles.daySubText}>
                     {d.workoutTemplateId ? 'Treino' : 'Desc'}
                   </Text>

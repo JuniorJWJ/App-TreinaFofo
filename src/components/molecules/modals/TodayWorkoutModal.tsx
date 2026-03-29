@@ -1,3 +1,4 @@
+﻿
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -15,15 +16,24 @@ import { useMuscleGroupUtils } from '../../../hooks/useMuscleGroupUtils';
 import { ExerciseItem } from '../workout/ExerciseItem';
 import { WorkoutStats } from '../../molecules/workout/WorkoutStats';
 import { RestDayContent } from '../workout/RestDayContent';
+import type { Exercise, Workout } from '../../../types';
 
 interface TodayWorkoutModalProps {
   visible: boolean;
   onClose: () => void;
-  workout: any;
-  workoutDetails: any;
+  workout?: Workout | null;
+  workoutDetails?: Workout | null;
   isCompleted: boolean;
   onToggleCompletion: () => void;
 }
+
+const getGifSource = (gifLocal: Exercise['gifLocal']) => {
+  if (!gifLocal) return null;
+  if (typeof gifLocal === 'number') return gifLocal;
+  if (typeof gifLocal === 'string') return { uri: gifLocal };
+  if (typeof gifLocal === 'object' && gifLocal.uri) return gifLocal;
+  return null;
+};
 
 export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
   visible,
@@ -49,16 +59,15 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
 
   const toggleExerciseExpand = (exerciseId: string) => {
     setExpandedExerciseId(
-      expandedExerciseId === exerciseId ? null : exerciseId
+      expandedExerciseId === exerciseId ? null : exerciseId,
     );
   };
 
-  // ✅ Fixed ternary operator – added missing '?' and removed extra comma
   const toggleExerciseCompletion = (exerciseId: string) => {
     setCompletedExerciseIds(prev =>
       prev.includes(exerciseId)
         ? prev.filter(id => id !== exerciseId)
-        : [...prev, exerciseId]
+        : [...prev, exerciseId],
     );
   };
 
@@ -66,7 +75,7 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
     <Modal
       visible={visible}
       animationType="fade"
-      transparent={true}
+      transparent
       onRequestClose={onClose}
     >
       <TouchableWithoutFeedback onPress={onClose}>
@@ -80,7 +89,7 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
                   activeOpacity={0.7}
                 >
                   <View style={styles.closeIconCircle}>
-                    <Text style={styles.closeIconText}>✕</Text>
+                    <Text style={styles.closeIconText}>×</Text>
                   </View>
                 </TouchableOpacity>
 
@@ -128,7 +137,7 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
         ]}
       >
         <Text style={styles.statusText}>
-          {isCompleted ? '✓ CONCLUÍDO' : '🔄 PENDENTE'}
+          {isCompleted ? '✓ CONCLUÍDO' : 'PENDENTE'}
         </Text>
       </View>
 
@@ -154,7 +163,10 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
             !!exercise.notes ||
             (exercise.warmupSets && exercise.warmupSets.length > 0) ||
             (exercise.progressionType && exercise.progressionType !== 'fixed') ||
-            !!exercise.autoProgression;
+            !!exercise.autoProgression ||
+            !!exercise.gifLocal;
+
+          const gifSource = getGifSource(exercise.gifLocal);
 
           return (
             <View key={exerciseId} style={styles.exerciseBlock}>
@@ -169,10 +181,10 @@ export const TodayWorkoutModal: React.FC<TodayWorkoutModalProps> = ({
                 getMuscleGroupName={getMuscleGroupName}
               />
 
-              {isExpanded && exercise.gifLocal && (
+              {isExpanded && gifSource && (
                 <View style={styles.gifContainer}>
                   <Image
-                    source={exercise.gifLocal}
+                    source={gifSource}
                     style={styles.gifImage}
                     contentFit="contain"
                     transition={200}

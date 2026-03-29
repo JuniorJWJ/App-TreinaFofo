@@ -1,4 +1,4 @@
-// src/components/molecules/WaterCalculatorModal.tsx
+﻿// src/components/molecules/WaterCalculatorModal.tsx
 import React, { useState, useEffect } from 'react';
 import { Modal, View, StyleSheet, ScrollView } from 'react-native';
 import { WaterCalculatorForm } from '../forms/WaterCalculatorForm';
@@ -51,7 +51,7 @@ export const WaterCalculatorModal: React.FC<WaterCalculatorModalProps> = ({
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      transparent
       visible={visible}
       onRequestClose={onClose}
     >
@@ -61,11 +61,7 @@ export const WaterCalculatorModal: React.FC<WaterCalculatorModalProps> = ({
             <Text variant="title" style={styles.modalTitle}>
               Calculadora de Hidratação
             </Text>
-            <Button
-              title="✕"
-              onPress={onClose}
-              style={styles.closeButton} 
-            />
+            <Button title="×" onPress={onClose} style={styles.closeButton} />
           </View>
 
           <ScrollView style={styles.modalContent}>

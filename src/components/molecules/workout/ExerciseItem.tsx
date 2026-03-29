@@ -1,10 +1,11 @@
-// components/molecules/workout/ExerciseItem.tsx
+﻿// components/molecules/workout/ExerciseItem.tsx
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from '../../atoms/Text';
+import type { Exercise } from '../../../types';
 
 interface ExerciseItemProps {
-  exercise: any;
+  exercise: Exercise;
   index: number;
   isExpanded: boolean;
   isCompleted: boolean;
@@ -115,7 +116,7 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
                 <Text style={styles.detailValue}>
                   {exercise.warmupSets
                     .map(
-                      (set: any) =>
+                      set =>
                         `${set.reps} reps${
                           set.weight
                             ? ` @ ${set.weight}${exercise.weightUnit || 'kg'}`
@@ -135,8 +136,8 @@ export const ExerciseItem: React.FC<ExerciseItemProps> = ({
                     {exercise.progressionType === 'range'
                       ? 'Faixa de repetições'
                       : exercise.progressionType === 'linear'
-                      ? 'Progressão linear'
-                      : 'Outro'}
+                        ? 'Progressão linear'
+                        : 'Outro'}
                   </Text>
                 </View>
               )}

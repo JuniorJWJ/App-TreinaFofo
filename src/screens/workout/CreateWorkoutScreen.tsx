@@ -1,7 +1,6 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+﻿import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { useWorkoutStore } from '../../store';
-import { useExerciseStore } from '../../store';
+import { useWorkoutStore, useExerciseStore } from '../../store';
 import {
   WorkoutForm,
   WorkoutFormHandle,
@@ -12,7 +11,11 @@ import { ConfirmationModal } from '../../components/molecules/modals/Confirmatio
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 
 interface CreateWorkoutScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    replace: (screen: string, params?: Record<string, unknown>) => void;
+    setOptions: (options: Record<string, unknown>) => void;
+  };
 }
 
 export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
@@ -33,11 +36,7 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   const handleSubmit = useCallback(
     (workoutName: string, selectedExercises: string[]) => {
       if (!workoutName.trim()) {
-        modal.showWarning(
-          'Digite um nome para o treino',
-          'Atenção!',
-          () => {}
-        );
+        modal.showWarning('Digite um nome para o treino', 'Atenção!', () => {});
         return;
       }
 
@@ -45,7 +44,7 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         modal.showWarning(
           'Selecione pelo menos um exercício',
           'Atenção!',
-          () => {}
+          () => {},
         );
         return;
       }
@@ -55,7 +54,7 @@ export const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         createQuickWorkout(workoutName, selectedExercises);
 
         modal.showConfirmation(
-          'Treino criado com sucesso! O que você gostaria de fazer agora',
+          'Treino criado com sucesso! O que você gostaria de fazer agora?',
           'Sucesso!',
           () => navigation.navigate('WorkoutList'),
           'Ver Treinos',

@@ -1,13 +1,17 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
 import { useExerciseStore } from '../../store';
 import { useMuscleGroupUtils } from '../../hooks/useMuscleGroupUtils';
+import type { Exercise } from '../../types';
 
 interface ExerciseDetailScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    goBack: () => void;
+  };
   route: { params: { exerciseId: string } };
 }
 
@@ -44,7 +48,7 @@ export const ExerciseDetailScreen: React.FC<ExerciseDetailScreenProps> = ({
     color: getMuscleGroupColor(id),
   }));
 
-  const getGifSource = (gifLocal: any) => {
+  const getGifSource = (gifLocal: Exercise['gifLocal']) => {
     if (!gifLocal) return null;
     if (typeof gifLocal === 'number') return gifLocal;
     if (typeof gifLocal === 'string') return { uri: gifLocal };
@@ -115,7 +119,7 @@ export const ExerciseDetailScreen: React.FC<ExerciseDetailScreenProps> = ({
         )}
       </View>
 
-      {(exercise.warmupSets && exercise.warmupSets.length > 0) && (
+      {exercise.warmupSets && exercise.warmupSets.length > 0 && (
         <View style={styles.section}>
           <Text variant="subtitle" style={styles.sectionTitle}>
             Séries de Aquecimento
@@ -128,7 +132,7 @@ export const ExerciseDetailScreen: React.FC<ExerciseDetailScreenProps> = ({
         </View>
       )}
 
-      {(exercise.progressionType && exercise.progressionType !== 'fixed') && (
+      {exercise.progressionType && exercise.progressionType !== 'fixed' && (
         <View style={styles.section}>
           <Text variant="subtitle" style={styles.sectionTitle}>
             Progressão

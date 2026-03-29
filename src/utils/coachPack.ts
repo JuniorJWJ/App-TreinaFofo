@@ -2,6 +2,9 @@ import { useExerciseStore } from '../store/exerciseStore';
 import { useWorkoutStore } from '../store/workoutStore';
 import { useWeeklyPlanStore } from '../store/weeklyPlanStore';
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
 type ImportResult = {
   added: number;
   updated: number;
@@ -70,7 +73,7 @@ export const exportCoachPackJson = (): string => {
 };
 
 export const importCoachPackJson = (json: string): CoachPackImportResult => {
-  let payload: any;
+  let payload: unknown;
   try {
     payload = JSON.parse(json);
   } catch {
@@ -82,7 +85,10 @@ export const importCoachPackJson = (json: string): CoachPackImportResult => {
   }
 
   const exercisesPayload = {
-    exercises: Array.isArray(payload?.exercises) ? payload.exercises : [],
+    exercises:
+      isRecord(payload) && Array.isArray(payload.exercises)
+        ? payload.exercises
+        : [],
   };
 
   const exerciseResult = useExerciseStore
@@ -91,11 +97,19 @@ export const importCoachPackJson = (json: string): CoachPackImportResult => {
 
   const workoutResult = useWorkoutStore
     .getState()
-    .importWorkoutsFromData(payload?.workouts);
+    .importWorkoutsFromData(
+      isRecord(payload) && Array.isArray(payload.workouts)
+        ? payload.workouts
+        : [],
+    );
 
   const weeklyPlanResult = useWeeklyPlanStore
     .getState()
-    .importWeeklyPlansFromData(payload?.weeklyPlans);
+    .importWeeklyPlansFromData(
+      isRecord(payload) && Array.isArray(payload.weeklyPlans)
+        ? payload.weeklyPlans
+        : [],
+    );
 
   return {
     exercises: exerciseResult,

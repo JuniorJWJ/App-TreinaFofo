@@ -1,7 +1,6 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+﻿import React, { useRef, useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useWorkoutStore } from '../../store';
-import { useExerciseStore } from '../../store';
+import { useWorkoutStore, useExerciseStore } from '../../store';
 import {
   WorkoutForm,
   WorkoutFormHandle,
@@ -12,8 +11,12 @@ import { ConfirmationModal } from '../../components/molecules/modals/Confirmatio
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 
 interface EditWorkoutScreenProps {
-  navigation: any;
-  route: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    goBack: () => void;
+    setOptions: (options: Record<string, unknown>) => void;
+  };
+  route: { params?: { workoutId?: string } };
 }
 
 export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
@@ -42,6 +45,7 @@ export const EditWorkoutScreen: React.FC<EditWorkoutScreenProps> = ({
     async (workoutName: string, selectedExercises: string[]) => {
       setIsLoading(true);
       try {
+        if (!workoutId) return;
         updateWorkout(workoutId, {
           name: workoutName.trim(),
           exerciseIds: selectedExercises,

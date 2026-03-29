@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+﻿
+import React, { useState, useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -24,10 +25,37 @@ import {
   useWorkoutStore,
   useWeeklyPlanStore,
 } from '../../store';
+import type { Exercise, Workout, WeeklyPlan } from '../../types';
 
 interface ExerciseListScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
 }
+
+type ImportPayload = {
+  exercises: unknown[];
+  workouts: unknown[];
+  weeklyPlans: unknown[];
+};
+
+type ImportPreview = {
+  exercises: number;
+  workouts: number;
+  weeklyPlans: number;
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+const getId = (value: unknown): string =>
+  isRecord(value) && typeof value.id === 'string' ? value.id : '';
+
+const getName = (value: unknown): string =>
+  isRecord(value) && typeof value.name === 'string' ? value.name : '';
+
+const collectIds = (items: unknown[]) =>
+  items.map(getId).filter((id): id is string => Boolean(id));
 
 export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
   navigation,
@@ -38,11 +66,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
   const [exportJson, setExportJson] = useState('');
   const [importJson, setImportJson] = useState('');
   const [importError, setImportError] = useState<string | null>(null);
-  const [importPreview, setImportPreview] = useState<{
-    exercises: number;
-    workouts: number;
-    weeklyPlans: number;
-  } | null>(null);
+  const [importPreview, setImportPreview] = useState<ImportPreview | null>(null);
 
   // ========== Export State ==========
   const [exportSelection, setExportSelection] = useState({
@@ -57,11 +81,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
   );
 
   // ========== Import State ==========
-  const [importPayload, setImportPayload] = useState<{
-    exercises: any[];
-    workouts: any[];
-    weeklyPlans: any[];
-  } | null>(null);
+  const [importPayload, setImportPayload] = useState<ImportPayload | null>(null);
   const [importSelection, setImportSelection] = useState({
     exercises: true,
     workouts: true,
@@ -94,21 +114,21 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
     deleteExercise,
   } = useExerciseList();
 
-  const toIso = (value: any) => {
+  const toIso = (value: unknown) => {
     if (!value) return new Date().toISOString();
     if (value instanceof Date) return value.toISOString();
-    const parsed = new Date(value);
+    const parsed = new Date(value as string);
     return Number.isNaN(parsed.getTime())
       ? new Date().toISOString()
       : parsed.toISOString();
   };
 
-  const serializeExercise = (exercise: any) => {
+  const serializeExercise = (exercise: Exercise) => {
     const gifLocal =
       typeof exercise.gifLocal === 'string' ||
       (exercise.gifLocal &&
         typeof exercise.gifLocal === 'object' &&
-        exercise.gifLocal.uri)
+        'uri' in exercise.gifLocal)
         ? exercise.gifLocal
         : undefined;
 
@@ -120,7 +140,7 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
     };
   };
 
-  const serializeWorkout = (workout: any) => ({
+  const serializeWorkout = (workout: Workout) => ({
     id: workout.id,
     name: workout.name,
     description: workout.description,
@@ -133,11 +153,11 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
     updatedAt: toIso(workout.updatedAt),
   });
 
-  const serializeWeeklyPlan = (plan: any) => ({
+  const serializeWeeklyPlan = (plan: WeeklyPlan) => ({
     id: plan.id,
     name: plan.name,
     description: plan.description,
-    days: (plan.days || []).map((day: any) => ({
+    days: (plan.days || []).map(day => ({
       day: day.day,
       workoutId: day.workoutId ?? null,
       notes: day.notes,
@@ -242,19 +262,24 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
   const handleImportTextChange = (text: string) => {
     setImportJson(text);
     try {
-      const payload = JSON.parse(text);
-      const exercisesData = Array.isArray(payload?.exercises)
-        ? payload.exercises
-        : [];
-      const workoutsData = Array.isArray(payload?.workouts)
-        ? payload.workouts
-        : [];
-      const weeklyPlansData = Array.isArray(payload?.weeklyPlans)
-        ? payload.weeklyPlans
-        : [];
+      const payload = JSON.parse(text) as unknown;
+      const exercisesData =
+        isRecord(payload) && Array.isArray(payload.exercises)
+          ? payload.exercises
+          : [];
+      const workoutsData =
+        isRecord(payload) && Array.isArray(payload.workouts)
+          ? payload.workouts
+          : [];
+      const weeklyPlansData =
+        isRecord(payload) && Array.isArray(payload.weeklyPlans)
+          ? payload.weeklyPlans
+          : [];
+
       const exercisesCount = exercisesData.length;
       const workoutsCount = workoutsData.length;
       const weeklyPlansCount = weeklyPlansData.length;
+
       setImportPreview({
         exercises: exercisesCount,
         workouts: workoutsCount,
@@ -270,15 +295,9 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
         workouts: workoutsCount > 0,
         weeklyPlans: weeklyPlansCount > 0,
       });
-      setSelectedImportExerciseIds(
-        exercisesData.map((item: any) => item.id).filter(Boolean),
-      );
-      setSelectedImportWorkoutIds(
-        workoutsData.map((item: any) => item.id).filter(Boolean),
-      );
-      setSelectedImportWeeklyPlanIds(
-        weeklyPlansData.map((item: any) => item.id).filter(Boolean),
-      );
+      setSelectedImportExerciseIds(collectIds(exercisesData));
+      setSelectedImportWorkoutIds(collectIds(workoutsData));
+      setSelectedImportWeeklyPlanIds(collectIds(weeklyPlansData));
       setImportError(null);
     } catch {
       setImportPreview(null);
@@ -291,17 +310,17 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
     if (!importJson.trim() || !importPayload) return;
     const selectedExercises = importSelection.exercises
       ? importPayload.exercises.filter(item =>
-          selectedImportExerciseIds.includes(item.id),
+          selectedImportExerciseIds.includes(getId(item)),
         )
       : [];
     const selectedWorkouts = importSelection.workouts
       ? importPayload.workouts.filter(item =>
-          selectedImportWorkoutIds.includes(item.id),
+          selectedImportWorkoutIds.includes(getId(item)),
         )
       : [];
     const selectedWeeklyPlans = importSelection.weeklyPlans
       ? importPayload.weeklyPlans.filter(item =>
-          selectedImportWeeklyPlanIds.includes(item.id),
+          selectedImportWeeklyPlanIds.includes(getId(item)),
         )
       : [];
 
@@ -415,50 +434,70 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
     setSelectedImportWeeklyPlanIds(prev => toggleId(prev, id));
   };
 
-  const handleDeleteExercise = (exerciseId: string, exerciseName: string) => {
-    modal.showConfirmation(
-      `Tem certeza que deseja excluir "${exerciseName}"`,
-      'Excluir Exercício',
-      () => {
-        deleteExercise(exerciseId);
-        modal.hideModal();
-      },
-      'Excluir',
-      'Cancelar',
-    );
-  };
+  const handleDeleteExercise = useCallback(
+    (exerciseId: string, exerciseName: string) => {
+      modal.showConfirmation(
+        `Tem certeza que deseja excluir \"${exerciseName}\"`,
+        'Excluir Exercício',
+        () => {
+          deleteExercise(exerciseId);
+          modal.hideModal();
+        },
+        'Excluir',
+        'Cancelar',
+      );
+    },
+    [modal, deleteExercise],
+  );
 
-  const handleEditExercise = (exerciseId: string) => {
-    navigation.navigate('EditExercise', { exerciseId });
-  };
+  const handleEditExercise = useCallback(
+    (exerciseId: string) => {
+      navigation.navigate('EditExercise', { exerciseId });
+    },
+    [navigation],
+  );
 
-  const handleOpenDetails = (exerciseId: string) => {
-    navigation.navigate('ExerciseDetail', { exerciseId });
-  };
+  const handleOpenDetails = useCallback(
+    (exerciseId: string) => {
+      navigation.navigate('ExerciseDetail', { exerciseId });
+    },
+    [navigation],
+  );
 
-  const renderItem = ({ item, index }: { item: any; index: number }) => {
-    const currentGroup = getMuscleGroupName(item.muscleGroupId);
-    const prevGroup =
-      index > 0
-        ? getMuscleGroupName(exercises[index - 1].muscleGroupId)
-        : null;
+  const renderItem = useCallback(
+    ({ item, index }: { item: Exercise; index: number }) => {
+      const currentGroup = getMuscleGroupName(item.muscleGroupId);
+      const prevGroup =
+        index > 0
+          ? getMuscleGroupName(exercises[index - 1].muscleGroupId)
+          : null;
 
-    const showGroupHeader = currentGroup !== prevGroup && !selectedGroup;
+      const showGroupHeader = currentGroup !== prevGroup && !selectedGroup;
 
-    return (
-      <ExerciseCard
-        exercise={item}
-        onEdit={() => handleEditExercise(item.id)}
-        onDelete={() => handleDeleteExercise(item.id, item.name)}
-        onPress={() => handleOpenDetails(item.id)}
-        onLongPress={() => handleDeleteExercise(item.id, item.name)}
-        muscleGroupName={currentGroup}
-        muscleGroupColor={getMuscleGroupColor(item.muscleGroupId)}
-        showGroupHeader={showGroupHeader}
-        hasGif={!!item.gifLocal}
-      />
-    );
-  };
+      return (
+        <ExerciseCard
+          exercise={item}
+          onEdit={() => handleEditExercise(item.id)}
+          onDelete={() => handleDeleteExercise(item.id, item.name)}
+          onPress={() => handleOpenDetails(item.id)}
+          onLongPress={() => handleDeleteExercise(item.id, item.name)}
+          muscleGroupName={currentGroup}
+          muscleGroupColor={getMuscleGroupColor(item.muscleGroupId)}
+          showGroupHeader={showGroupHeader}
+          hasGif={!!item.gifLocal}
+        />
+      );
+    },
+    [
+      exercises,
+      selectedGroup,
+      getMuscleGroupName,
+      getMuscleGroupColor,
+      handleEditExercise,
+      handleDeleteExercise,
+      handleOpenDetails,
+    ],
+  );
 
   const hasSearchOrFilter = search.length > 0 || selectedGroup !== null;
   const hasExercises = exercises.length > 0;
@@ -694,18 +733,18 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
                   {importSelection.exercises &&
                     importPayload.exercises.map((item, index) => (
                       <TouchableOpacity
-                        key={item.id || `import-exercise-${index}`}
+                        key={getId(item) || `import-exercise-${index}`}
                         style={styles.itemRow}
-                        onPress={() => handleToggleImportExerciseId(item.id)}
+                        onPress={() => handleToggleImportExerciseId(getId(item))}
                       >
                         <View
                           style={[
                             styles.checkbox,
-                            selectedImportExerciseIds.includes(item.id) &&
+                            selectedImportExerciseIds.includes(getId(item)) &&
                               styles.checkboxChecked,
                           ]}
                         />
-                        <Text style={styles.itemText}>{item.name}</Text>
+                        <Text style={styles.itemText}>{getName(item)}</Text>
                       </TouchableOpacity>
                     ))}
 
@@ -726,18 +765,18 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
                   {importSelection.workouts &&
                     importPayload.workouts.map((item, index) => (
                       <TouchableOpacity
-                        key={item.id || `import-workout-${index}`}
+                        key={getId(item) || `import-workout-${index}`}
                         style={styles.itemRow}
-                        onPress={() => handleToggleImportWorkoutId(item.id)}
+                        onPress={() => handleToggleImportWorkoutId(getId(item))}
                       >
                         <View
                           style={[
                             styles.checkbox,
-                            selectedImportWorkoutIds.includes(item.id) &&
+                            selectedImportWorkoutIds.includes(getId(item)) &&
                               styles.checkboxChecked,
                           ]}
                         />
-                        <Text style={styles.itemText}>{item.name}</Text>
+                        <Text style={styles.itemText}>{getName(item)}</Text>
                       </TouchableOpacity>
                     ))}
 
@@ -758,18 +797,18 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
                   {importSelection.weeklyPlans &&
                     importPayload.weeklyPlans.map((item, index) => (
                       <TouchableOpacity
-                        key={item.id || `import-weekly-${index}`}
+                        key={getId(item) || `import-weekly-${index}`}
                         style={styles.itemRow}
-                        onPress={() => handleToggleImportWeeklyPlanId(item.id)}
+                        onPress={() => handleToggleImportWeeklyPlanId(getId(item))}
                       >
                         <View
                           style={[
                             styles.checkbox,
-                            selectedImportWeeklyPlanIds.includes(item.id) &&
+                            selectedImportWeeklyPlanIds.includes(getId(item)) &&
                               styles.checkboxChecked,
                           ]}
                         />
-                        <Text style={styles.itemText}>{item.name}</Text>
+                        <Text style={styles.itemText}>{getName(item)}</Text>
                       </TouchableOpacity>
                     ))}
                 </>
@@ -834,6 +873,10 @@ export const ExerciseListScreen: React.FC<ExerciseListScreenProps> = ({
           data={exercises}
           keyExtractor={item => item.id}
           renderItem={renderItem}
+          removeClippedSubviews
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={7}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
         />

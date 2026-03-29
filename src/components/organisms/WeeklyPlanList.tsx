@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { WeeklyPlanCard } from '../molecules/cards/WeeklyPlanCard';
+import type { WeeklyPlan } from '../../types';
 
 interface WeeklyPlanListProps {
-  plans: any[];
-  activePlanId: string;
+  plans: WeeklyPlan[];
+  activePlanId: string | null;
   onSetActivePlan: (planId: string, planName: string) => void;
   onEditPlan: (planId: string) => void;
   onDeletePlan: (planId: string, planName: string) => void;
@@ -19,14 +20,17 @@ export const WeeklyPlanList: React.FC<WeeklyPlanListProps> = ({
 }) => {
   const safePlans = (plans || []).filter(Boolean);
 
-  const renderPlanItem = ({ item }: { item: any }) => (
-    <WeeklyPlanCard
-      plan={item}
-      isActive={activePlanId === item.id}
-      onSetActive={onSetActivePlan}
-      onEdit={onEditPlan}
-      onDelete={onDeletePlan}
-    />
+  const renderPlanItem = useCallback(
+    ({ item }: { item: WeeklyPlan }) => (
+      <WeeklyPlanCard
+        plan={item}
+        isActive={activePlanId === item.id}
+        onSetActive={onSetActivePlan}
+        onEdit={onEditPlan}
+        onDelete={onDeletePlan}
+      />
+    ),
+    [activePlanId, onSetActivePlan, onEditPlan, onDeletePlan],
   );
 
   return (
@@ -35,6 +39,10 @@ export const WeeklyPlanList: React.FC<WeeklyPlanListProps> = ({
       keyExtractor={(item, index) =>
         item?.id || item?.name || `plan-${index}`
       }
+      removeClippedSubviews
+      initialNumToRender={8}
+      maxToRenderPerBatch={8}
+      windowSize={7}
       renderItem={renderPlanItem}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.listContent}

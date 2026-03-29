@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react';
-import {  StyleSheet, ScrollView } from 'react-native';
-import { useWeeklyPlanStore } from '../../store';
-import { useWorkoutStore } from '../../store';
+﻿import React, { useCallback, useMemo } from 'react';
+import { StyleSheet, ScrollView } from 'react-native';
+import { useWeeklyPlanStore, useWorkoutStore } from '../../store';
 import { useFocusEffect } from '@react-navigation/native';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
@@ -12,8 +11,12 @@ import { useWeeklyPlanForm } from '../../hooks/useWeeklyPlanForm';
 import { DayOfWeek } from '../../types';
 
 interface CreateWeeklyPlanScreenProps {
-  navigation: any;
-  route: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    goBack: () => void;
+    setOptions: (options: Record<string, unknown>) => void;
+  };
+  route: { params?: { planId?: string } };
 }
 
 export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
@@ -26,9 +29,9 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
 
   const isEditing = !!route.params?.planId;
   const existingPlan = isEditing
-    ? weeklyPlans.find(p => p.id === route.params.planId)
+    ? weeklyPlans.find(p => p.id === route.params?.planId)
     : null;
-  const safePlan = existingPlan || {};
+  const safePlan = useMemo(() => existingPlan || {}, [existingPlan]);
 
   const {
     planName,
@@ -46,21 +49,27 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
   const [isModalVisible, setModalVisible] = React.useState(false);
   const [selectedDay, setSelectedDay] = React.useState<DayOfWeek | null>(null);
 
-  const getWorkoutName = useCallback((workoutId: string | null) => {
-    if (!workoutId) return 'Descanso';
-    const workout = workouts.find(w => w.id === workoutId);
-    return workout ? workout.name : 'Treino não encontrado';
-  }, [workouts]);
+  const getWorkoutName = useCallback(
+    (workoutId: string | null) => {
+      if (!workoutId) return 'Descanso';
+      const workout = workouts.find(w => w.id === workoutId);
+      return workout ? workout.name : 'Treino não encontrado';
+    },
+    [workouts],
+  );
 
   const handleDayPress = useCallback((day: DayOfWeek) => {
     setSelectedDay(day);
     setModalVisible(true);
   }, []);
 
-  const handleSelectWorkout = useCallback((workoutId: string | null) => {
-    if (selectedDay) updateDayWorkout(selectedDay, workoutId);
-    setModalVisible(false);
-  }, [selectedDay, updateDayWorkout]);
+  const handleSelectWorkout = useCallback(
+    (workoutId: string | null) => {
+      if (selectedDay) updateDayWorkout(selectedDay, workoutId);
+      setModalVisible(false);
+    },
+    [selectedDay, updateDayWorkout],
+  );
 
   const handleSave = useCallback(() => {
     if (!planName.trim()) {
@@ -69,15 +78,14 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     }
 
     setIsLoading(true);
-    
+
     const planData = {
       name: planName.trim(),
       description: description.trim(),
       days,
       startDate: safePlan.startDate || new Date(),
       endDate:
-        safePlan.endDate ||
-        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        safePlan.endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       workoutSplitId: safePlan.workoutSplitId,
       isActive: safePlan.isActive || false,
       isTemplate: safePlan.isTemplate || false,
@@ -89,20 +97,16 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     if (isEditing && existingPlan) {
       try {
         updateWeeklyPlan(existingPlan.id, planData);
-        modal.showSuccess(
-          'Plano semanal atualizado com sucesso!',
-          'Sucesso!',
-          () => {
-            setIsLoading(false);
-            navigation.goBack();
-          }
-        );
+        modal.showSuccess('Plano semanal atualizado com sucesso!', 'Sucesso!', () => {
+          setIsLoading(false);
+          navigation.goBack();
+        });
       } catch (error) {
         console.error(error);
         setIsLoading(false);
         modal.showError(
           'Não foi possível atualizar o plano semanal. Tente novamente.',
-          'Erro!'
+          'Erro!',
         );
       }
     } else {
@@ -115,11 +119,11 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
           updatedAt: new Date(),
         });
 
-        // CORREÇÃO AQUI: usar showModal corretamente
+        // CORRECAO AQUI: usar showModal corretamente
         modal.showModal({
           type: 'confirmation',
           title: 'Sucesso!',
-          message: 'Plano semanal criado com sucesso! O que você gostaria de fazer agora',
+          message: 'Plano semanal criado com sucesso! O que você gostaria de fazer agora?',
           confirmText: 'Definir como Ativo',
           cancelText: 'Voltar para Lista',
           onConfirm: () => {
@@ -138,7 +142,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
         setIsLoading(false);
         modal.showError(
           'Não foi possível criar o plano semanal. Tente novamente.',
-          'Erro!'
+          'Erro!',
         );
       }
     }
@@ -148,6 +152,7 @@ export const CreateWeeklyPlanScreen: React.FC<CreateWeeklyPlanScreenProps> = ({
     days,
     existingPlan,
     isEditing,
+    safePlan,
     updateWeeklyPlan,
     modal,
     navigation,
@@ -237,3 +242,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#1b1613ff',
   },
 });
+

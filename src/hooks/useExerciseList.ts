@@ -1,10 +1,11 @@
-import { useState, useMemo, useCallback } from 'react';
+﻿import { useState, useMemo, useCallback } from 'react';
 import { useExerciseStore, useMuscleGroupStore } from '../store';
+import type { Exercise } from '../types';
 
 interface UseExerciseListOptions {
   initialSearch?: string;
   initialSelectedGroup?: string | null;
-  customExercises?: any[]; // Para usar quando não queremos pegar do store
+  customExercises?: Exercise[]; // Para usar quando não queremos pegar do store
 }
 
 export const useExerciseList = (options: UseExerciseListOptions = {}) => {
@@ -90,3 +91,4 @@ export const useExerciseList = (options: UseExerciseListOptions = {}) => {
     deleteExercise, // Apenas se estiver usando exercícios do store
   };
 };
+

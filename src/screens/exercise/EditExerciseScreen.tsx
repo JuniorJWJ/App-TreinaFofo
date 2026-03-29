@@ -1,6 +1,10 @@
-import React, { useRef, useState, useCallback } from 'react';
+﻿import React, { useRef, useState, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { ExerciseForm, ExerciseFormHandle, SaveResult } from '../../components/molecules/forms/ExerciseForm';
+import {
+  ExerciseForm,
+  ExerciseFormHandle,
+  SaveResult,
+} from '../../components/molecules/forms/ExerciseForm';
 import { Text } from '../../components/atoms/Text';
 import { useFocusEffect } from '@react-navigation/native';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
@@ -8,8 +12,12 @@ import { ConfirmationModal } from '../../../src/components/molecules/modals/Conf
 import { useExerciseStore } from '../../store';
 
 interface EditExerciseScreenProps {
-  navigation: any;
-  route: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    goBack: () => void;
+    setOptions: (options: Record<string, unknown>) => void;
+  };
+  route: { params?: { exerciseId?: string } };
 }
 
 export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
@@ -18,7 +26,7 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
 }) => {
   const { exerciseId } = route.params || {};
   const { exercises } = useExerciseStore();
-  
+
   const exercise = exercises.find(ex => ex.id === exerciseId);
   const exerciseFormRef = useRef<ExerciseFormHandle>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,11 +34,11 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
 
   const handleHeaderSave = useCallback(async () => {
     if (!exerciseFormRef.current) return;
-    
+
     setIsLoading(true);
     const result: SaveResult = await exerciseFormRef.current.save();
     setIsLoading(false);
-    
+
     if (result.success && result.type === 'update') {
       // Modal de sucesso similar ao EditWorkoutScreen
       modal.showSuccess(
@@ -42,7 +50,7 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
       // Modal de erro/warning
       modal.showWarning(
         result.message || 'Ocorreu um erro desconhecido.',
-        'Atenção!'
+        'Atenção!',
       );
     }
   }, [modal, navigation]);
@@ -89,11 +97,7 @@ export const EditExerciseScreen: React.FC<EditExerciseScreenProps> = ({
 
   return (
     <View style={styles.container}>
-      <ExerciseForm
-        ref={exerciseFormRef}
-        exercise={exercise}
-        isEditing={true}
-      />
+      <ExerciseForm ref={exerciseFormRef} exercise={exercise} isEditing={true} />
 
       {modal.modalConfig && (
         <ConfirmationModal

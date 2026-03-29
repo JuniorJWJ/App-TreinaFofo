@@ -1,15 +1,16 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
-import { useWorkoutStore } from '../../store';
-import { useExerciseStore } from '../../store';
+import { useWorkoutStore, useExerciseStore } from '../../store';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { popularWorkouts } from '../../data/popularWorkouts';
 
 interface PopularWorkoutsScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
 }
 
 export const PopularWorkoutsScreen: React.FC<PopularWorkoutsScreenProps> = ({
@@ -23,7 +24,7 @@ export const PopularWorkoutsScreen: React.FC<PopularWorkoutsScreenProps> = ({
     const ids: string[] = [];
     const missing: string[] = [];
 
-    names.forEach((name) => {
+    names.forEach(name => {
       const ex = exercises.find(
         e => e.name.toLowerCase() === name.toLowerCase(),
       );
@@ -52,7 +53,11 @@ export const PopularWorkoutsScreen: React.FC<PopularWorkoutsScreenProps> = ({
     }
 
     const muscleGroupIds = Array.from(
-      new Set(ids.map(id => exercises.find(e => e.id === id)?.muscleGroupId).filter(Boolean)),
+      new Set(
+        ids
+          .map(id => exercises.find(e => e.id === id)?.muscleGroupId)
+          .filter(Boolean),
+      ),
     ) as string[];
 
     addWorkout({
@@ -82,7 +87,7 @@ export const PopularWorkoutsScreen: React.FC<PopularWorkoutsScreenProps> = ({
           Treinos Populares
         </Text>
 
-        {popularWorkouts.map((workout) => (
+        {popularWorkouts.map(workout => (
           <View key={workout.id} style={styles.card}>
             <Text variant="subtitle" style={styles.cardTitle}>
               {workout.name}
@@ -91,7 +96,8 @@ export const PopularWorkoutsScreen: React.FC<PopularWorkoutsScreenProps> = ({
               {workout.description}
             </Text>
             <Text variant="caption" style={styles.cardSubtitle}>
-              {workout.exerciseNames.length} exercícios • {workout.estimatedDuration} min
+              {workout.exerciseNames.length} exercícios •{' '}
+              {workout.estimatedDuration} min
             </Text>
             <View style={styles.tagRow}>
               {workout.tags.map(tag => (

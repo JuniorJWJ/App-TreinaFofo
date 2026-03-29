@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
-import { DayOfWeek, DailyWorkout } from '../types';
+import { DayOfWeek, DailyWorkout, WeeklyPlan } from '../types';
 
-export const useWeeklyPlanForm = (existingPlan: any = null) => {
+export const useWeeklyPlanForm = (existingPlan: WeeklyPlan | null = null) => {
   const safePlan = existingPlan || {};
   const [planName, setPlanName] = useState(safePlan.name || '');
   const [description, setDescription] = useState(safePlan.description || '');

@@ -1,9 +1,16 @@
 // src/components/atoms/SearchInput.tsx
 import React from 'react';
-import { TextInput, TextInputProps, StyleSheet, View } from 'react-native';
+import {
+  TextInput,
+  TextInputProps,
+  StyleSheet,
+  View,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 
 interface SearchInputProps extends TextInputProps {
-  containerStyle: any;
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({ 

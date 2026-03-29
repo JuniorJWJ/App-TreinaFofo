@@ -1,5 +1,6 @@
-// src/types/exercise.ts
+﻿// src/types/exercise.ts
 import { MuscleGroup } from './muscleGroups';
+
 export interface Exercise {
   id: string;
   name: string;
@@ -10,7 +11,7 @@ export interface Exercise {
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
   videoUrl?: string;
   imageUrl?: string;
-  gifLocal?: any;
+  gifLocal?: string | { uri: string } | number;
 
   // Configurações padrão
   defaultSets: number;
@@ -68,7 +69,7 @@ export type ExerciseFormData = {
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
   videoUrl?: string;
   imageUrl?: string;
-  gifLocal?: any;
+  gifLocal?: string | { uri: string } | number;
 
   // Configurações padrão
   defaultSets: number;

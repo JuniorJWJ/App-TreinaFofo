@@ -1,7 +1,12 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Workout, WorkoutFormData, WorkoutSession } from '../types';
+import { normalizeText } from '../utils/textNormalize';
+
+const uniqueIds = (ids: string[]) => Array.from(new Set(ids.filter(Boolean)));
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
 
 interface WorkoutState {
   workouts: Workout[];
@@ -19,7 +24,7 @@ interface WorkoutState {
   getWorkout: (id: string) => Workout | undefined;
   getWorkouts: () => Workout[];
   duplicateWorkout: (id: string) => void;
-  importWorkoutsFromData: (workouts: any[]) => {
+  importWorkoutsFromData: (workouts: unknown[]) => {
     added: number;
     updated: number;
     skipped: number;
@@ -41,7 +46,7 @@ export const useWorkoutStore = create<WorkoutState>()(
       // activeWorkoutId: null,
       isLoading: false,
 
-      // 🔄 **ALTERAÇÕES FEITAS:**
+      // ðŸ”„ **ALTERAÇÕES FEITAS:**
 
       // 1. NOVO: Definir treino ativo
       // setActiveWorkout: (workoutId) => {
@@ -60,15 +65,16 @@ export const useWorkoutStore = create<WorkoutState>()(
       // 3. NOVO: Criar treino rápido
       createQuickWorkout: (name, exerciseIds) => {
         console.log('Criando treino rápido:', name, 'com', exerciseIds.length, 'exercícios');
-        
+        const normalizedIds = uniqueIds(exerciseIds || []);
+
         const newWorkout: Workout = {
           id: `wr-${Date.now()}`,
           name,
           description: '',
           muscleGroupIds: [],
-          exerciseIds,
+          exerciseIds: normalizedIds,
           exercises: [],
-          estimatedDuration: exerciseIds.length * 10, // 10 min por exercício
+          estimatedDuration: normalizedIds.length * 10, // 10 min por exercício
           difficulty: 'beginner',
           tags: ['rápido'],
           timesCompleted: 0,
@@ -89,8 +95,11 @@ export const useWorkoutStore = create<WorkoutState>()(
       // ✅ **MÉTODOS EXISTENTES (mantidos):**
 
       addWorkout: (workoutData) => {
+        const normalizedIds = uniqueIds(workoutData.exerciseIds || []);
         const newWorkout: Workout = {
           ...workoutData,
+          exerciseIds: normalizedIds,
+          exercises: [],
           id: `wr-${Date.now()}`,
           timesCompleted: 0,
           lastCompleted: new Date(0),
@@ -107,7 +116,15 @@ export const useWorkoutStore = create<WorkoutState>()(
         set((state) => ({
           workouts: state.workouts.map((workout) =>
             workout.id === id
-              ? { ...workout, ...updates, updatedAt: new Date() }
+              ? {
+                  ...workout,
+                  ...updates,
+                  exerciseIds: updates.exerciseIds
+                    ? uniqueIds(updates.exerciseIds)
+                    : workout.exerciseIds,
+                  exercises: [],
+                  updatedAt: new Date(),
+                }
               : workout
           ),
         }));
@@ -136,6 +153,8 @@ export const useWorkoutStore = create<WorkoutState>()(
             ...workout,
             id: `wr-${Date.now()}`,
             name: `${workout.name} (Cópia)`,
+            exerciseIds: uniqueIds(workout.exerciseIds || []),
+            exercises: [],
             timesCompleted: 0,
             lastCompleted: new Date(0),
             averageCompletionTime: 0,
@@ -150,7 +169,7 @@ export const useWorkoutStore = create<WorkoutState>()(
 
       importWorkoutsFromData: (workouts) => {
         const incoming = Array.isArray(workouts) ? workouts : [];
-        const parseDate = (value: any) => {
+        const parseDate = (value: unknown) => {
           if (!value) return null;
           const date = new Date(value);
           return Number.isNaN(date.getTime()) ? null : date;
@@ -163,20 +182,29 @@ export const useWorkoutStore = create<WorkoutState>()(
         const existingById = new Map(get().workouts.map(w => [w.id, w]));
         const nextWorkouts = [...get().workouts];
 
-        incoming.forEach(raw => {
-          if (!raw || !raw.id || !raw.name) {
+        incoming.forEach((rawItem) => {
+          if (!isRecord(rawItem)) {
+            skipped += 1;
+            return;
+          }
+
+          const raw = rawItem as Partial<Workout> & Record<string, unknown>;
+          const rawId = typeof raw.id === 'string' ? raw.id : '';
+          const rawName = typeof raw.name === 'string' ? raw.name : '';
+
+          if (!rawId || !rawName) {
             skipped += 1;
             return;
           }
 
           const incomingUpdatedAt = parseDate(raw.updatedAt) || new Date();
-          const existing = existingById.get(raw.id);
+          const existing = existingById.get(rawId);
 
           if (!existing) {
             nextWorkouts.push({
               ...raw,
-              exerciseIds: Array.isArray(raw.exerciseIds) ? raw.exerciseIds : [],
-              exercises: Array.isArray(raw.exercises) ? raw.exercises : [],
+              exerciseIds: uniqueIds(Array.isArray(raw.exerciseIds) ? raw.exerciseIds : []),
+              exercises: [],
               timesCompleted: 0,
               lastCompleted: new Date(0),
               averageCompletionTime: 0,
@@ -197,11 +225,9 @@ export const useWorkoutStore = create<WorkoutState>()(
               ...existing,
               ...raw,
               exerciseIds: Array.isArray(raw.exerciseIds)
-                ? raw.exerciseIds
+                ? uniqueIds(raw.exerciseIds)
                 : existing.exerciseIds,
-              exercises: Array.isArray(raw.exercises)
-                ? raw.exercises
-                : existing.exercises,
+              exercises: [],
               timesCompleted: existing.timesCompleted,
               lastCompleted: existing.lastCompleted,
               averageCompletionTime: existing.averageCompletionTime,
@@ -299,6 +325,7 @@ export const useWorkoutStore = create<WorkoutState>()(
     }),
     {
       name: 'workout-store',
+      version: 1,
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
@@ -311,6 +338,36 @@ export const useWorkoutStore = create<WorkoutState>()(
           await AsyncStorage.removeItem(name);
         },
       },
+      migrate: (persistedState: unknown) => {
+        if (!isRecord(persistedState)) return persistedState;
+        const rawWorkouts = Array.isArray(persistedState.workouts)
+          ? persistedState.workouts
+          : [];
+        const normalizedWorkouts = rawWorkouts.map((workoutItem) => {
+          if (!isRecord(workoutItem)) {
+            return workoutItem as Workout;
+          }
+
+          const workout = workoutItem as Partial<Workout> & Record<string, unknown>;
+          return {
+            ...workout,
+            name: normalizeText(workout.name) || workout.name,
+            description: normalizeText(workout.description),
+            tags: Array.isArray(workout.tags)
+              ? workout.tags.map((tag: string) => normalizeText(tag) || tag)
+              : workout.tags,
+            exerciseIds: uniqueIds(Array.isArray(workout.exerciseIds) ? workout.exerciseIds : []),
+            exercises: [],
+          } as Workout;
+        });
+
+        return {
+          ...persistedState,
+          workouts: normalizedWorkouts,
+        };
+      },
     }
   )
 );
+
+

@@ -1,14 +1,18 @@
+﻿
 import React from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { useWorkoutStore } from '../../store';
-import { useExerciseStore } from '../../store';
+import { useWorkoutStore, useExerciseStore } from '../../store';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
 import { FloatingActionButton } from '../../components/molecules/buttons/FloatingActionButton';
 import { ConfirmationModal } from '../../components/molecules/modals/ConfirmationModal';
 import { useConfirmationModal } from '../../hooks/useConfirmationModal';
+import type { Workout } from '../../types';
+
 interface WorkoutListScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
 }
 
 export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
@@ -40,7 +44,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
     navigation.navigate('WorkoutDetail', { workoutId });
   };
 
-  const renderWorkoutItem = ({ item }: { item: any }) => (
+  const renderWorkoutItem = ({ item }: { item: Workout }) => (
     <TouchableOpacity
       style={[
         styles.workoutCard,
@@ -79,7 +83,7 @@ export const WorkoutListScreen: React.FC<WorkoutListScreenProps> = ({
         )}
       </View>
 
-      {/* BOTÕES DE AÇÃO */}
+      {/* BOTOES DE ACAO */}
       <View style={styles.workoutActions}>
         <Button
           title="Editar"
@@ -255,7 +259,6 @@ const styles = StyleSheet.create({
     bottom: 40,
     right: 20,
   },
-
   fabButton: {
     width: 60,
     height: 60,
@@ -263,15 +266,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#483148',
     justifyContent: 'center',
     alignItems: 'center',
-
-    // sombra
     elevation: 6,
     shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-
   fabText: {
     color: '#FFF',
     fontSize: 32,

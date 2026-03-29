@@ -21,6 +21,7 @@ import {
   scheduleWaterReminders,
   setupWaterNotifications,
 } from '../../services/waterNotificationService';
+import type { WaterActivityLevel, WaterClimate } from '../../utils/waterCalculator';
 
 type ReminderTimeKey = 'wakeUpTime' | 'sleepTime';
 const REMINDER_INTERVAL_OPTIONS = [1, 5, 15, 30, 60, 120, 180];
@@ -115,8 +116,8 @@ export const WaterDashboardScreen = () => {
 
     if (!permissionGranted) {
       Alert.alert(
-        'Permissao necessaria',
-        'Ative as notificacoes do app para receber lembretes de agua.'
+        'Permissão necessária',
+        'Ative as notificações do app para receber lembretes de água.'
       );
       return;
     }
@@ -132,11 +133,11 @@ export const WaterDashboardScreen = () => {
     });
   };
 
-  const handleTimeChange = async (
-    key: ReminderTimeKey,
-    event: DateTimePickerEvent,
-    selectedDate: Date
-  ) => {
+const handleTimeChange = async (
+  key: ReminderTimeKey,
+  event: DateTimePickerEvent,
+  selectedDate?: Date
+) => {
     if (key === 'wakeUpTime') {
       setShowWakePicker(false);
     } else {
@@ -189,10 +190,10 @@ export const WaterDashboardScreen = () => {
         <View style={styles.notificationHeader}>
           <View>
             <Text variant="subtitle" style={styles.notificationTitle}>
-              Lembretes de agua
+              Lembretes de água
             </Text>
             <Text variant="caption" style={styles.notificationDescription}>
-              Receba alertas diarios para bater sua meta.
+              Receba alertas diários para bater sua meta.
             </Text>
           </View>
 
@@ -281,14 +282,14 @@ export const WaterDashboardScreen = () => {
         currentGoal={dailyGoal}
         onClose={() => setGoalModalVisible(false)}
         onSave={updateGoal}
-        weight={config.weight ?? 0}
+        weight={config.weight || 0}
         activityLevel={config.activityLevel}
         climate={config.climate}
         onProfileSave={profile =>
           updateConfig({
             weight: profile.weight,
-            activityLevel: profile.activityLevel as any,
-            climate: profile.climate as any,
+            activityLevel: profile.activityLevel as WaterActivityLevel,
+            climate: profile.climate as WaterClimate,
           })
         }
       />

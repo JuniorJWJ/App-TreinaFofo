@@ -194,7 +194,7 @@ export const checkNotificationPermissions = async (): Promise<{
 
     return {
       granted: settings.granted || settings.status === 'granted',
-      canAskAgain: settings.canAskAgain ?? true,
+      canAskAgain: settings.canAskAgain ? true : false,
       status: settings.status || 'unknown',
     };
   } catch (error) {

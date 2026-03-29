@@ -1,4 +1,4 @@
-// src/components/molecules/FloatingActionButton.tsx
+﻿// src/components/molecules/FloatingActionButton.tsx
 import React from 'react';
 import {
   TouchableOpacity,
@@ -9,14 +9,20 @@ import {
 } from 'react-native';
 import { Text } from '../../atoms/Text';
 
-export type FabPosition = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'bottom-center' | 'top-center';
+export type FabPosition =
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top-right'
+  | 'top-left'
+  | 'bottom-center'
+  | 'top-center';
 
 export interface FloatingActionButtonProps extends TouchableOpacityProps {
-  /** Texto ou ícone do botão */
+  /** Texto ou icone do botao */
   label?: string;
-  /** Ícone personalizado (sobrescreve o label) */
+  /** Icone personalizado (sobrescreve o label) */
   icon?: React.ReactNode;
-  /** Posição do FAB na tela */
+  /** Posicao do FAB na tela */
   position?: FabPosition;
   /** Offset personalizado para posicionamento */
   offset?: {
@@ -27,15 +33,15 @@ export interface FloatingActionButtonProps extends TouchableOpacityProps {
   };
   /** Cor de fundo */
   backgroundColor?: string;
-  /** Cor do texto/ícone */
+  /** Cor do texto/icone */
   color?: string;
   /** Tamanho do FAB */
   size?: 'small' | 'medium' | 'large';
-  /** Elevação/shadow */
+  /** Elevacao/shadow */
   elevation?: number;
   /** Callback de clique */
   onPress: () => void;
-  /** Se o botão está visível */
+  /** Se o botao esta visivel */
   visible?: boolean;
   /** Estilos adicionais */
   containerStyle?: ViewStyle;
@@ -73,7 +79,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 
   // Posicionamento
   const positionStyles: ViewStyle = {};
-  
+
   switch (position) {
     case 'bottom-right':
       positionStyles.bottom = offset.bottom ?? 40;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   Modal,
   View,
@@ -13,6 +13,7 @@ import { Button } from '../../atoms/Button';
 import { WaterCalculatorModal } from './WaterCalculatorModal';
 import { ConfirmationModal } from '../modals/ConfirmationModal';
 import { useConfirmationModal } from '../../../hooks/useConfirmationModal';
+import type { WaterActivityLevel, WaterClimate } from '../../../utils/waterCalculator';
 
 interface WaterGoalModalProps {
   visible: boolean;
@@ -20,8 +21,8 @@ interface WaterGoalModalProps {
   onClose: () => void;
   onSave: (goal: number) => void;
   weight: number;
-  activityLevel: 'sedentary' | 'light' | 'moderate' | 'intense' | 'active' | 'athlete' | undefined;
-  climate: 'cold' | 'temperate' | 'hot' | 'very_hot' | undefined;
+  activityLevel: WaterActivityLevel | undefined;
+  climate: WaterClimate | undefined;
   onProfileSave: (profile: {
     weight: number;
     activityLevel: string;
@@ -59,7 +60,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
   const handleSaveClick = () => {
     const goalNum = parseInt(goal, 10);
 
-    if (isNaN(goalNum) || goalNum <= 0) {
+    if (Number.isNaN(goalNum) || goalNum <= 0) {
       setInputError('Por favor, digite um valor válido maior que 0');
       return;
     }
@@ -70,7 +71,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
         'Meta Baixa',
         () => handleSave(goalNum),
         'Confirmar',
-        'Cancelar'
+        'Cancelar',
       );
     } else if (goalNum > 5000) {
       modal.showConfirmation(
@@ -78,7 +79,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
         'Meta Alta',
         () => handleSave(goalNum),
         'Confirmar',
-        'Cancelar'
+        'Cancelar',
       );
     } else {
       handleSave(goalNum);
@@ -110,12 +111,12 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
     <>
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent
         visible={visible}
         onRequestClose={handleClose}
       >
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // ✅ fixed missing '?'
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.modalOverlay}
         >
           <View style={styles.modalContainer}>
@@ -132,13 +133,13 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
                 <TextInput
                   style={styles.modalInput}
                   value={goal}
-                  onChangeText={(text) => {
+                  onChangeText={text => {
                     setGoal(text.replace(/[^0-9]/g, ''));
                     setInputError('');
                   }}
                   placeholder="Ex: 2000"
                   keyboardType="numeric"
-                  autoFocus={true}
+                  autoFocus
                   maxLength={5}
                 />
 
@@ -159,7 +160,7 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
                     Sugestões comuns:
                   </Text>
                   <View style={styles.suggestionButtons}>
-                    {[1500, 2000, 2500, 3000, 4000].map((amount) => (
+                    {[1500, 2000, 2500, 3000, 4000].map(amount => (
                       <Button
                         key={amount}
                         title={`${amount}ml`}
@@ -206,14 +207,14 @@ export const WaterGoalModal: React.FC<WaterGoalModalProps> = ({
       <WaterCalculatorModal
         visible={calculatorModalVisible}
         initialWeight={weight}
-        initialActivityLevel={activityLevel as any}
-        initialClimate={climate as any}
+        initialActivityLevel={activityLevel}
+        initialClimate={climate}
         onClose={closeCalculator}
         onSave={handleCalculatorSave}
         onProfileSave={onProfileSave}
       />
 
-      {/* Modal de Confirmação - with safe optional chaining */}
+      {/* Modal de Confirmação */}
       {modal.modalConfig && (
         <ConfirmationModal
           visible={modal.isVisible}

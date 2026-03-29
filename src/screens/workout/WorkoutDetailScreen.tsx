@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Text } from '../../components/atoms/Text';
@@ -6,11 +6,17 @@ import { Button } from '../../components/atoms/Button';
 import { useWorkoutStore, useExerciseStore } from '../../store';
 import { useMuscleGroupUtils } from '../../hooks/useMuscleGroupUtils';
 import { WorkoutStats } from '../../components/molecules/workout/WorkoutStats';
+import type { Exercise } from '../../types';
 
 interface WorkoutDetailScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    goBack: () => void;
+  };
   route: { params: { workoutId: string } };
 }
+
+const isExercise = (value: Exercise | undefined): value is Exercise => Boolean(value);
 
 export const WorkoutDetailScreen: React.FC<WorkoutDetailScreenProps> = ({
   navigation,
@@ -27,19 +33,19 @@ export const WorkoutDetailScreen: React.FC<WorkoutDetailScreenProps> = ({
   );
 
   const workoutExercises = useMemo(() => {
-    if (!workout) return [];
+    if (!workout) return [] as Exercise[];
     return workout.exerciseIds
       .map(id => exercises.find(ex => ex.id === id))
-      .filter(Boolean);
+      .filter(isExercise);
   }, [workout, exercises]);
 
   const totalSets = useMemo(() => {
-    return workoutExercises.reduce((sum, ex: any) => {
-      return sum + (ex?.defaultSets || 0);
+    return workoutExercises.reduce((sum, ex) => {
+      return sum + (ex.defaultSets || 0);
     }, 0);
   }, [workoutExercises]);
 
-  const getGifSource = (gifLocal: any) => {
+  const getGifSource = (gifLocal: Exercise['gifLocal']) => {
     if (!gifLocal) return null;
     if (typeof gifLocal === 'number') return gifLocal;
     if (typeof gifLocal === 'string') return { uri: gifLocal };
@@ -69,8 +75,7 @@ export const WorkoutDetailScreen: React.FC<WorkoutDetailScreenProps> = ({
           {workout.name}
         </Text>
         <Text variant="caption" style={styles.subtitle}>
-          {workout.exerciseIds.length} exercícios •{' '}
-          {workout.estimatedDuration} min
+          {workout.exerciseIds.length} exercícios • {workout.estimatedDuration} min
         </Text>
       </View>
 
@@ -85,7 +90,7 @@ export const WorkoutDetailScreen: React.FC<WorkoutDetailScreenProps> = ({
           Exercícios do Treino
         </Text>
 
-        {workoutExercises.map((exercise: any, index: number) => {
+        {workoutExercises.map((exercise, index) => {
           const isExpanded = expandedExerciseId === exercise.id;
           const hasAdditionalDetails =
             (exercise.defaultWeight !== undefined &&
@@ -160,7 +165,7 @@ export const WorkoutDetailScreen: React.FC<WorkoutDetailScreenProps> = ({
                       <Text style={styles.detailValue}>
                         {exercise.warmupSets
                           .map(
-                            (set: any) =>
+                            set =>
                               `${set.reps} reps${
                                 set.weight
                                   ? ` @ ${set.weight}${exercise.weightUnit || 'kg'}`
@@ -180,8 +185,8 @@ export const WorkoutDetailScreen: React.FC<WorkoutDetailScreenProps> = ({
                           {exercise.progressionType === 'range'
                             ? 'Faixa de repetições'
                             : exercise.progressionType === 'linear'
-                            ? 'Progressão linear'
-                            : 'Outro'}
+                              ? 'Progressão linear'
+                              : 'Outro'}
                         </Text>
                       </View>
                     )}
@@ -367,4 +372,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#332B33',
   },
 });
-

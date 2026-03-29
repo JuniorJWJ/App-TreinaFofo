@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+﻿import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   ExerciseForm,
@@ -13,7 +13,12 @@ import { ConfirmationModal } from '../../../src/components/molecules/modals/Conf
 // import { useMuscleGroupStore } from '../../store';
 
 interface CreateExerciseScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    goBack: () => void;
+    replace: (screen: string, params?: Record<string, unknown>) => void;
+    setOptions: (options: Record<string, unknown>) => void;
+  };
 }
 
 export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
@@ -22,39 +27,42 @@ export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
   const exerciseFormRef = useRef<ExerciseFormHandle>(null);
   // const { CreateExercise } = useExerciseStore();
   // const { muscleGroups } = useMuscleGroupStore();
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  
+
   const modal = useConfirmationModal();
 
-  const handleSubmit = useCallback((result: SaveResult) => {
-    if (!result.success) {
-      modal.showWarning(
-        result.message || 'Ocorreu um erro desconhecido.',
-        'Atenção!'
-      );
-      return;
-    }
+  const handleSubmit = useCallback(
+    (result: SaveResult) => {
+      if (!result.success) {
+        modal.showWarning(
+          result.message || 'Ocorreu um erro desconhecido.',
+          'Atenção!',
+        );
+        return;
+      }
 
-    if (result.type === 'update') {
-      modal.showSuccess(
-        'Sucesso!',
-        result.message || 'Operação realizada com sucesso.',
-        () => navigation.goBack()
-      );
-      return;
-    }
+      if (result.type === 'update') {
+        modal.showSuccess(
+          'Sucesso!',
+          result.message || 'Operação realizada com sucesso.',
+          () => navigation.goBack(),
+        );
+        return;
+      }
 
-    // Para criação, mostrar modal com duas opções
-    modal.showConfirmation(
-      result.message || 'Exercício criado com sucesso!',
-      'Exercício criado!',
-      () => navigation.navigate('ExerciseList'),
-      'Ver Exercícios',
-      'Criar Outro',
-    );
-  }, [modal, navigation]);
+      // Para criação, mostrar modal com duas opções
+      modal.showConfirmation(
+        result.message || 'Exercício criado com sucesso!',
+        'Exercício criado!',
+        () => navigation.navigate('ExerciseList'),
+        'Ver Exercícios',
+        'Criar Outro',
+      );
+    },
+    [modal, navigation],
+  );
 
   const handleSave = useCallback(async () => {
     if (!exerciseFormRef.current) return;
@@ -101,8 +109,9 @@ export const CreateExerciseScreen: React.FC<CreateExerciseScreenProps> = ({
     if (!exerciseFormRef.current) return;
 
     const formData = exerciseFormRef.current.getFormData();
-    const isValid = formData.name.trim() !== '' && formData.selectedMuscleGroupId !== '';
-    
+    const isValid =
+      formData.name.trim() !== '' && formData.selectedMuscleGroupId !== '';
+
     setIsFormValid(isValid);
   }, []);
 

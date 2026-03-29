@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+﻿import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import {
   View,
   StyleSheet,
@@ -23,7 +23,7 @@ interface ExerciseFormProps {
 
 export interface ExerciseFormHandle {
   save: () => Promise<SaveResult>; // Retorna SaveResult com sucesso e ação
-  getFormData: () => any;
+  getFormData: () => ExerciseFormDataSnapshot;
   isLoading: boolean;
 }
 
@@ -33,7 +33,26 @@ export interface SaveResult {
   action: 'go_back' | 'add_another' | 'stay';
   message: string;
   type: 'update' | 'create';
-  data: any;
+  data: unknown;
+}
+
+export interface ExerciseFormDataSnapshot {
+  name: string;
+  description: string;
+  selectedMuscleGroupId: string;
+  secondaryMuscleGroupIds: string[];
+  sets: string;
+  reps: string;
+  restTime: string;
+  defaultWeight: string;
+  weightUnit: 'kg' | 'lb';
+  notes: string;
+  gifUrl: string;
+  progressionType: 'fixed' | 'range' | 'linear';
+  useWarmupSets: boolean;
+  warmupSets: Array<{ reps: string; percentage: string }>;
+  autoProgression: boolean;
+  incrementSize: string;
 }
 
 export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
@@ -66,14 +85,14 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
     const [gifUrl, setGifUrl] = useState(
       typeof exercise.gifLocal === 'string' ? exercise.gifLocal : '',
     );
-    // ✅ Fixed syntax: removed trailing comma and added setter (though not used)
-    const [progressionType, setProgressionType] = useState<
+    // OK Fixed syntax: removed trailing comma and added setter (though not used)
+    const [progressionType, _setProgressionType] = useState<
       'fixed' | 'range' | 'linear'
     >(exercise.progressionType || 'fixed');
     const [useWarmupSets, setUseWarmupSets] = useState(
       (exercise.warmupSets && exercise.warmupSets.length > 0) || false,
     );
-    // ✅ Fixed ternary: added missing '?'
+    // OK Fixed ternary: added missing '?'
     const [warmupSets, setWarmupSets] = useState<
       Array<{ reps: string; percentage: string }>
     >(
@@ -126,7 +145,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
       if (!name || !selectedMuscleGroupId) {
         return {
           success: false,
-          action: 'stay', // ✅ Added missing action
+          action: 'stay', // OK Added missing action
           message: 'Preencha o nome e selecione um grupo muscular',
           type: 'create', // Required but not used for failure
           data: null,
@@ -158,9 +177,9 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
             secondaryMuscleGroupIds.length > 0
               ? secondaryMuscleGroupIds
               : undefined,
-          defaultSets: parseInt(sets) || 3,
-          defaultReps: parseInt(reps) || 12,
-          defaultRestTime: parseInt(restTime) || 60,
+          defaultSets: parseInt(sets, 10) || 3,
+          defaultReps: parseInt(reps, 10) || 12,
+          defaultRestTime: parseInt(restTime, 10) || 60,
           defaultWeight: defaultWeight ? parseFloat(defaultWeight) : undefined,
           weightUnit,
           notes: notes.trim() || undefined,
@@ -170,8 +189,8 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           progressionType,
           warmupSets: useWarmupSets
             ? warmupSets.map(set => ({
-                reps: parseInt(set.reps) || 10,
-                percentage: parseInt(set.percentage) || 50,
+                reps: parseInt(set.reps, 10) || 10,
+                percentage: parseInt(set.percentage, 10) || 50,
               }))
             : [],
           autoProgression,
@@ -182,7 +201,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           updateExercise(exercise.id, exerciseData);
           return {
             success: true,
-            action: 'go_back', // ✅ Added action
+            action: 'go_back', // OK Added action
             message: `Exercício "${name}" atualizado`,
             type: 'update',
             data: null,
@@ -191,7 +210,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
           CreateExercise(exerciseData);
           return {
             success: true,
-            action: 'add_another', // ✅ Added action
+            action: 'add_another', // OK Added action
             message: `"${name}" foi adicionado ao grupo ${selectedGroup.name}.`,
             type: 'create',
             data: { name: name.trim(), muscleGroupName: selectedGroup.name },
@@ -490,7 +509,7 @@ export const ExerciseForm = forwardRef<ExerciseFormHandle, ExerciseFormProps>(
                       style={styles.removeButton}
                       onPress={() => removeWarmupSet(index)}
                     >
-                      <Text color="#FFF">✕</Text>
+                      <Text color="#FFF">x</Text>
                     </TouchableOpacity>
                   </View>
                 ))}
@@ -737,3 +756,7 @@ const styles = StyleSheet.create({
 });
 
 ExerciseForm.displayName = 'ExerciseForm';
+
+
+
+

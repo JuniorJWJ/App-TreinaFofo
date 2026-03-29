@@ -1,11 +1,12 @@
-// src/components/molecules/ExerciseCard.tsx
+﻿// src/components/molecules/ExerciseCard.tsx
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from '../../atoms/Text';
 import { Button } from '../../atoms/Button';
+import type { Exercise } from '../../../types';
 
 interface ExerciseCardProps {
-  exercise: any;
+  exercise: Exercise;
   onEdit: () => void;
   onDelete: () => void;
   onPress: () => void;
@@ -16,7 +17,7 @@ interface ExerciseCardProps {
   hasGif: boolean;
 }
 
-export const ExerciseCard: React.FC<ExerciseCardProps> = ({
+const ExerciseCardComponent: React.FC<ExerciseCardProps> = ({
   exercise,
   onEdit,
   onDelete,
@@ -77,7 +78,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             </Text>
             <Text variant="caption">Descanso: {exercise.defaultRestTime}s</Text>
           </View>
-          {exercise.defaultWeight && (
+          {exercise.defaultWeight !== undefined && exercise.defaultWeight !== null && (
             <Text variant="caption">
               Peso: {exercise.defaultWeight} {exercise.weightUnit || 'kg'}
             </Text>
@@ -92,6 +93,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     </View>
   );
 };
+
+export const ExerciseCard = React.memo(ExerciseCardComponent);
 
 const styles = StyleSheet.create({
   groupHeader: {

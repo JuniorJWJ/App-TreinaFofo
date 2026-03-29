@@ -2,9 +2,10 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text } from '../../atoms/Text';
 import { Button } from '../../atoms/Button';
+import type { WeeklyPlan } from '../../../types';
 
 interface WeeklyPlanCardProps {
-  plan: any;
+  plan: WeeklyPlan;
   isActive: boolean;
   onSetActive: (planId: string, planName: string) => void;
   onEdit: (planId: string) => void;
@@ -22,9 +23,9 @@ export const WeeklyPlanCard: React.FC<WeeklyPlanCardProps> = ({
     return null;
   }
 
-  const getCompletedWorkouts = (plan: any) => {
+  const getCompletedWorkouts = (plan: WeeklyPlan) => {
     const days = Array.isArray(plan.days) ? plan.days : [];
-    return days.filter((d: any) => d.isCompleted).length;
+    return days.filter(d => d.isCompleted).length;
   };
 
   return (

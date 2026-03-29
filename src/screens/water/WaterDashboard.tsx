@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 // @ts-ignore
 import { ProgressCircle } from 'react-native-svg-charts';
@@ -26,47 +26,47 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [customAmount, setCustomAmount] = useState('');
   const [inputError, setInputError] = useState('');
-  
+
   const modal = useConfirmationModal();
 
   const progress = Math.min(currentIntake / dailyGoal, 1);
   const remaining = dailyGoal - currentIntake;
-  
+
   const quickAmounts = [100, 250, 500, 1000];
-  
+
   const handleAddCustom = () => {
     setModalVisible(true);
     setCustomAmount('');
     setInputError('');
   };
-  
+
   const handleReset = () => {
     if (!onReset) return;
-    
+
     modal.showConfirmation(
-      'Tem certeza que deseja zerar a ingestão de água do dia',
+      'Tem certeza que deseja zerar a ingestao de agua do dia',
       'Resetar Dia',
       () => {
         onReset();
       },
       'Zerar',
-      'Cancelar'
+      'Cancelar',
     );
   };
 
   const handleSubmitCustomAmount = () => {
-    const amount = parseInt(customAmount);
-    
-    if (isNaN(amount) || amount <= 0) {
-      setInputError('Por favor, digite um valor válido maior que 0');
+    const amount = parseInt(customAmount, 10);
+
+    if (Number.isNaN(amount) || amount <= 0) {
+      setInputError('Por favor, digite um valor valido maior que 0');
       return;
     }
-    
+
     if (amount > 10000) {
       setInputError('Valor muito alto. Digite um valor menor que 10.000 ml');
       return;
     }
-    
+
     onAddWater(amount);
     setModalVisible(false);
     setCustomAmount('');
@@ -87,14 +87,14 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
   return (
     <View style={styles.container}>
       <Text variant="title" align="center">
-        💧 Hidratação Hoje
+        Hidratacao Hoje
       </Text>
-      
+
       <View style={styles.progressContainer}>
         <ProgressCircle
           style={styles.progressCircle}
           progress={progress}
-          progressColor={progress >= 1 ? "#4CAF50" : "#4A90E2"}
+          progressColor={progress >= 1 ? '#4CAF50' : '#4A90E2'}
           backgroundColor="#E0E0E0"
           strokeWidth={20}
         />
@@ -103,20 +103,20 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
             {currentIntake}ml
           </Text>
           <Text variant="caption">de {dailyGoal}ml</Text>
-          <Text variant="caption" style={[
-            styles.remainingText,
-            progress >= 1 && { color: '#4CAF50', fontWeight: 'bold' }
-          ]}>
-            {remaining > 0 
-               `${remaining}ml restantes` 
-              : 'Meta alcançada! 🎉'
-            }
+          <Text
+            variant="caption"
+            style={[
+              styles.remainingText,
+              progress >= 1 && { color: '#4CAF50', fontWeight: 'bold' },
+            ]}
+          >
+            {remaining > 0 ? `${remaining}ml restantes` : 'Meta alcancada!'}
           </Text>
         </View>
       </View>
-      
+
       <View style={styles.quickAddContainer}>
-        <Text variant="subtitle">Adicionar rápido:</Text>
+        <Text variant="subtitle">Adicionar rapido:</Text>
         <View style={styles.quickButtons}>
           {quickAmounts.map(amount => (
             <Button
@@ -133,8 +133,8 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
           style={styles.customButton}
         />
       </View>
-      
-      {/* Estatísticas */}
+
+      {/* Estatisticas */}
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
           <Text variant="title" style={styles.statValue}>
@@ -155,8 +155,8 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
           <Text variant="caption">Total hoje</Text>
         </View>
       </View>
-      
-      {/* Ações */}
+
+      {/* Acoes */}
       <View style={styles.actionsContainer}>
         {onAdjustGoal && (
           <Button
@@ -184,7 +184,7 @@ export const WaterDashboard: React.FC<WaterDashboardProps> = ({
         onSubmit={handleSubmitCustomAmount}
       />
 
-      {/* Modal de confirmação */}
+      {/* Modal de confirmacao */}
       {modal.modalConfig && (
         <ConfirmationModal
           visible={modal.isVisible}

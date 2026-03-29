@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useWeeklyPlanStore } from '../../store';
 import { FloatingActionButton } from '../../components/molecules/buttons/FloatingActionButton';
@@ -8,10 +8,14 @@ import { EmptyWeeklyPlans } from '../../components/molecules/workout/EmptyWeekly
 import { useWeeklyPlanActions } from '../../hooks/useWeeklyPlanActions';
 
 interface WeeklyPlanListScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
 }
 
-export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navigation }) => {
+export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({
+  navigation,
+}) => {
   const { weeklyPlans, activePlanId } = useWeeklyPlanStore();
   const { handleDeletePlan, handleSetActivePlan, modal } = useWeeklyPlanActions();
 
@@ -22,7 +26,9 @@ export const WeeklyPlanListScreen: React.FC<WeeklyPlanListScreenProps> = ({ navi
   return (
     <View style={styles.container}>
       {weeklyPlans.length === 0 ? (
-        <EmptyWeeklyPlans onCreatePlan={() => navigation.navigate('CreateWeeklyPlan')} />
+        <EmptyWeeklyPlans
+          onCreatePlan={() => navigation.navigate('CreateWeeklyPlan')}
+        />
       ) : (
         <WeeklyPlanList
           plans={weeklyPlans}

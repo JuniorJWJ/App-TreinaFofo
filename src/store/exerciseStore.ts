@@ -1,14 +1,18 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Exercise, ExerciseFormData } from '../types';
-import {  mockExercises } from '../data/mockExercises';
+import { mockExercises } from '../data/mockExercises';
+import { normalizeText } from '../utils/textNormalize';
 
 const mockGifByName = new Map(
   mockExercises
     .filter(ex => ex.gifLocal)
     .map(ex => [ex.name, ex.gifLocal])
 );
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
 
 interface ExerciseState {
   exercises: Exercise[];
@@ -88,20 +92,21 @@ export const useExerciseStore = create<ExerciseState>()(
       },
 
       importExercisesFromJson: (json: string) => {
-        let payload: any;
+        let payload: unknown;
         try {
           payload = JSON.parse(json);
         } catch {
           return { added: 0, updated: 0, skipped: 0 };
         }
 
-        const incoming: any[] = Array.isArray(payload?.exercises)
-          ? payload.exercises
+        const incoming: unknown[] =
+          isRecord(payload) && Array.isArray(payload.exercises)
+            ? payload.exercises
           : Array.isArray(payload)
             ? payload
             : [];
 
-        const parseDate = (value: any) => {
+        const parseDate = (value: unknown) => {
           if (!value) return null;
           const date = new Date(value);
           return Number.isNaN(date.getTime()) ? null : date;
@@ -114,23 +119,35 @@ export const useExerciseStore = create<ExerciseState>()(
         const existingById = new Map(get().exercises.map(ex => [ex.id, ex]));
         const nextExercises = [...get().exercises];
 
-        incoming.forEach(raw => {
-          if (!raw || !raw.id || !raw.name || !raw.muscleGroupId) {
+        incoming.forEach(rawItem => {
+          if (!isRecord(rawItem)) {
+            skipped += 1;
+            return;
+          }
+
+          const raw = rawItem as Partial<Exercise> & Record<string, unknown>;
+          const rawId = typeof raw.id === 'string' ? raw.id : '';
+          const rawName = typeof raw.name === 'string' ? raw.name : '';
+          const rawGroup =
+            typeof raw.muscleGroupId === 'string' ? raw.muscleGroupId : '';
+
+          if (!rawId || !rawName || !rawGroup) {
             skipped += 1;
             return;
           }
 
           const incomingUpdatedAt = parseDate(raw.updatedAt) || new Date();
-          const existing = existingById.get(raw.id);
+          const existing = existingById.get(rawId);
 
           if (!existing) {
             nextExercises.push({
               ...raw,
               createdAt: parseDate(raw.createdAt) || new Date(),
               updatedAt: incomingUpdatedAt,
-              warmupSets: raw.warmupSets || [],
-              weightUnit: raw.weightUnit || 'kg',
-            });
+              warmupSets: Array.isArray(raw.warmupSets) ? raw.warmupSets : [],
+              weightUnit:
+                typeof raw.weightUnit === 'string' ? raw.weightUnit : 'kg',
+            } as Exercise);
             added += 1;
             return;
           }
@@ -152,10 +169,15 @@ export const useExerciseStore = create<ExerciseState>()(
               gifLocal: mergedGif,
               createdAt: existing.createdAt,
               updatedAt: incomingUpdatedAt,
-              // FIXED: proper fallback for warmupSets
-              warmupSets: raw.warmupSets !== undefined ? raw.warmupSets : (existing.warmupSets ?? []),
-              weightUnit: raw.weightUnit || existing.weightUnit || 'kg',
-            };
+              warmupSets:
+                raw.warmupSets !== undefined
+                  ? raw.warmupSets
+                  : existing.warmupSets || [],
+              weightUnit:
+                typeof raw.weightUnit === 'string'
+                  ? raw.weightUnit
+                  : existing.weightUnit || 'kg',
+            } as Exercise;
 
             const idx = nextExercises.findIndex(ex => ex.id === existing.id);
             if (idx >= 0) nextExercises[idx] = merged;
@@ -216,29 +238,63 @@ export const useExerciseStore = create<ExerciseState>()(
     }),
     {
       name: 'exercise-store',
-      version: 3,
+      version: 4,
       storage: createJSONStorage(() => AsyncStorage),
-      migrate: (persistedState: any, version: number) => {
-        if (persistedState && persistedState.exercises && version < 3) {
-          persistedState.exercises = persistedState.exercises.map(
-            (exercise: any) => {
-              const gifLocal = mockGifByName.get(exercise.name);
-              return {
-                ...exercise,
-                defaultWeight: exercise.defaultWeight || undefined,
-                weightUnit: exercise.weightUnit || 'kg',
-                warmupSets: exercise.warmupSets || [],
-                progressionType: exercise.progressionType || 'fixed',
-                autoProgression: exercise.autoProgression || false,
-                incrementSize: exercise.incrementSize || 2.5,
-                notes: exercise.notes || undefined,
-                // FIXED: proper fallback for gifLocal
-                gifLocal: gifLocal ?? exercise.gifLocal,
-              };
-            }
-          );
-        }
-        return persistedState;
+      migrate: (persistedState: unknown, version: number) => {
+        if (!isRecord(persistedState)) return persistedState;
+
+        const rawExercises = Array.isArray(persistedState.exercises)
+          ? persistedState.exercises
+          : [];
+
+        let normalized = rawExercises.map(exerciseItem => {
+          if (!isRecord(exerciseItem)) return exerciseItem as Exercise;
+
+          const exercise = exerciseItem as Partial<Exercise> & Record<string, unknown>;
+          if (version >= 3) {
+            return exercise as Exercise;
+          }
+
+          const gifLocal = mockGifByName.get(exercise.name as string);
+
+          return {
+            ...(exercise as Exercise),
+            defaultWeight: exercise.defaultWeight || undefined,
+            weightUnit: (exercise.weightUnit as string) || 'kg',
+            warmupSets: Array.isArray(exercise.warmupSets)
+              ? exercise.warmupSets
+              : [],
+            progressionType: exercise.progressionType || 'fixed',
+            autoProgression: exercise.autoProgression || false,
+            incrementSize: exercise.incrementSize || 2.5,
+            notes: exercise.notes || undefined,
+            // FIXED: proper fallback for gifLocal
+            gifLocal: exercise.gifLocal ?? gifLocal,
+          } as Exercise;
+        });
+
+        normalized = normalized.map(exercise => {
+          if (!isRecord(exercise)) return exercise as Exercise;
+          const safeExercise = exercise as Exercise;
+          return {
+            ...safeExercise,
+            name: normalizeText(safeExercise.name) || safeExercise.name,
+            muscleGroupId: normalizeText(safeExercise.muscleGroupId),
+            description: normalizeText(safeExercise.description),
+            equipment: normalizeText(safeExercise.equipment),
+            notes: normalizeText(safeExercise.notes),
+            secondaryMuscleGroups: Array.isArray(safeExercise.secondaryMuscleGroups)
+              ? safeExercise.secondaryMuscleGroups.map((group: string) =>
+                  normalizeText(group) || group
+                )
+              : safeExercise.secondaryMuscleGroups,
+          };
+        });
+
+        return {
+          ...persistedState,
+          exercises: normalized,
+        };
       },
       onRehydrateStorage: () => (state) => {
         if (state && state.exercises.length === 0) {

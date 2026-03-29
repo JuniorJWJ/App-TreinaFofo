@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 // import { useExerciseStore } from '../../store';
 // import { useMuscleGroupStore } from '../../store';
-import { useWeeklyPlanStore } from '../../store';
-import { useWorkoutStore } from '../../store';
+import { useWeeklyPlanStore, useWorkoutStore } from '../../store';
 import { useWaterTracker } from '../../hooks/useWaterTracker';
 import { WaterProgressCard } from '../../components/molecules/cards/WaterProgressCard';
 import { TodayWorkoutModal } from '../../components/molecules/modals/TodayWorkoutModal';
@@ -14,8 +13,11 @@ import { TodayWorkoutCard } from '../../components/molecules/cards/TodayWorkoutC
 import { QuickActions } from '../../components/molecules/workout/QuickActions';
 import { TimerCard } from '../../components/molecules/timer/TimerCard';
 import { Text } from 'react-native-gesture-handler';
+
 interface HomeScreenProps {
-  navigation: any;
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
@@ -56,12 +58,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   const handleWorkoutCardPress = () => {
-    console.log('Opening workout modal'); // Adicione este log
+    console.log('Opening workout modal');
     setIsWorkoutModalVisible(true);
   };
 
   const handleCloseModal = () => {
-    console.log('Closing workout modal'); // Adicione este log
+    console.log('Closing workout modal');
     setIsWorkoutModalVisible(false);
   };
 
@@ -85,7 +87,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             dailyGoal={dailyGoal}
             onPress={handleWaterCardPress}
             onQuickAdd={handleQuickWaterAdd}
-            showActions={true}
+            showActions
           />
         </View>
 
@@ -95,7 +97,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             style={styles.timerToggleButton}
           >
             <Text style={styles.timerToggleText}>
-              {showTimer ? '👆 Esconder Cronômetro' : '👇 Mostrar Cronômetro'}
+              {showTimer ? 'Esconder Cronômetro' : 'Mostrar Cronômetro'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   },
 
   section: {
-    marginBottom: 10, // 🔥 espaçamento padrão entre TODOS os elementos
+    marginBottom: 10,
   },
 
   timerToggleButton: {
